@@ -45,6 +45,10 @@ OPENAI_KEY = os.environ.get("OPENAI_API_KEY", "")
 OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
 OPENAI_URL = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/") + "/chat/completions"
 LLM_CALLS_PER_HOUR = int(os.environ.get("LLM_CALLS_PER_HOUR", "80"))
+# Reasoning models (gpt-5+/o-series) spend output tokens on hidden reasoning; "none" keeps answers fast and complete.
+# Parameters a model rejects are switched off automatically on the first call and remembered.
+MODEL_PARAMS = {"tokens_key": "max_completion_tokens", "temperature": True,
+                "effort": os.environ.get("OPENAI_REASONING_EFFORT", "none").strip() or None}
 MAX_BODY = 1_000_000
 
 TAX = json.loads((DATA / "taxonomy.json").read_text(encoding="utf-8"))
@@ -130,30 +134,68 @@ def llm_json(uid, system, user, max_tokens=1200):
         if len(_calls[uid]) >= LLM_CALLS_PER_HOUR:
             raise ApiError(429, "AI usage limit reached for this hour. Please try again later.")
         _calls[uid].append(now)
-    body = {"model": OPENAI_MODEL, "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
-            "response_format": {"type": "json_object"}, "temperature": 0.2, "max_tokens": max_tokens}
-    for attempt in range(2):
+    budget = max_tokens
+    for attempt in range(5):
+        body = {"model": OPENAI_MODEL, "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
+                "response_format": {"type": "json_object"}, MODEL_PARAMS["tokens_key"]: budget}
+        if MODEL_PARAMS["temperature"]:
+            body["temperature"] = 0.2
+        if MODEL_PARAMS["effort"]:
+            body["reasoning_effort"] = MODEL_PARAMS["effort"]
         req = urllib.request.Request(OPENAI_URL, data=json.dumps(body).encode(),
                                      headers={"Authorization": f"Bearer {OPENAI_KEY}", "Content-Type": "application/json"})
         try:
             with urllib.request.urlopen(req, timeout=90, context=SSL_CTX) as r:
                 data = json.loads(r.read())
-            return json.loads(data["choices"][0]["message"]["content"])
         except urllib.error.HTTPError as e:
-            detail = e.read().decode(errors="ignore")[:400]
-            if e.code == 400 and attempt == 0 and ("temperature" in detail or "max_tokens" in detail):
-                body.pop("temperature", None)
-                if "max_tokens" in detail:
-                    body["max_completion_tokens"] = body.pop("max_tokens", max_tokens)
-                continue
+            detail = e.read().decode(errors="ignore")[:600]
+            if e.code == 400:  # learn which parameters this model accepts, remember it for later calls
+                if "max_tokens" in detail and MODEL_PARAMS["tokens_key"] == "max_tokens":
+                    MODEL_PARAMS["tokens_key"] = "max_completion_tokens"
+                    continue
+                if "temperature" in detail and MODEL_PARAMS["temperature"]:
+                    MODEL_PARAMS["temperature"] = False
+                    continue
+                if "reasoning_effort" in detail and MODEL_PARAMS["effort"]:
+                    MODEL_PARAMS["effort"] = None
+                    continue
             if e.code == 401:
                 raise ApiError(502, "OpenAI rejected the API key. Check OPENAI_API_KEY in .env.")
+            print("OpenAI HTTP error", e.code, detail[:200])
             raise ApiError(502, f"AI service error ({e.code}). Please retry.")
         except (urllib.error.URLError, TimeoutError):
             raise ApiError(504, "AI service is unreachable or timed out. Please retry.")
-        except (KeyError, json.JSONDecodeError):
+        try:
+            choice = data["choices"][0]
+            text = choice["message"].get("content") or ""
+        except (KeyError, IndexError, TypeError):
             raise ApiError(502, "AI returned an invalid response. Please retry.")
+        parsed = parse_json(text)
+        if parsed is not None:
+            return parsed
+        if choice.get("finish_reason") == "length" and budget < 12000:
+            print(f"LLM output cut at {budget} tokens; retrying with a larger budget")
+            budget *= 2
+            continue
+        print("LLM returned non-JSON content, finish_reason:", choice.get("finish_reason"))
+        raise ApiError(502, "AI returned an invalid response. Please retry.")
     raise ApiError(502, "AI request failed. Please retry.")
+
+
+def parse_json(text):
+    text = (text or "").strip()
+    if not text:
+        return None
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        a, b = text.find("{"), text.rfind("}")  # tolerate code fences / stray text around the JSON
+        if a != -1 and b > a:
+            try:
+                return json.loads(text[a:b + 1])
+            except json.JSONDecodeError:
+                return None
+    return None
 
 
 def strs(x, n=10, ln=200):
@@ -318,7 +360,7 @@ def api_report(body, u):
     ai = llm_json(uid, P2, json.dumps({
         "profile": prof, "user_canonical_skills": sorted(have), "current_role": cur, "target_role": tgt,
         "target_salary": body.get("targetSalary"), "risk": {"score": risk["score"], "factors": risk["factors"]},
-        "role_list": list(ROLES), "market": market}, ensure_ascii=False), 1800)
+        "role_list": list(ROLES), "market": market}, ensure_ascii=False), 3000)
 
     def skl(x):
         return [{"skill": str(i.get("skill", ""))[:60], "reason": str(i.get("reason", ""))[:220]} for i in (x or []) if isinstance(i, dict) and i.get("skill")][:4]
@@ -418,7 +460,7 @@ def api_roadmap(body, u):
         "current_skills": rep["skills"], "current_role": rep["currentRole"], "target_role": target,
         "selected_vacancies": [{"title": j["title"], "company": j["company"], "missing_skills": j["missing"]} for j in jobs],
         "missing_skills": missing, "years_experience": rep["profile"].get("years_experience"),
-        "study_time_per_week": rep.get("studyHours") or "3-6 hours"}, ensure_ascii=False), 1800)
+        "study_time_per_week": rep.get("studyHours") or "3-6 hours"}, ensure_ascii=False), 3000)
     ms = []
     for i, m in enumerate((ai.get("milestones") or [])[:3]):
         if not isinstance(m, dict):
@@ -457,7 +499,7 @@ def api_questions(body, u):
         for s in m["skills"]:
             if s not in skills:
                 skills.append(s)
-    ai = llm_json(u["id"], P4, json.dumps({"target_role": rm["targetRole"], "roadmap_skills": skills[:10]}), 1800)
+    ai = llm_json(u["id"], P4, json.dumps({"target_role": rm["targetRole"], "roadmap_skills": skills[:10]}), 3000)
     mcq = []
     for q in (ai.get("mcq") or [])[:5]:
         opts = strs(q.get("options"), 4, 200) if isinstance(q, dict) else []
@@ -504,7 +546,7 @@ def api_submit(body, u):
     mcq_res = [{"id": q["id"], "picked": picks[q["id"]], "answer": q["answer"], "correct": picks[q["id"]] == q["answer"],
                 "explanation": q["explanation"]} for q in iv["mcq"]]
     ai = llm_json(u["id"], P5, json.dumps({"answers": [{"id": q["id"], "question": q["question"], "expected_concepts": q["expected"],
-                                                         "answer": answers[q["id"]]} for q in iv["open"]]}, ensure_ascii=False), 1800)
+                                                         "answer": answers[q["id"]]} for q in iv["open"]]}, ensure_ascii=False), 3000)
     by_id = {str(e.get("id")): e for e in (ai.get("evaluations") or []) if isinstance(e, dict)}
     evals = []
     for q in iv["open"]:
