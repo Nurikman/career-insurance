@@ -1,0 +1,2 @@
+# The API uses only the Python standard library.
+# This file tells Railway (Nixpacks) to build a Python service.

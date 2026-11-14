@@ -1,0 +1,4339 @@
+{
+ "meta": {
+  "scrapedAt": "2026-11-14T15:21:23Z",
+  "count": 100,
+  "sources": [
+   "greenhouse:affirm",
+   "greenhouse:airbnb",
+   "greenhouse:asana",
+   "greenhouse:attentive",
+   "greenhouse:axios",
+   "greenhouse:betterment",
+   "greenhouse:block",
+   "greenhouse:brex",
+   "greenhouse:buzzfeed",
+   "greenhouse:carta",
+   "greenhouse:checkr",
+   "greenhouse:chime",
+   "greenhouse:coinbase",
+   "greenhouse:databricks",
+   "greenhouse:datadog",
+   "greenhouse:discord",
+   "greenhouse:doordashusa",
+   "greenhouse:dropbox",
+   "greenhouse:duolingo",
+   "greenhouse:elastic",
+   "greenhouse:figma",
+   "greenhouse:flexport",
+   "greenhouse:gemini",
+   "greenhouse:gitlab",
+   "greenhouse:gusto",
+   "greenhouse:instacart",
+   "greenhouse:klaviyo",
+   "greenhouse:lyft",
+   "greenhouse:mercury",
+   "greenhouse:mongodb",
+   "greenhouse:okta",
+   "greenhouse:oscar",
+   "greenhouse:peloton",
+   "greenhouse:pinterest",
+   "greenhouse:reddit",
+   "greenhouse:ripple",
+   "greenhouse:robinhood",
+   "greenhouse:roblox",
+   "greenhouse:samsara",
+   "greenhouse:scaleai",
+   "greenhouse:sofi",
+   "greenhouse:squarespace",
+   "greenhouse:stripe",
+   "greenhouse:thenewyorktimes",
+   "greenhouse:toast",
+   "greenhouse:twilio",
+   "greenhouse:twitch",
+   "greenhouse:vercel",
+   "greenhouse:voxmedia",
+   "greenhouse:zscaler",
+   "lever:hive",
+   "lever:outreach",
+   "lever:palantir",
+   "lever:ro",
+   "lever:spotify",
+   "lever:zoox"
+  ],
+  "note": "Real public postings scraped from employer job boards; may close at any time."
+ },
+ "jobs": [
+  {
+   "id": "gh-airbnb-8065789",
+   "title": "Senior Machine Learning Engineer, Query Intelligence",
+   "company": "Airbnb",
+   "location": "United States",
+   "remote": false,
+   "url": "https://careers.airbnb.com/positions/8065789?gh_jid=8065789",
+   "postedAt": "2026-07-14T19:54:51-04:00",
+   "role": "AI Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 200000,
+    "max": 235000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$200,000 — $235,000 USD"
+   },
+   "mandatory": [
+    "A/B testing",
+    "ETL",
+    "LLMs",
+    "Machine learning",
+    "NLP",
+    "Stakeholder communication",
+    "Python",
+    "Java",
+    "C++",
+    "Deep learning",
+    "Spark",
+    "Airflow",
+    "PyTorch",
+    "TensorFlow",
+    "Kubernetes",
+    "REST APIs"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Python",
+     "text": "Strong programming (Scala / Python / Java / C++ or equivalent) and data engineering skills."
+    },
+    {
+     "skill": "Spark",
+     "text": "3 or more of these technologies: Tensorflow, PyTorch, Kubernetes, Spark, Airflow (or equivalent), Kafka (or equivalent), data warehouse"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-doordashusa-7980080",
+   "title": "Senior Staff Machine Learning Engineer, Ads",
+   "company": "DoorDash",
+   "location": "San Francisco, CA; Sunnyvale, CA",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/doordashusa/jobs/7980080",
+   "postedAt": "2026-06-03T19:00:06-04:00",
+   "role": "AI Engineer",
+   "level": "Lead",
+   "salary": {
+    "min": 242800,
+    "max": 357000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$242,800 — $357,000 USD"
+   },
+   "mandatory": [
+    "Deep learning",
+    "LLMs",
+    "Machine learning",
+    "A/B testing",
+    "NLP",
+    "Python",
+    "PyTorch",
+    "TensorFlow",
+    "Java",
+    "C++",
+    "Stakeholder communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Python",
+     "text": "Strong programming skills in Python, Java, or C++, with hands-on experience using ML frameworks such as PyTorch, TensorFlow, or XGBoost."
+    },
+    {
+     "skill": "Machine learning",
+     "text": "Apply state-of-the-art machine learning and LLM techniques to problems across personalization, query understanding, user and content"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-gusto-7168696",
+   "title": "Staff Machine Learning Engineer - Risk",
+   "company": "Gusto",
+   "location": "San Francisco, CA - Hybrid",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/gusto/jobs/7168696",
+   "postedAt": "2026-11-05T14:56:39-05:00",
+   "role": "AI Engineer",
+   "level": "Lead",
+   "salary": {
+    "min": 227000,
+    "max": 284000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$227k -284k"
+   },
+   "mandatory": [
+    "Machine learning",
+    "Risk management",
+    "Statistics",
+    "Prototyping",
+    "Stakeholder communication",
+    "LLMs",
+    "Business analysis",
+    "Deep learning",
+    "Python",
+    "R",
+    "NLP",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Business analysis",
+     "text": "leverage data to improve Gusto’s products and help risk management team to understand business requirements and develop tailored solutions"
+    },
+    {
+     "skill": "LLMs",
+     "text": "core analysis and modeling capabilities, including through the integration of LLMs to improve data processing, analysis, and insights."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "lv-hive-8977b31f-787d-4b17-ab00-5825764774fe",
+   "title": "Machine Learning Engineer",
+   "company": "Hive",
+   "location": "Seattle",
+   "remote": false,
+   "url": "https://jobs.lever.co/hive/8977b31f-787d-4b17-ab00-5825764774fe",
+   "postedAt": "2026-10-15T21:48:39.918000+00:00",
+   "role": "AI Engineer",
+   "level": "Unspecified",
+   "salary": {
+    "min": 120000,
+    "max": 180000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$120,000 - $180,000"
+   },
+   "mandatory": [
+    "Deep learning",
+    "Statistics",
+    "NLP",
+    "Machine learning",
+    "TensorFlow",
+    "Python",
+    "ETL",
+    "Linux",
+    "Prototyping",
+    "SQL",
+    "Spark",
+    "C++",
+    "Docker",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Python",
+     "text": "You know the ins and outs of Python, especially as it applies to the above ML frameworks"
+    },
+    {
+     "skill": "Machine learning",
+     "text": "You have strong experience with a high-level machine learning frameworks such as Tensorflow, Caffe, or Torch, and familiarity with the"
+    }
+   ],
+   "source": "lever"
+  },
+  {
+   "id": "gh-instacart-8240305",
+   "title": "Senior Machine Learning Engineer, Fulfillment",
+   "company": "Instacart",
+   "location": "United States - Remote",
+   "remote": true,
+   "url": "https://instacart.careers/job/?gh_jid=8240305",
+   "postedAt": "2026-10-30T14:31:38-04:00",
+   "role": "AI Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 207000,
+    "max": 218500,
+    "currency": "USD",
+    "period": "year",
+    "text": "$207,000 — $218,500 USD"
+   },
+   "mandatory": [
+    "Machine learning",
+    "A/B testing",
+    "Python",
+    "Stakeholder communication",
+    "Statistics",
+    "Leadership",
+    "SQL",
+    "AWS",
+    "GCP",
+    "Docker",
+    "CI/CD",
+    "Incident response"
+   ],
+   "preferred": [
+    "Spark",
+    "Airflow",
+    "Kubernetes",
+    "Java",
+    "Go",
+    "C++"
+   ],
+   "quotes": [
+    {
+     "skill": "Statistics",
+     "text": "Use experimentation, statistical analysis, and causal or counterfactual evaluation techniques to assess model quality and guide launch"
+    },
+    {
+     "skill": "AWS",
+     "text": "and operating machine learning services or data products in a cloud environment such as Google Cloud Platform or Amazon Web Services."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-peloton-8154261",
+   "title": "Machine Learning Engineer III",
+   "company": "Peloton",
+   "location": "New York, New York",
+   "remote": false,
+   "url": "https://careers.onepeloton.com/en/all-jobs/?gh_jid=8154261",
+   "postedAt": "2026-09-01T13:49:34-04:00",
+   "role": "AI Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 141400,
+    "max": 190700,
+    "currency": "USD",
+    "period": "year",
+    "text": "$141,400 — $190,700 USD"
+   },
+   "mandatory": [
+    "Machine learning",
+    "MLOps",
+    "Statistics",
+    "NLP",
+    "Python",
+    "Java",
+    "Go",
+    "C++",
+    "SQL",
+    "Stakeholder communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Python",
+     "text": "Experience writing code in Python, Java, Kotlin, Go, C/C++ with documentation for reproducibility"
+    },
+    {
+     "skill": "SQL",
+     "text": "Experience with relational and non-relational databases such as Postgres, MySQL, Cassandra, or DynamoDB"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-samsara-7858719",
+   "title": "People Analytics AI Engineer",
+   "company": "Samsara",
+   "location": "Remote - Seattle",
+   "remote": true,
+   "url": "https://www.samsara.com/company/careers/roles/7858719?gh_jid=7858719",
+   "postedAt": "2026-06-05T11:20:27-04:00",
+   "role": "AI Engineer",
+   "level": "Unspecified",
+   "salary": {
+    "min": 146370,
+    "max": 221400,
+    "currency": "USD",
+    "period": "year",
+    "text": "$146,370 — $221,400 USD"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "A/B testing",
+    "Product strategy",
+    "LLMs",
+    "Python",
+    "REST APIs",
+    "SQL",
+    "Data modeling",
+    "Snowflake",
+    "BigQuery",
+    "Spark",
+    "AWS",
+    "Communication"
+   ],
+   "preferred": [
+    "Git"
+   ],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "Experience with SQL or NoSQL databases, including data modeling and query optimization."
+    },
+    {
+     "skill": "A/B testing",
+     "text": "Act as a key voice in roadmap planning, experimentation frameworks, and modeling strategy discussions."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-sofi-7593403003",
+   "title": "Senior Staff AI Engineer",
+   "company": "SoFi",
+   "location": "CA - San Francisco",
+   "remote": false,
+   "url": "https://sofi.com/careers/job/7593403003?gh_jid=7593403003",
+   "postedAt": "2026-01-22T15:52:57-05:00",
+   "role": "AI Engineer",
+   "level": "Lead",
+   "salary": null,
+   "mandatory": [
+    "Prototyping",
+    "Risk management",
+    "Leadership",
+    "LLMs",
+    "Stakeholder communication",
+    "NLP",
+    "Kubernetes",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Docker",
+    "Python",
+    "ETL",
+    "Snowflake",
+    "REST APIs",
+    "Agile"
+   ],
+   "preferred": [
+    "Machine learning",
+    "React"
+   ],
+   "quotes": [
+    {
+     "skill": "Python",
+     "text": "Expert level Python is required."
+    },
+    {
+     "skill": "AWS",
+     "text": "Experience with cloud platforms (AWS, Azure, or GCP) and containerization technologies (Docker, Kubernetes)."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-zscaler-5278553007",
+   "title": "Senior Staff AI Engineer",
+   "company": "Zscaler",
+   "location": "Santa Clara, California, USA",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/zscaler/jobs/5278553007",
+   "postedAt": "2026-11-11T12:29:20-05:00",
+   "role": "AI Engineer",
+   "level": "Lead",
+   "salary": {
+    "min": 180000,
+    "max": 225000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$180,000 — $225,000 USD"
+   },
+   "mandatory": [
+    "Agile",
+    "Machine learning",
+    "Leadership",
+    "LLMs",
+    "Product strategy",
+    "Communication",
+    "CI/CD",
+    "Stakeholder communication",
+    "Excel",
+    "Python",
+    "Java",
+    "TypeScript",
+    "React",
+    "Node.js",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Docker",
+    "Kubernetes",
+    "Incident response"
+   ],
+   "preferred": [
+    "Risk management"
+   ],
+   "quotes": [
+    {
+     "skill": "Incident response",
+     "text": "operating production enterprise services, including incident response, on-call management, runbook development, and SLA governance"
+    },
+    {
+     "skill": "Python",
+     "text": "Proficiency in full-stack development utilizing Python, TypeScript/Node.js (or Java/Go), modern front-end frameworks like React, and robust"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-attentive-4463318009",
+   "title": "Senior People Insights Analyst",
+   "company": "Attentive",
+   "location": "New York, NY (Hybrid)",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/attentive/jobs/4463318009",
+   "postedAt": "2026-10-23T19:24:06-04:00",
+   "role": "Data Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 100000,
+    "max": 125000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$100,000 - $125,000"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Leadership"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Leadership",
+     "text": "compensation, and engagement data to make recommendations to the People Leadership Team; execute quickly on those recommendations"
+    },
+    {
+     "skill": "Stakeholder communication",
+     "text": "essential that they are able to motivate, empathize with, and communicate effectively with stakeholders at every level of the organization."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-figma-6249978004",
+   "title": "Technical Operations & Insights Analyst",
+   "company": "Figma",
+   "location": "San Francisco, CA • New York, NY • United States",
+   "remote": false,
+   "url": "https://boards.greenhouse.io/figma/jobs/6249978004?gh_jid=6249978004",
+   "postedAt": "2026-11-10T13:53:05-05:00",
+   "role": "Data Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 140000,
+    "max": 245000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$140,000 — $245,000 USD"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Leadership",
+    "SQL",
+    "Python",
+    "Git",
+    "Statistics",
+    "Communication",
+    "Financial modeling"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Financial modeling",
+     "text": "Deeper financial modeling, workforce planning, or coaching other analysts"
+    },
+    {
+     "skill": "Statistics",
+     "text": "Apply statistical inference to operational decisions, including observational comparisons, uncertainty, and sensitivity analysis. Explain"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "lv-hive-2a2855f7-ea1f-4b53-9958-941a499c62a9",
+   "title": "Product Analyst - Sports, Media, & Marketing",
+   "company": "Hive",
+   "location": "San Francisco",
+   "remote": false,
+   "url": "https://jobs.lever.co/hive/2a2855f7-ea1f-4b53-9958-941a499c62a9",
+   "postedAt": "2026-10-15T20:09:10.957000+00:00",
+   "role": "Data Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 75000,
+    "max": 105000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$75,000 - $105,000"
+   },
+   "mandatory": [
+    "Data visualization",
+    "SQL",
+    "Statistics",
+    "Python",
+    "ETL",
+    "Stakeholder communication",
+    "Communication",
+    "Business analysis"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "Analyze high volume data using SQL and effectively communicate findings"
+    },
+    {
+     "skill": "Data visualization",
+     "text": "Develop product quality and performance KPIs and track over time via dashboarding and automated reporting"
+    }
+   ],
+   "source": "lever"
+  },
+  {
+   "id": "gh-mercury-6186428004",
+   "title": "Senior Data Analyst - Reconciliation",
+   "company": "Mercury",
+   "location": "San Francisco, CA, New York, NY, Portland, OR, or Remote within Canada or United States",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/mercury/jobs/6186428004",
+   "postedAt": "2026-09-09T11:10:28-04:00",
+   "role": "Data Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 192300,
+    "max": 235100,
+    "currency": "USD",
+    "period": "year",
+    "text": "$192,300 — $235,100 USD"
+   },
+   "mandatory": [
+    "ETL",
+    "Accounting",
+    "Stakeholder communication",
+    "Product strategy",
+    "Leadership",
+    "SQL",
+    "dbt",
+    "Tableau",
+    "Looker",
+    "Data visualization"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "Advanced SQL skills and hands-on experience developing and maintaining data transformation pipelines (e.g., dbt or similar)"
+    },
+    {
+     "skill": "Tableau",
+     "text": "building monitoring or BI dashboards to communicate operational and financial metrics using tools such as Omni, Looker, or Tableau"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-okta-8304288",
+   "title": "Senior Data Analyst (Auth0)",
+   "company": "Okta",
+   "location": "Chicago, Illinois; New York, New York; Seattle, Washington; Washington, DC",
+   "remote": false,
+   "url": "https://www.okta.com/company/careers/opportunity/8304288?gh_jid=8304288",
+   "postedAt": "2026-10-21T11:55:12-04:00",
+   "role": "Data Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 114000,
+    "max": 156200,
+    "currency": "USD",
+    "period": "year",
+    "text": "$114,000 — $156,200 USD"
+   },
+   "mandatory": [
+    "Product strategy",
+    "SQL",
+    "Tableau",
+    "Data visualization",
+    "Snowflake",
+    "dbt",
+    "Stakeholder communication",
+    "Communication",
+    "LLMs",
+    "A/B testing",
+    "Forecasting",
+    "Machine learning"
+   ],
+   "preferred": [
+    "Data modeling",
+    "Git"
+   ],
+   "quotes": [
+    {
+     "skill": "dbt",
+     "text": "DBT models"
+    },
+    {
+     "skill": "Tableau",
+     "text": "Tableau dashboards"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-oscar-8193718",
+   "title": "Senior Analyst, Data Analytics, SIU",
+   "company": "Oscar Health",
+   "location": "Remote (New York, NY)",
+   "remote": true,
+   "url": "https://oscarhealth.com/careers/jobs?gh_jid=8193718",
+   "postedAt": "2026-09-17T15:57:36-04:00",
+   "role": "Data Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 86628,
+    "max": 109761,
+    "currency": "USD",
+    "period": "year",
+    "text": "$86,628 - $109,761 per year"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Data visualization",
+    "Risk management",
+    "Communication",
+    "SQL",
+    "Python",
+    "R",
+    "Statistics",
+    "Excel",
+    "Looker"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Risk management",
+     "text": "Compliance with all applicable laws and regulations"
+    },
+    {
+     "skill": "Excel",
+     "text": "Proficiency in Google Sheets or Excel skills, with ability to use VLookup, nested if statements and connected Sheets"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-roblox-8332448",
+   "title": "Senior Data Analyst, Moderation Operations",
+   "company": "Roblox",
+   "location": "San Mateo, CA, United States",
+   "remote": false,
+   "url": "https://careers.roblox.com/jobs/8332448?gh_jid=8332448",
+   "postedAt": "2026-11-12T14:38:34-05:00",
+   "role": "Data Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 167910,
+    "max": 205690,
+    "currency": "USD",
+    "period": "year",
+    "text": "$167,910 — $205,690 USD"
+   },
+   "mandatory": [
+    "Risk management",
+    "Leadership",
+    "Product analytics",
+    "Data visualization",
+    "Stakeholder communication",
+    "SQL",
+    "Python",
+    "Git"
+   ],
+   "preferred": [
+    "Statistics"
+   ],
+   "quotes": [
+    {
+     "skill": "Product analytics",
+     "text": "Identify opportunities through trend and cohort analysis; assess business cases and lead cross‑functional analytics initiatives from"
+    },
+    {
+     "skill": "SQL",
+     "text": "Advanced proficiency in SQL, including complex queries, common table expressions, and window functions; working knowledge of Git and Python"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-scaleai-4729899005",
+   "title": "Senior Data Analyst, Public Sector",
+   "company": "Scale AI",
+   "location": "Washington, DC",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/scaleai/jobs/4729899005",
+   "postedAt": "2026-09-02T14:44:20-04:00",
+   "role": "Data Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 184000,
+    "max": 230000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$184,000 — $230,000 USD"
+   },
+   "mandatory": [
+    "Data visualization",
+    "Stakeholder communication",
+    "Leadership",
+    "SQL",
+    "Data modeling",
+    "dbt",
+    "Tableau",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "Advanced SQL skills and experience building with data modeling tools (e.g. DBT)"
+    },
+    {
+     "skill": "Tableau",
+     "text": "Experience building dashboards and reports with BI tools (e.g. Tableau, Metabase)"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-thenewyorktimes-4751531005",
+   "title": "Analyst, Data and Insights",
+   "company": "The New York Times",
+   "location": "New York, NY",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4751531005",
+   "postedAt": "2026-11-06T08:56:25-05:00",
+   "role": "Data Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 88000,
+    "max": 100000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$88,000 — $100,000 USD"
+   },
+   "mandatory": [
+    "Data visualization",
+    "SQL",
+    "Stakeholder communication",
+    "Python",
+    "R"
+   ],
+   "preferred": [
+    "BigQuery",
+    "AWS",
+    "dbt",
+    "Git",
+    "Statistics",
+    "A/B testing",
+    "LLMs"
+   ],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "Write SQL to build pipelines and analyze large datasets"
+    },
+    {
+     "skill": "Python",
+     "text": "Proficiency in at least one additional scripting language like R or Python"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-gitlab-8922013002",
+   "title": "Data Scientist, Enterprise Analytics",
+   "company": "GitLab",
+   "location": "Remote, Canada; Remote, United States",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/gitlab/jobs/8922013002",
+   "postedAt": "2026-10-30T15:59:39-04:00",
+   "role": "Data Scientist",
+   "level": "Unspecified",
+   "salary": {
+    "min": 86400,
+    "max": 176400,
+    "currency": "USD",
+    "period": "year",
+    "text": "$86,400 — $176,400 USD"
+   },
+   "mandatory": [
+    "Risk management",
+    "Statistics",
+    "A/B testing",
+    "Machine learning",
+    "Product strategy",
+    "Product analytics",
+    "Forecasting",
+    "MLOps",
+    "CI/CD",
+    "Stakeholder communication",
+    "SQL",
+    "Python",
+    "Tableau",
+    "Looker",
+    "Snowflake"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Tableau",
+     "text": "Snowflake SQL), including working with product usage and event data, and in business intelligence tools (Looker, Tableau, Hex, or similar)"
+    },
+    {
+     "skill": "SQL",
+     "text": "Write production-grade Python and SQL that meets internal standards for style, maintainability, and performance in a high-scale database"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-klaviyo-8048082003",
+   "title": "Lead Product Data Scientist, Agents",
+   "company": "Klaviyo",
+   "location": "Boston, MA",
+   "remote": false,
+   "url": "https://www.klaviyo.com/careers/jobs/8048082003?gh_jid=8048082003",
+   "postedAt": "2026-10-30T07:44:42-04:00",
+   "role": "Data Scientist",
+   "level": "Lead",
+   "salary": {
+    "min": 172000,
+    "max": 258000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$172,000 — $258,000 USD"
+   },
+   "mandatory": [
+    "Product strategy",
+    "Leadership",
+    "A/B testing",
+    "Data visualization",
+    "Product analytics",
+    "Statistics",
+    "SQL",
+    "Data modeling",
+    "LLMs",
+    "Stakeholder communication",
+    "dbt",
+    "ETL",
+    "Machine learning",
+    "Python"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Python",
+     "text": "You're highly proficient in SQL and Python or R, with experience developing production-quality analytical solutions and familiarity with"
+    },
+    {
+     "skill": "dbt",
+     "text": "to develop reliable instrumentation, data pipelines, and dbt models that capture agent interactions, support robust evaluation, and"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-lyft-8620998002",
+   "title": "Senior Data Scientist, Algorithm, Lyft Biz",
+   "company": "Lyft",
+   "location": "San Francisco, CA",
+   "remote": false,
+   "url": "https://app.careerpuck.com/job-board/lyft/job/8620998002?gh_jid=8620998002",
+   "postedAt": "2026-07-06T23:49:32-04:00",
+   "role": "Data Scientist",
+   "level": "Senior",
+   "salary": {
+    "min": 148000,
+    "max": 185000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$148,000 - $185,000"
+   },
+   "mandatory": [
+    "REST APIs",
+    "A/B testing",
+    "Machine learning",
+    "Product strategy",
+    "Stakeholder communication",
+    "Leadership",
+    "Statistics",
+    "Python",
+    "Snowflake",
+    "Spark",
+    "PyTorch",
+    "TensorFlow",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Statistics",
+     "text": "Master’s or PhD in Machine Learning, Computer Science, Statistics, Optimization, or a related quantitative field (or equivalent applied"
+    },
+    {
+     "skill": "Python",
+     "text": "Technical Stack: Strong proficiency in Python, modern ML frameworks (PyTorch, TensorFlow, scikit-learn), and distributed data systems"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-oscar-8083703",
+   "title": "Senior Data Scientist, Risk Adjustment",
+   "company": "Oscar Health",
+   "location": "New York, New York, United States",
+   "remote": false,
+   "url": "https://oscarhealth.com/careers/jobs?gh_jid=8083703",
+   "postedAt": "2026-07-24T15:18:53-04:00",
+   "role": "Data Scientist",
+   "level": "Senior",
+   "salary": {
+    "min": 163944,
+    "max": 215176,
+    "currency": "USD",
+    "period": "year",
+    "text": "$163,944 - $215,176"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "ETL",
+    "Product strategy",
+    "Risk management",
+    "SQL",
+    "Python",
+    "Statistics",
+    "Git",
+    "Financial modeling",
+    "dbt",
+    "BigQuery"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Risk management",
+     "text": "Compliance with all applicable laws and regulations"
+    },
+    {
+     "skill": "Product strategy",
+     "text": "Works with team and manager to impact longer term strategies and roadmap"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-pinterest-6087213",
+   "title": "Sr. Data Scientist, Core",
+   "company": "Pinterest",
+   "location": "San Francisco, CA, US; Remote, US",
+   "remote": true,
+   "url": "https://www.pinterestcareers.com/jobs/?gh_jid=6087213",
+   "postedAt": "2024-07-03T20:30:32-04:00",
+   "role": "Data Scientist",
+   "level": "Senior",
+   "salary": {
+    "min": 139764,
+    "max": 287749,
+    "currency": "USD",
+    "period": "year",
+    "text": "$139,764 — $287,749 USD"
+   },
+   "mandatory": [
+    "A/B testing",
+    "Product analytics",
+    "Stakeholder communication",
+    "Statistics",
+    "Machine learning",
+    "Forecasting",
+    "Deep learning",
+    "PyTorch",
+    "TensorFlow",
+    "SQL",
+    "Python",
+    "Communication",
+    "Leadership"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Deep learning",
+     "text": "Experience using machine learning and deep learning frameworks, such as PyTorch, TensorFlow or scikit-learn"
+    },
+    {
+     "skill": "SQL",
+     "text": "data sets with high dimensionality and complexity; fluency in SQL (or other database languages) and a scripting language (Python or R)"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-reddit-7445240",
+   "title": "Staff Data Scientist, Marketing",
+   "company": "Reddit",
+   "location": "Remote - United States",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/reddit/jobs/7445240",
+   "postedAt": "2026-05-05T14:32:22-04:00",
+   "role": "Data Scientist",
+   "level": "Lead",
+   "salary": {
+    "min": 217000,
+    "max": 303900,
+    "currency": "USD",
+    "period": "year",
+    "text": "$217,000 — $303,900 USD"
+   },
+   "mandatory": [
+    "A/B testing",
+    "Leadership",
+    "Product strategy",
+    "Statistics",
+    "SQL",
+    "Python",
+    "R",
+    "ETL",
+    "Machine learning",
+    "Communication",
+    "Stakeholder communication"
+   ],
+   "preferred": [
+    "Forecasting",
+    "Social media"
+   ],
+   "quotes": [
+    {
+     "skill": "Statistics",
+     "text": ": Mentor junior scientists and set the technical bar for code quality and statistical rigor across the Marketing organization."
+    },
+    {
+     "skill": "SQL",
+     "text": "Advanced proficiency in Python or R and SQL. Experience building production-grade data pipelines and using machine learning for predictive"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-ripple-8260181",
+   "title": "Staff Data Scientist",
+   "company": "Ripple",
+   "location": "San Francisco, CA, United States",
+   "remote": false,
+   "url": "https://ripple.com/careers/all-jobs/job/8260181?gh_jid=8260181",
+   "postedAt": "2026-10-07T12:55:15-04:00",
+   "role": "Data Scientist",
+   "level": "Lead",
+   "salary": {
+    "min": 212000,
+    "max": 265000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$212,000 — $265,000 USD"
+   },
+   "mandatory": [
+    "Forecasting",
+    "LLMs",
+    "Leadership",
+    "Stakeholder communication",
+    "Statistics",
+    "A/B testing",
+    "Communication"
+   ],
+   "preferred": [
+    "SQL",
+    "Python",
+    "dbt",
+    "Spark",
+    "Airflow"
+   ],
+   "quotes": [
+    {
+     "skill": "Statistics",
+     "text": "Deep expertise in experimentation, causal inference, forecasting, and statistical modeling in a product environment."
+    },
+    {
+     "skill": "LLMs",
+     "text": ": applying LLMs and agentic workflows to scale insight generation, automate routine analysis, and enable self-serve exploration for non-DS"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-roblox-8127054",
+   "title": "Senior Data Scientist, Consumer Apps",
+   "company": "Roblox",
+   "location": "San Mateo, CA, United States",
+   "remote": false,
+   "url": "https://careers.roblox.com/jobs/8127054?gh_jid=8127054",
+   "postedAt": "2026-08-24T16:30:47-04:00",
+   "role": "Data Scientist",
+   "level": "Senior",
+   "salary": {
+    "min": 263670,
+    "max": 322820,
+    "currency": "USD",
+    "period": "year",
+    "text": "$263,670 — $322,820 USD"
+   },
+   "mandatory": [
+    "Statistics",
+    "A/B testing",
+    "Machine learning",
+    "Product strategy",
+    "Product analytics",
+    "Stakeholder communication",
+    "SQL",
+    "Python",
+    "R",
+    "Spark",
+    "Airflow",
+    "Leadership",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "analytical and technical skills, with proficiency in Python or R, SQL, and large-scale data processing and workflow tools such as Spark"
+    },
+    {
+     "skill": "Statistics",
+     "text": "product analytics, experimentation, causal inference, statistical modeling and machine learning. Aligned and partnering with"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "lv-spotify-babebec3-0061-4c39-a4ad-c51a54d23567",
+   "title": "Senior Data Scientist, Artist-First AI Music lab",
+   "company": "Spotify",
+   "location": "New York, NY",
+   "remote": true,
+   "url": "https://jobs.lever.co/spotify/babebec3-0061-4c39-a4ad-c51a54d23567",
+   "postedAt": "2026-10-08T15:54:35.083000+00:00",
+   "role": "Data Scientist",
+   "level": "Senior",
+   "salary": {
+    "min": 144714,
+    "max": 206735,
+    "currency": "USD",
+    "period": "year",
+    "text": "$144,714–$206,735 USD"
+   },
+   "mandatory": [
+    "LLMs",
+    "A/B testing",
+    "Product strategy",
+    "Stakeholder communication",
+    "Data visualization",
+    "Statistics",
+    "SQL",
+    "Python",
+    "Machine learning"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Data visualization",
+     "text": "Create the datasets, dashboards, and long-term measurement systems that give Spotify a lasting, comprehensive understanding of product"
+    },
+    {
+     "skill": "SQL",
+     "text": "You're proficient in advanced analytics with Python and SQL, have analyzed large datasets, and use AI tools (e.g. Cursor, Copilot) to"
+    }
+   ],
+   "source": "lever"
+  },
+  {
+   "id": "gh-airbnb-8303047",
+   "title": "Product Manager, LATAM (Miami or San Francisco)",
+   "company": "Airbnb",
+   "location": "Miami, San Francisco",
+   "remote": false,
+   "url": "https://careers.airbnb.com/positions/8303047?gh_jid=8303047",
+   "postedAt": "2026-10-21T03:55:01-04:00",
+   "role": "Product Manager",
+   "level": "Unspecified",
+   "salary": {
+    "min": 232000,
+    "max": 282000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$232,000 — $282,000 USD"
+   },
+   "mandatory": [
+    "Product strategy",
+    "Stakeholder communication",
+    "User research",
+    "Product analytics",
+    "Financial modeling",
+    "Leadership",
+    "Business analysis",
+    "Prototyping"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Business analysis",
+     "text": "Ability to effectively use data and perform business analysis to support product strategy/decisions."
+    },
+    {
+     "skill": "Prototyping",
+     "text": "Strong AI fluency: hands-on use of AI tools in your day-to-day product work (research, analysis, prototyping, communications)."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-gitlab-8855883002",
+   "title": "Senior Product Manager, CRM & GTM Systems",
+   "company": "GitLab",
+   "location": "Remote, United States",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/gitlab/jobs/8855883002",
+   "postedAt": "2026-10-02T13:56:31-04:00",
+   "role": "Product Manager",
+   "level": "Senior",
+   "salary": {
+    "min": 104800,
+    "max": 176400,
+    "currency": "USD",
+    "period": "year",
+    "text": "$104,800 — $176,400 USD"
+   },
+   "mandatory": [
+    "Risk management",
+    "Product strategy",
+    "Leadership",
+    "Stakeholder communication",
+    "Communication",
+    "Business analysis",
+    "Marketing automation",
+    "Data modeling",
+    "Product analytics"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Data modeling",
+     "text": "Ability to engage deeply with engineering and architecture teams on API design, data modeling, and integration patterns."
+    },
+    {
+     "skill": "Business analysis",
+     "text": "Write and maintain clear user stories, acceptance criteria, and lead-flow and data-flow diagrams that engineering and admins can build"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-lyft-8916924002",
+   "title": "Senior Product Manager, Rider ML/AI",
+   "company": "Lyft",
+   "location": "San Francisco, CA",
+   "remote": false,
+   "url": "https://app.careerpuck.com/job-board/lyft/job/8916924002?gh_jid=8916924002",
+   "postedAt": "2026-10-26T13:09:16-04:00",
+   "role": "Product Manager",
+   "level": "Senior",
+   "salary": {
+    "min": 148000,
+    "max": 185000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$148,000 - $185,000"
+   },
+   "mandatory": [
+    "Machine learning",
+    "Product strategy",
+    "Product analytics",
+    "Leadership",
+    "Excel",
+    "Jira",
+    "Statistics",
+    "A/B testing",
+    "Data visualization",
+    "Deep learning",
+    "PyTorch",
+    "TensorFlow",
+    "Stakeholder communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Statistics",
+     "text": "with user facing large scale experimentation (optimizely, statsig, eppo etc), knowing concepts such as power and statistical significance"
+    },
+    {
+     "skill": "Product strategy",
+     "text": "Define, own and be responsible for the roadmap of applied ML and AI products in every screen of the Rider Application, through the Rider"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-mongodb-7908293",
+   "title": "Product Manager, Internal Financial Data",
+   "company": "MongoDB",
+   "location": "Austin; New York City; Palo Alto; San Francisco; United States",
+   "remote": false,
+   "url": "https://www.mongodb.com/careers/job/?gh_jid=7908293",
+   "postedAt": "2026-05-13T11:55:09-04:00",
+   "role": "Product Manager",
+   "level": "Unspecified",
+   "salary": {
+    "min": 106000,
+    "max": 209000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$106,000 — $209,000 USD"
+   },
+   "mandatory": [
+    "ETL",
+    "Machine learning",
+    "REST APIs",
+    "Forecasting",
+    "Product strategy",
+    "Leadership",
+    "Business analysis",
+    "Data visualization",
+    "Stakeholder communication",
+    "Agile",
+    "Financial modeling",
+    "Risk management",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Financial modeling",
+     "text": "Familiarity with FP&A and Workforce Planning (WFP) ecosystems"
+    },
+    {
+     "skill": "Risk management",
+     "text": "Experience handling sensitive data and SOX compliance, with the judgment to balance risk controls with velocity"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-peloton-8384770",
+   "title": "Group Product Manager",
+   "company": "Peloton",
+   "location": "New York, New York",
+   "remote": false,
+   "url": "https://careers.onepeloton.com/en/all-jobs/?gh_jid=8384770",
+   "postedAt": "2026-11-13T11:44:12-05:00",
+   "role": "Product Manager",
+   "level": "Unspecified",
+   "salary": {
+    "min": 215029,
+    "max": 265202,
+    "currency": "USD",
+    "period": "year",
+    "text": "$215,029 — $265,202 USD"
+   },
+   "mandatory": [
+    "Kubernetes",
+    "Leadership",
+    "A/B testing",
+    "Product strategy",
+    "Product analytics",
+    "User research",
+    "Stakeholder communication",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "User research",
+     "text": "Collaborate with Analytics and User Research to uncover deep behavioral insights, set benchmark KPIs, and drive real business impact"
+    },
+    {
+     "skill": "A/B testing",
+     "text": "and subscription growth. Lead features seamlessly from discovery and technical scoping through UAT, experimentation, and global launch"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-robinhood-8204521",
+   "title": "Senior Product Manager, Capital Markets",
+   "company": "Robinhood",
+   "location": "Menlo Park, CA; New York, NY",
+   "remote": false,
+   "url": "https://boards.greenhouse.io/robinhood/jobs/8204521?t=gh_src=&gh_jid=8204521",
+   "postedAt": "2026-09-15T12:51:36-04:00",
+   "role": "Product Manager",
+   "level": "Senior",
+   "salary": {
+    "min": 166000,
+    "max": 195000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$166,000 — $195,000 USD"
+   },
+   "mandatory": [
+    "Spark",
+    "Product strategy",
+    "Risk management",
+    "A/B testing",
+    "Product analytics",
+    "Leadership",
+    "Prototyping",
+    "Stakeholder communication",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Prototyping",
+     "text": "A track record of shipping 0-1 products at scale, beyond prototypes and pilots"
+    },
+    {
+     "skill": "A/B testing",
+     "text": "Use research, experimentation, and product analytics to decide what to build, and to prove what worked"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-thenewyorktimes-4747130005",
+   "title": "Technical Product Manager II, Data Platforms",
+   "company": "The New York Times",
+   "location": "New York, NY",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/thenewyorktimes/jobs/4747130005",
+   "postedAt": "2026-10-26T13:35:01-04:00",
+   "role": "Product Manager",
+   "level": "Mid",
+   "salary": {
+    "min": 120000,
+    "max": 142000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$120,000 — $142,000 USD"
+   },
+   "mandatory": [
+    "Machine learning",
+    "Product strategy",
+    "Stakeholder communication",
+    "Data modeling"
+   ],
+   "preferred": [
+    "Spark",
+    "Airflow",
+    "SQL",
+    "Python",
+    "BigQuery",
+    "AWS"
+   ],
+   "quotes": [
+    {
+     "skill": "Product strategy",
+     "text": "Communicate roadmap progress, risks, and tradeoffs to stakeholders."
+    },
+    {
+     "skill": "Data modeling",
+     "text": "Understanding of data infrastructure concepts, including pipelines, compute, storage, data modeling, and governance."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-toast-8245664",
+   "title": "Senior Product Manager, Lending",
+   "company": "Toast",
+   "location": "Remote, US",
+   "remote": true,
+   "url": "https://careers.toasttab.com/jobs?gh_jid=8245664",
+   "postedAt": "2026-10-21T09:52:05-04:00",
+   "role": "Product Manager",
+   "level": "Senior",
+   "salary": {
+    "min": 159000,
+    "max": 254000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$159,000 — $254,000 USD"
+   },
+   "mandatory": [
+    "Product strategy",
+    "Risk management",
+    "Prototyping",
+    "Business analysis",
+    "Agile",
+    "Stakeholder communication",
+    "Communication",
+    "SQL"
+   ],
+   "preferred": [
+    "Machine learning"
+   ],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "Comfortable with data analysis tools like SQL."
+    },
+    {
+     "skill": "Prototyping",
+     "text": "non-technical user stories, define requirements, workflows, and wireframes in collaboration with Engineering, Design, Data Science and"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-vercel-6205772004",
+   "title": "Product Manager, Dashboard",
+   "company": "Vercel",
+   "location": "Hybrid - San Francisco",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/vercel/jobs/6205772004",
+   "postedAt": "2026-09-24T19:38:23-04:00",
+   "role": "Product Manager",
+   "level": "Unspecified",
+   "salary": {
+    "min": 172000,
+    "max": 258000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$172,000 - $258,000"
+   },
+   "mandatory": [
+    "LLMs",
+    "Product strategy",
+    "CI/CD",
+    "Product analytics",
+    "Data visualization"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Product analytics",
+     "text": "Run experiments and measure onboarding funnel performance, feature adoption, and engagement across user segments"
+    },
+    {
+     "skill": "Data visualization",
+     "text": "Worked on control planes, dashboards, or console products at infrastructure, cloud, or developer tools companies"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-affirm-7819449003",
+   "title": "Staff CIAM Software Engineer",
+   "company": "Affirm",
+   "location": "Remote US",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/affirm/jobs/7819449003",
+   "postedAt": "2026-08-12T04:13:07-04:00",
+   "role": "Software Engineer",
+   "level": "Lead",
+   "salary": {
+    "min": 230000,
+    "max": 290000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$230,000 - $290,000"
+   },
+   "mandatory": [
+    "Python",
+    "SQL",
+    "Spark",
+    "AWS",
+    "Kubernetes",
+    "Communication",
+    "REST APIs",
+    "Terraform",
+    "CI/CD",
+    "Azure",
+    "Data modeling"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "REST APIs",
+     "text": "Develop backend APIs and services in Python and Kotlin that expose identity capabilities to web, mobile, and partner applications."
+    },
+    {
+     "skill": "Python",
+     "text": "You have 7+ years of experience designing, developing and launching backend systems at scale using languages like Python or Kotlin."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-attentive-4120606009",
+   "title": "Senior Software Engineer, Identity",
+   "company": "Attentive",
+   "location": "New York, NY (Hybrid)",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/attentive/jobs/4120606009",
+   "postedAt": "2026-03-31T14:45:44-04:00",
+   "role": "Software Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 178400,
+    "max": 267600,
+    "currency": "USD",
+    "period": "year",
+    "text": "$178,400 - $267,600"
+   },
+   "mandatory": [
+    "JavaScript",
+    "Java",
+    "Leadership",
+    "Data modeling",
+    "TypeScript",
+    "AWS",
+    "Design systems",
+    "Airflow",
+    "Kubernetes",
+    "Terraform",
+    "React",
+    "REST APIs",
+    "Python",
+    "Machine learning",
+    "PyTorch",
+    "TensorFlow",
+    "LLMs"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Design systems",
+     "text": "Good debugging instincts across service boundaries. You design systems so issues surface clearly rather than hiding."
+    },
+    {
+     "skill": "AWS",
+     "text": "Experience with edge compute or serverless runtimes (Cloudflare Workers, Lambda@Edge, Fastly), or the ability to ramp quickly."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-block-4901418008",
+   "title": "Software Engineer, Finance Applications",
+   "company": "Block",
+   "location": "Bay Area, CA, United States of America",
+   "remote": false,
+   "url": "https://block.xyz/careers/jobs/4901418008?gh_jid=4901418008",
+   "postedAt": "2026-02-17T11:31:17-05:00",
+   "role": "Software Engineer",
+   "level": "Unspecified",
+   "salary": {
+    "min": 217800,
+    "max": 326800,
+    "currency": "USD",
+    "period": "year",
+    "text": "$217,800 — $326,800 USD"
+   },
+   "mandatory": [
+    "Forecasting",
+    "Stakeholder communication",
+    "Financial modeling",
+    "Accounting",
+    "REST APIs",
+    "Risk management",
+    "Leadership",
+    "Prototyping",
+    "Product analytics",
+    "Business analysis"
+   ],
+   "preferred": [
+    "ETL",
+    "Git",
+    "Python",
+    "Java",
+    "JavaScript",
+    "SQL",
+    "Snowflake",
+    "AWS",
+    "Kubernetes"
+   ],
+   "quotes": [
+    {
+     "skill": "Product analytics",
+     "text": "systems — you understand why idempotency, audit trails, data retention, and access controls matter and you build for them by default"
+    },
+    {
+     "skill": "Risk management",
+     "text": "Partner across the business — Work directly with operations, compliance, and product stakeholders to translate complex financial and"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-brex-8617113002",
+   "title": "Senior Software Engineer, Release Infra",
+   "company": "Brex",
+   "location": "San Francisco, California, United States",
+   "remote": false,
+   "url": "https://www.brex.com/careers/8617113002?gh_jid=8617113002",
+   "postedAt": "2026-07-01T17:50:44-04:00",
+   "role": "Software Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 192000,
+    "max": 240000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$192,000 - $240,000"
+   },
+   "mandatory": [
+    "Incident response",
+    "Leadership",
+    "Python",
+    "Java",
+    "Go",
+    "Git",
+    "CI/CD",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Docker",
+    "Kubernetes",
+    "Terraform",
+    "SQL",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Incident response",
+     "text": "Build and evolve tooling for observability and incident response, enabling fast detection, triage, and resolution"
+    },
+    {
+     "skill": "SQL",
+     "text": "Experience designing and optimizing data storage systems (SQL and/or NoSQL) for operational and observability use cases"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-databricks-7898766002",
+   "title": "Senior Software Engineer - Fullstack",
+   "company": "Databricks",
+   "location": "Mountain View, California; San Francisco, California",
+   "remote": false,
+   "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7898766002",
+   "postedAt": "2025-03-06T17:58:22-05:00",
+   "role": "Software Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 166000,
+    "max": 225000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$166,000 — $225,000 USD"
+   },
+   "mandatory": [
+    "REST APIs",
+    "Stakeholder communication",
+    "Leadership",
+    "Product strategy",
+    "Agile",
+    "JavaScript",
+    "React",
+    "Python",
+    "Java",
+    "Go",
+    "SQL",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Docker",
+    "Kubernetes"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "Good knowledge of SQL."
+    },
+    {
+     "skill": "JavaScript",
+     "text": "5+ years of experience with HTML, CSS, and JavaScript."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-figma-5551686004",
+   "title": "Software Engineer - Data Infrastructure",
+   "company": "Figma",
+   "location": "San Francisco, CA • New York, NY • United States",
+   "remote": false,
+   "url": "https://boards.greenhouse.io/figma/jobs/5551686004?gh_jid=5551686004",
+   "postedAt": "2025-06-02T06:16:21-04:00",
+   "role": "Software Engineer",
+   "level": "Unspecified",
+   "salary": {
+    "min": 153000,
+    "max": 376000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$153,000 — $376,000 USD"
+   },
+   "mandatory": [
+    "Snowflake",
+    "Machine learning",
+    "Stakeholder communication",
+    "ETL",
+    "Risk management",
+    "Leadership",
+    "Spark",
+    "Airflow",
+    "Communication",
+    "SQL",
+    "Python",
+    "dbt",
+    "Git"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Spark",
+     "text": "Strong expertise in batch and streaming data processing technologies such as Spark, Flink, Kafka, or Airflow/Dagster"
+    },
+    {
+     "skill": "Git",
+     "text": "Experience using AI-assisted development tools (e.g., GitHub Copilot, ChatGPT, Claude) to write, debug, and optimize code"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-scaleai-4481921005",
+   "title": "Forward Deployed Software Engineer, Public Sector",
+   "company": "Scale AI",
+   "location": "Austin, TX; Colorado Springs, CO; Honolulu, HI; Omaha, NE; St. Louis, MO; Washington, DC",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/scaleai/jobs/4481921005",
+   "postedAt": "2024-10-09T16:46:02-04:00",
+   "role": "Software Engineer",
+   "level": "Unspecified",
+   "salary": {
+    "min": 184000,
+    "max": 292560,
+    "currency": "USD",
+    "period": "year",
+    "text": "$184,000 — $292,560 USD"
+   },
+   "mandatory": [
+    "Project management",
+    "Product strategy",
+    "Stakeholder communication",
+    "Python",
+    "TypeScript",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Docker",
+    "Linux"
+   ],
+   "preferred": [
+    "LLMs",
+    "React",
+    "Kubernetes",
+    "Terraform",
+    "Data modeling",
+    "ETL"
+   ],
+   "quotes": [
+    {
+     "skill": "Python",
+     "text": "Strong production coding in Python and TypeScript (or comparable modern languages)."
+    },
+    {
+     "skill": "AWS",
+     "text": "Comfort across the stack, including cloud platforms (AWS, Azure, or GCP), containers, Linux, and networking fundamentals."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-twitch-8937278002",
+   "title": "Software Engineer II, Fintech",
+   "company": "Twitch",
+   "location": "San Francisco, CA",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/twitch/jobs/8937278002",
+   "postedAt": "2026-11-10T23:09:25-05:00",
+   "role": "Software Engineer",
+   "level": "Mid",
+   "salary": {
+    "min": 165200,
+    "max": 223600,
+    "currency": "USD",
+    "period": "year",
+    "text": "$165,200 — $223,600 USD"
+   },
+   "mandatory": [
+    "AWS",
+    "Prototyping",
+    "CI/CD",
+    "ETL",
+    "Stakeholder communication",
+    "Business analysis",
+    "Accounting",
+    "Incident response",
+    "Leadership",
+    "LLMs",
+    "REST APIs",
+    "Python",
+    "JavaScript",
+    "TypeScript",
+    "Terraform"
+   ],
+   "preferred": [
+    "Machine learning"
+   ],
+   "quotes": [
+    {
+     "skill": "Python",
+     "text": "Proficiency in Python or TypeScript/JavaScript with a track record of shipping production code"
+    },
+    {
+     "skill": "ETL",
+     "text": "Develop data pipelines between enterprise apps, Redshift, and S3, and make that data available to AI agents"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-betterment-8278414",
+   "title": "Product Designer",
+   "company": "Betterment",
+   "location": "Betterment HQ - New York City",
+   "remote": false,
+   "url": "https://www.betterment.com/careers/current-openings/job?gh_jid=8278414&gh_jid=8278414",
+   "postedAt": "2026-10-23T15:22:25-04:00",
+   "role": "UX Designer",
+   "level": "Unspecified",
+   "salary": {
+    "min": 120000,
+    "max": 140000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$120,000-$140,000"
+   },
+   "mandatory": [
+    "Data visualization",
+    "Prototyping",
+    "Stakeholder communication",
+    "Design systems",
+    "User research",
+    "Project management"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "User research",
+     "text": "Ability to identify user needs and pain points through research, usability testing, and data analysis"
+    },
+    {
+     "skill": "Prototyping",
+     "text": "in a fast, iterative, AI-native environment, using interactive prototypes to test ideas early, align with partners, and accelerate"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-brex-8935731002",
+   "title": "Senior Product Designer, T&E",
+   "company": "Brex",
+   "location": "New York, New York, United States",
+   "remote": false,
+   "url": "https://www.brex.com/careers/8935731002?gh_jid=8935731002",
+   "postedAt": "2026-11-09T17:28:02-05:00",
+   "role": "UX Designer",
+   "level": "Senior",
+   "salary": {
+    "min": 192000,
+    "max": 240000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$192,000 - $240,000"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Risk management",
+    "Product strategy",
+    "Design systems",
+    "Leadership",
+    "Prototyping",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Prototyping",
+     "text": "High craft across UX, interaction design, visual design, prototyping, and systems thinking."
+    },
+    {
+     "skill": "Product strategy",
+     "text": "Own the design direction for a core area of travel and expenses and set a vision and roadmap for it with Product and Engineering."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-coinbase-8280149",
+   "title": "Senior Product Designer, Platform",
+   "company": "Coinbase",
+   "location": "Remote - USA",
+   "remote": true,
+   "url": "https://www.coinbase.com/careers/positions/8280149?gh_jid=8280149",
+   "postedAt": "2026-10-14T14:15:44-04:00",
+   "role": "UX Designer",
+   "level": "Senior",
+   "salary": {
+    "min": 180370,
+    "max": 212200,
+    "currency": "USD",
+    "period": "year",
+    "text": "$180,370 — $212,200 USD"
+   },
+   "mandatory": [
+    "Data visualization",
+    "Leadership",
+    "Product strategy",
+    "Data modeling",
+    "Prototyping",
+    "Stakeholder communication",
+    "Communication",
+    "Risk management",
+    "Figma",
+    "LLMs"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Prototyping",
+     "text": "Sharp attention to detail and mastery of your craft: visual design, interaction design, and prototyping."
+    },
+    {
+     "skill": "Figma",
+     "text": "Fluency in Figma and modern prototyping tools, including using AI tools to explore, prototype, or ship faster."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-discord-8731898002",
+   "title": "Senior Product Designer, Consumer Revenue",
+   "company": "Discord",
+   "location": "San Francisco Bay Area",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/discord/jobs/8731898002",
+   "postedAt": "2026-08-20T10:43:52-04:00",
+   "role": "UX Designer",
+   "level": "Senior",
+   "salary": {
+    "min": 188000,
+    "max": 235000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$188,000 — $235,000 USD"
+   },
+   "mandatory": [
+    "A/B testing",
+    "Prototyping",
+    "Product strategy",
+    "Leadership",
+    "Product analytics",
+    "Design systems",
+    "Business analysis",
+    "Figma"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Figma",
+     "text": "Expert-level Figma and prototyping skills; experience working within and contributing to a design system."
+    },
+    {
+     "skill": "Product analytics",
+     "text": "Use experimentation, funnel data, and research insights to refine your designs and inform ship/no-ship decisions."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-doordashusa-8155051",
+   "title": "Staff Product Designer, Merchant Marketing",
+   "company": "DoorDash",
+   "location": "San Francisco, CA; New York, NY; Seattle, WA; Sunnyvale, CA",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/doordashusa/jobs/8155051",
+   "postedAt": "2026-08-26T03:12:34-04:00",
+   "role": "UX Designer",
+   "level": "Lead",
+   "salary": {
+    "min": 124500,
+    "max": 183000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$124,500 — $183,000 USD"
+   },
+   "mandatory": [
+    "LLMs",
+    "A/B testing",
+    "Prototyping",
+    "Leadership",
+    "Stakeholder communication",
+    "Design systems",
+    "Product analytics"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Design systems",
+     "text": "or LLM-powered workflows that support component creation, documentation, evaluation, automation, and broader design system scalability."
+    },
+    {
+     "skill": "Product analytics",
+     "text": "to iterate on launched designs and improve metrics such as efficiency, consistency, conversion, retention, and customer satisfaction."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-gemini-7811967",
+   "title": "Senior Product Designer (Prediction Markets)",
+   "company": "Gemini",
+   "location": "New York, New York; Miami, Florida; Remote (USA)",
+   "remote": true,
+   "url": "https://boards.greenhouse.io/embed/job_app?for=gemini&token=7811967&gh_jid=7811967",
+   "postedAt": "2026-04-13T17:50:48-04:00",
+   "role": "UX Designer",
+   "level": "Senior",
+   "salary": {
+    "min": 129500,
+    "max": 185000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$129,500 - $185,000"
+   },
+   "mandatory": [
+    "User research",
+    "Business analysis",
+    "Prototyping",
+    "Product strategy",
+    "Stakeholder communication",
+    "Design systems",
+    "Communication",
+    "Figma"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Figma",
+     "text": "Proficient in Figma and other prototyping tools."
+    },
+    {
+     "skill": "User research",
+     "text": "Translate business requirements and user research findings into elegant design solutions for complex product problems."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-instacart-8191763",
+   "title": "Senior Product Designer II - Growth Systems & AI Workflows",
+   "company": "Instacart",
+   "location": "United States - Remote",
+   "remote": true,
+   "url": "https://instacart.careers/job/?gh_jid=8191763",
+   "postedAt": "2026-09-10T13:28:47-04:00",
+   "role": "UX Designer",
+   "level": "Senior",
+   "salary": {
+    "min": 203000,
+    "max": 214000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$203,000 — $214,000 USD"
+   },
+   "mandatory": [
+    "A/B testing",
+    "Product analytics",
+    "Design systems",
+    "Stakeholder communication",
+    "Figma",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Product analytics",
+     "text": "accountability, and craft, continuously evolving how we design for conversion, engagement, retention, and long-term customer value."
+    },
+    {
+     "skill": "Figma",
+     "text": "Establish a shared source of truth: a master Figma file of approved components, screens, and flows, connected to code through"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "lv-palantir-c2d11af1-5b84-4be0-92ac-36113fb8f2b5",
+   "title": "Product Designer - US Government",
+   "company": "Palantir",
+   "location": "New York, NY",
+   "remote": false,
+   "url": "https://jobs.lever.co/palantir/c2d11af1-5b84-4be0-92ac-36113fb8f2b5",
+   "postedAt": "2025-04-03T18:13:34.536000+00:00",
+   "role": "UX Designer",
+   "level": "Unspecified",
+   "salary": {
+    "min": 130000,
+    "max": 135000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$130,000 - $135,000/year"
+   },
+   "mandatory": [
+    "Forecasting",
+    "Product strategy",
+    "Agile",
+    "Figma",
+    "Prototyping",
+    "User research",
+    "JavaScript",
+    "TypeScript",
+    "Stakeholder communication",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Forecasting",
+     "text": "it, our platforms empower our partners to develop lifesaving drugs, forecast supply chain disruptions, locate missing children, and more."
+    },
+    {
+     "skill": "JavaScript",
+     "text": "how software interfaces are built. Familiarity with HTML, CSS, Javascript, and Typescript is appreciated. You don't need to be an"
+    }
+   ],
+   "source": "lever"
+  },
+  {
+   "id": "gh-buzzfeed-8160564",
+   "title": "Community Editor & Strategist (Project Based)",
+   "company": "BuzzFeed",
+   "location": "Remote (United States)",
+   "remote": true,
+   "url": "https://boards.greenhouse.io/buzzfeed/jobs/8160564?gh_jid=8160564",
+   "postedAt": "2026-08-26T16:46:38-04:00",
+   "role": "Content Creator",
+   "level": "Unspecified",
+   "salary": null,
+   "mandatory": [
+    "Communication"
+   ],
+   "preferred": [
+    "SEO",
+    "Social media"
+   ],
+   "quotes": [
+    {
+     "skill": "Communication",
+     "text": "Strong written communication skills and the ability to deliver thoughtful, constructive feedback to creators."
+    },
+    {
+     "skill": "SEO",
+     "text": "Interest in audience development, analytics, SEO, and social strategy is a plus."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-checkr-8264655",
+   "title": "Sr. Creative Producer",
+   "company": "Checkr",
+   "location": "Denver, Colorado, United States; San Francisco, California, United States",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/checkr/jobs/8264655",
+   "postedAt": "2026-10-12T16:53:12-04:00",
+   "role": "Content Creator",
+   "level": "Senior",
+   "salary": {
+    "min": 167000,
+    "max": 196000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$167,000 — $196,000 USD"
+   },
+   "mandatory": [
+    "Project management",
+    "Stakeholder communication",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Project management",
+     "text": "Fluency in a project management tool such as Asana"
+    },
+    {
+     "skill": "Stakeholder communication",
+     "text": "Strong cross-functional communication: you align stakeholders and build consensus while the creative direction stays with the creative leads"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-chime-8918533002",
+   "title": "Content Marketing Manager, SEO & AI Search",
+   "company": "Chime",
+   "location": "San Francisco, CA, USA",
+   "remote": false,
+   "url": "https://boards.greenhouse.io/chime/jobs/8918533002?gh_jid=8918533002",
+   "postedAt": "2026-10-26T22:22:40-04:00",
+   "role": "Content Creator",
+   "level": "Unspecified",
+   "salary": {
+    "min": 105000,
+    "max": 145000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$105,000 — $145,000 USD"
+   },
+   "mandatory": [
+    "Paid advertising",
+    "SEO",
+    "Content strategy",
+    "Risk management",
+    "Product strategy",
+    "LLMs",
+    "Project management",
+    "Stakeholder communication"
+   ],
+   "preferred": [
+    "Jira"
+   ],
+   "quotes": [
+    {
+     "skill": "LLMs",
+     "text": "Hands-on AEO/GEO knowledge: how LLMs and AI answer engines choose and cite sources, and how content structure, accuracy, and third-party"
+    },
+    {
+     "skill": "Product strategy",
+     "text": "categories, prompt data, and member insights into a sequenced roadmap that helps Chime own its story and earn accurate, positive"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-elastic-8349732",
+   "title": "Regional Content Strategist, Global Public Sector",
+   "company": "Elastic",
+   "location": "United States",
+   "remote": false,
+   "url": "https://jobs.elastic.co/jobs?gh_jid=8349732&gh_jid=8349732",
+   "postedAt": "2026-11-05T14:04:06-05:00",
+   "role": "Content Creator",
+   "level": "Unspecified",
+   "salary": {
+    "min": 89100,
+    "max": 140900,
+    "currency": "USD",
+    "period": "year",
+    "text": "$89,100 — $140,900 USD"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Content strategy",
+    "Risk management",
+    "Product strategy",
+    "Project management"
+   ],
+   "preferred": [
+    "LLMs",
+    "SEO"
+   ],
+   "quotes": [
+    {
+     "skill": "Product strategy",
+     "text": "Go-To-Market Strategy & Field Enablement"
+    },
+    {
+     "skill": "Risk management",
+     "text": "Track public sector trends, procurement dynamics, compliance and security requirements (e.g., FedRAMP, OMB 26-14, state and local"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-flexport-8054644",
+   "title": "Social Media & Content Manager",
+   "company": "Flexport",
+   "location": "New York City, New York, United States",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/flexport/jobs/8054644",
+   "postedAt": "2026-07-09T19:07:14-04:00",
+   "role": "Content Creator",
+   "level": "Unspecified",
+   "salary": {
+    "min": 100000,
+    "max": 125000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$100,000 — $125,000 USD"
+   },
+   "mandatory": [
+    "Content strategy",
+    "Social media",
+    "Leadership",
+    "Video editing"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Video editing",
+     "text": "Basic video editing skills. You can cut and caption short clips for social without needing a full production team."
+    },
+    {
+     "skill": "Content strategy",
+     "text": "We're looking for a Social Media and Content Marketing Manager to own the channels where Flexport shows up every day. You'll run our social"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-pinterest-8268318",
+   "title": "Lead Digital Producer",
+   "company": "Pinterest",
+   "location": "San Francisco, CA, US; Remote, CA, US",
+   "remote": true,
+   "url": "https://www.pinterestcareers.com/jobs/?gh_jid=8268318",
+   "postedAt": "2026-11-03T10:46:10-05:00",
+   "role": "Content Creator",
+   "level": "Lead",
+   "salary": {
+    "min": 120321,
+    "max": 247718,
+    "currency": "USD",
+    "period": "year",
+    "text": "$120,321 — $247,718 USD"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Leadership",
+    "Project management",
+    "Design systems",
+    "SEO",
+    "Forecasting",
+    "Communication",
+    "Risk management"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Risk management",
+     "text": "Strong operational discipline across scoping, resourcing, budgets, schedules, dependencies, QA, launch readiness, and risk management"
+    },
+    {
+     "skill": "Forecasting",
+     "text": "and dependencies; partner with leadership on resource forecasting and manage external agencies and vendors to ensure quality"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-squarespace-8232378",
+   "title": "Senior Media Strategist, Creator & Affiliate",
+   "company": "Squarespace",
+   "location": "New York City",
+   "remote": false,
+   "url": "https://www.squarespace.com/about/careers?gh_jid=8232378",
+   "postedAt": "2026-10-29T14:10:25-04:00",
+   "role": "Content Creator",
+   "level": "Senior",
+   "salary": {
+    "min": 85500,
+    "max": 138000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$85,500 - $138,000 USD"
+   },
+   "mandatory": [
+    "Excel",
+    "Leadership",
+    "Stakeholder communication",
+    "Paid advertising",
+    "Forecasting"
+   ],
+   "preferred": [
+    "Looker",
+    "BigQuery"
+   ],
+   "quotes": [
+    {
+     "skill": "Forecasting",
+     "text": "Influence budget planning, pacing and forecasting across Creator and Affiliate to ensure optimal allocation."
+    },
+    {
+     "skill": "Paid advertising",
+     "text": "Spearhead various initiatives, including leading tests with cross-functional teams such as Paid Media, Product Marketing, Legal and Finance."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-voxmedia-8168194",
+   "title": "Video Producer, On With Kara Swisher",
+   "company": "Vox Media",
+   "location": "New York, New York",
+   "remote": false,
+   "url": "https://boards.greenhouse.io/voxmedia/jobs/8168194?gh_jid=8168194",
+   "postedAt": "2026-09-02T15:13:01-04:00",
+   "role": "Content Creator",
+   "level": "Unspecified",
+   "salary": {
+    "min": 80000,
+    "max": 90000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$80,000 — $90,000 USD"
+   },
+   "mandatory": [
+    "Social media",
+    "Leadership",
+    "Video editing"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Video editing",
+     "text": "Lead the complete video editing workflow for each episode in Descript, shaping visual pacing, structure, and clarity."
+    },
+    {
+     "skill": "Social media",
+     "text": "Create platform-native shortform video content optimized for TikTok, Instagram Reels, and YouTube Shorts—translating strong podcast moments"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-carta-8003451003",
+   "title": "Demand Generation Marketing Manager, Private Equity",
+   "company": "Carta",
+   "location": "New York, NY",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/carta/jobs/8003451003",
+   "postedAt": "2026-09-23T17:06:41-04:00",
+   "role": "Marketing Manager",
+   "level": "Unspecified",
+   "salary": {
+    "min": 127500,
+    "max": 182000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$127,500 - $182,000"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Leadership",
+    "Project management",
+    "Marketing automation"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Marketing automation",
+     "text": "gen recommended, preferably in B2B SaaS, fintech, or financial services. Experience with 6Sense, Marketo, and Salesforce is a strong plus."
+    },
+    {
+     "skill": "Project management",
+     "text": "Development, Operations and all aspects of the marketing org to align on messaging, coordinate timelines, and drive shared outcomes."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-checkr-8383713",
+   "title": "Senior Performance Marketing Manager",
+   "company": "Checkr",
+   "location": "Denver, Colorado, United States; San Francisco, California, United States",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/checkr/jobs/8383713",
+   "postedAt": "2026-11-13T12:02:22-05:00",
+   "role": "Marketing Manager",
+   "level": "Senior",
+   "salary": {
+    "min": 158000,
+    "max": 186000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$158,000 — $186,000 USD"
+   },
+   "mandatory": [
+    "Paid advertising",
+    "A/B testing",
+    "Product analytics",
+    "Stakeholder communication",
+    "Excel",
+    "Looker",
+    "Google Analytics",
+    "Project management"
+   ],
+   "preferred": [
+    "Financial modeling"
+   ],
+   "quotes": [
+    {
+     "skill": "Excel",
+     "text": "Proficient with basic analytical tools (Google Sheets/Excel, Looker, Google Analytics)"
+    },
+    {
+     "skill": "Product analytics",
+     "text": "Analyze datasets to understand our paid marketing funnel and identify opportunities for improvement."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-chime-8929507002",
+   "title": "Sr. Growth Product Marketing Manager, Chime Enterprise",
+   "company": "Chime",
+   "location": "New York, NY, USA",
+   "remote": false,
+   "url": "https://boards.greenhouse.io/chime/jobs/8929507002?gh_jid=8929507002",
+   "postedAt": "2026-11-03T19:08:36-05:00",
+   "role": "Marketing Manager",
+   "level": "Senior",
+   "salary": {
+    "min": 150000,
+    "max": 208000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$150,000 — $208,000 USD"
+   },
+   "mandatory": [
+    "Product analytics",
+    "A/B testing",
+    "Stakeholder communication",
+    "Product strategy",
+    "Risk management",
+    "Leadership",
+    "Statistics",
+    "Communication"
+   ],
+   "preferred": [
+    "Looker"
+   ],
+   "quotes": [
+    {
+     "skill": "Product analytics",
+     "text": "Chime Enterprise's B2B2C funnel"
+    },
+    {
+     "skill": "Product strategy",
+     "text": "outcomes for Chime Enterprise's employee-side funnel, from opportunity sizing through roadmap delivery against quarterly and annual goals."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-coinbase-8192485",
+   "title": "Senior Performance Marketing Manager, Global Paid Social & Mobile UA",
+   "company": "Coinbase",
+   "location": "Remote - USA",
+   "remote": true,
+   "url": "https://www.coinbase.com/careers/positions/8192485?gh_jid=8192485",
+   "postedAt": "2026-09-15T11:27:26-04:00",
+   "role": "Marketing Manager",
+   "level": "Senior",
+   "salary": {
+    "min": 170765,
+    "max": 200900,
+    "currency": "USD",
+    "period": "year",
+    "text": "$170,765 — $200,900 USD"
+   },
+   "mandatory": [
+    "Paid advertising",
+    "Social media",
+    "Data visualization",
+    "Leadership",
+    "A/B testing",
+    "LLMs",
+    "Excel",
+    "Tableau",
+    "Looker",
+    "Stakeholder communication",
+    "Communication",
+    "Project management"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Social media",
+     "text": "global strategy and execution across paid social (Meta, TikTok, Snap, Reddit) and mobile user acquisition (mobile display) to"
+    },
+    {
+     "skill": "Excel",
+     "text": "Analytical and experimentation mindset; comfortable with spreadsheets and BI tools (e.g., Looker, Hex, Tableau, Superset) to build and"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-flexport-8386745",
+   "title": "Senior Growth Marketing Manager",
+   "company": "Flexport",
+   "location": "San Francisco, California, United States",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/flexport/jobs/8386745",
+   "postedAt": "2026-11-13T17:43:41-05:00",
+   "role": "Marketing Manager",
+   "level": "Senior",
+   "salary": {
+    "min": 160000,
+    "max": 184000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$160,000 — $184,000 USD"
+   },
+   "mandatory": [
+    "Product analytics",
+    "A/B testing",
+    "Paid advertising",
+    "Forecasting",
+    "LLMs",
+    "SEO",
+    "REST APIs",
+    "SQL",
+    "ETL",
+    "Git",
+    "Copywriting",
+    "Communication",
+    "Stakeholder communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Copywriting",
+     "text": "Strong copywriting and conversion optimization skills, from first touch through expansion."
+    },
+    {
+     "skill": "Forecasting",
+     "text": "Forecast and allocate budget, and decide what to scale or stop based on qualified pipeline and expansion revenue."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-gusto-8356810",
+   "title": "Senior Performance Marketing Manager, Paid Social",
+   "company": "Gusto",
+   "location": "Atlanta, GA - Hybrid; Burlingame, CA - Hybrid; Denver, CO - Hybrid; New York, NY - Hybrid; San Francisco, CA - Hybrid; Scottsdale, AZ - Hybrid; Toronto, Ontario - Remote",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/gusto/jobs/8356810",
+   "postedAt": "2026-11-05T15:17:06-05:00",
+   "role": "Marketing Manager",
+   "level": "Senior",
+   "salary": {
+    "min": 109000,
+    "max": 133000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$109,000 - $133,000/yr"
+   },
+   "mandatory": [
+    "A/B testing",
+    "Paid advertising",
+    "Stakeholder communication",
+    "Social media",
+    "Forecasting",
+    "Product strategy"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Forecasting",
+     "text": "dollar budgets with rigor, including campaign pacing, forecasting, budget-vs-actuals analysis, and making the case for paid"
+    },
+    {
+     "skill": "Social media",
+     "text": "strategy and execution across Meta, LinkedIn, Reddit, Quora, and TikTok, driving full-funnel campaigns from brand awareness through"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "lv-ro-c0f4bfce-326b-4644-8273-9c7a95e51130",
+   "title": "Associate Manager, Offline Marketing",
+   "company": "Ro",
+   "location": "New York, NY or Remote",
+   "remote": true,
+   "url": "https://jobs.lever.co/ro/c0f4bfce-326b-4644-8273-9c7a95e51130",
+   "postedAt": "2026-10-13T22:49:53.132000+00:00",
+   "role": "Marketing Manager",
+   "level": "Junior",
+   "salary": {
+    "min": 103700,
+    "max": 120000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$103,700 to $120,000"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Product strategy",
+    "Paid advertising",
+    "Risk management",
+    "Communication"
+   ],
+   "preferred": [
+    "Looker",
+    "Product analytics"
+   ],
+   "quotes": [
+    {
+     "skill": "Risk management",
+     "text": "the portfolio, including campaign launches, creative briefing, script refreshes, compliance reviews, reporting and budget management."
+    },
+    {
+     "skill": "Product strategy",
+     "text": "Develop a proactive partnership pipeline and testing roadmap, identifying new talent, audiences and partnership models that can expand the"
+    }
+   ],
+   "source": "lever"
+  },
+  {
+   "id": "gh-vercel-6011904004",
+   "title": "Performance Marketing Manager",
+   "company": "Vercel",
+   "location": "Hybrid - San Francisco, New York City, Austin",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/vercel/jobs/6011904004",
+   "postedAt": "2026-06-08T19:58:58-04:00",
+   "role": "Marketing Manager",
+   "level": "Unspecified",
+   "salary": {
+    "min": 150000,
+    "max": 188000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$150,000 - $188,000"
+   },
+   "mandatory": [
+    "LLMs",
+    "Paid advertising",
+    "REST APIs",
+    "Product analytics",
+    "Leadership",
+    "Stakeholder communication",
+    "Social media",
+    "Copywriting",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Copywriting",
+     "text": "Strong copywriting instincts and taste in performance creative, and ability to scale taste with AI"
+    },
+    {
+     "skill": "Paid advertising",
+     "text": "Multi-million-dollar annual paid media spend, where you beat ROAS and CAC targets and lower CAC over time"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-affirm-7994553003",
+   "title": "Staff Security Engineer, Enterprise AI",
+   "company": "Affirm",
+   "location": "Remote US",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/affirm/jobs/7994553003",
+   "postedAt": "2026-09-15T12:04:15-04:00",
+   "role": "Cybersecurity Analyst",
+   "level": "Lead",
+   "salary": {
+    "min": 220000,
+    "max": 280000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$220,000 - $280,000"
+   },
+   "mandatory": [
+    "Incident response",
+    "Risk management",
+    "LLMs",
+    "Python",
+    "Stakeholder communication",
+    "Git",
+    "Jira",
+    "AWS",
+    "Kubernetes",
+    "Terraform"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "AWS",
+     "text": "and deploy cloud services and policy-as-code using Infrastructure as Code (Terraform or similar); familiarity with Kubernetes and AWS."
+    },
+    {
+     "skill": "Jira",
+     "text": "and familiarity with the corporate systems where AI is adopted (OpenAI, Anthropic, GitHub, Google Workspace, Slack, Notion, Jira)."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-dropbox-8328546",
+   "title": "Senior Security Engineer, AI Security",
+   "company": "Dropbox",
+   "location": "Remote - US: Select locations",
+   "remote": true,
+   "url": "https://jobs.dropbox.com/listing/8328546?gh_jid=8328546",
+   "postedAt": "2026-11-10T12:56:11-05:00",
+   "role": "Cybersecurity Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 214200,
+    "max": 289800,
+    "currency": "USD",
+    "period": "year",
+    "text": "$214,200 — $289,800 USD"
+   },
+   "mandatory": [
+    "Kubernetes",
+    "AWS",
+    "GCP",
+    "Azure",
+    "Python",
+    "Java",
+    "Node.js",
+    "Go",
+    "C++",
+    "Linux",
+    "SIEM"
+   ],
+   "preferred": [
+    "LLMs"
+   ],
+   "quotes": [
+    {
+     "skill": "Azure",
+     "text": "or Microsoft Azure."
+    },
+    {
+     "skill": "GCP",
+     "text": "Google Cloud Platform"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-duolingo-8935541002",
+   "title": "Staff Security Engineer",
+   "company": "Duolingo",
+   "location": "New York, NY",
+   "remote": false,
+   "url": "https://careers.duolingo.com/jobs/8935541002?gh_jid=8935541002",
+   "postedAt": "2026-11-09T16:11:46-05:00",
+   "role": "Cybersecurity Analyst",
+   "level": "Lead",
+   "salary": {
+    "min": 204000,
+    "max": 306000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$204,000 — $306,000 USD"
+   },
+   "mandatory": [
+    "CI/CD",
+    "Network security",
+    "Terraform",
+    "Leadership",
+    "Stakeholder communication",
+    "Communication",
+    "AWS",
+    "GCP",
+    "Incident response"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Incident response",
+     "text": "Experience leading high-severity incident response and driving durable improvements afterward."
+    },
+    {
+     "skill": "AWS",
+     "text": "Experience securing large, multi-account or multi-cloud environments, particularly AWS and GCP."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-ripple-7997234",
+   "title": "Senior Staff Security Engineer, Product Security",
+   "company": "Ripple",
+   "location": "San Francisco, CA, United States",
+   "remote": false,
+   "url": "https://ripple.com/careers/all-jobs/job/7997234?gh_jid=7997234",
+   "postedAt": "2026-06-10T13:50:33-04:00",
+   "role": "Cybersecurity Analyst",
+   "level": "Lead",
+   "salary": {
+    "min": 232000,
+    "max": 310000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$232,000 — $310,000 USD"
+   },
+   "mandatory": [
+    "Network security",
+    "CI/CD",
+    "AWS",
+    "Azure",
+    "Kubernetes",
+    "Risk management",
+    "Leadership",
+    "GCP",
+    "Terraform",
+    "Python",
+    "Go"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Risk management",
+     "text": "Partner with GRC to ensure Treasury meets its compliance obligations across SOC 2, ISO 27001, and applicable financial regulatory"
+    },
+    {
+     "skill": "CI/CD",
+     "text": "for your product surface area, defining security guardrails, CI/CD integrations, and developer guidance that make secure by default a"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-robinhood-7460167",
+   "title": "Offensive Security Engineer",
+   "company": "Robinhood",
+   "location": "Bellevue, WA",
+   "remote": false,
+   "url": "https://boards.greenhouse.io/robinhood/jobs/7460167?t=gh_src=&gh_jid=7460167",
+   "postedAt": "2026-01-12T19:07:36-05:00",
+   "role": "Cybersecurity Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 157000,
+    "max": 185000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$157,000 — $185,000 USD"
+   },
+   "mandatory": [
+    "Spark",
+    "Stakeholder communication",
+    "Network security",
+    "Communication",
+    "Linux",
+    "AWS",
+    "GCP",
+    "Docker",
+    "Kubernetes",
+    "CI/CD",
+    "Python",
+    "JavaScript",
+    "Go",
+    "Git",
+    "Jira"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Linux",
+     "text": "Experience working with macOS and Linux environments."
+    },
+    {
+     "skill": "Python",
+     "text": "Experience reading or writing code in one or more programming languages, such as Python, Go, or JavaScript."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-samsara-8237426",
+   "title": "Senior Security Engineer - Threat Detection",
+   "company": "Samsara",
+   "location": "Remote - Dallas",
+   "remote": true,
+   "url": "https://www.samsara.com/company/careers/roles/8237426?gh_jid=8237426",
+   "postedAt": "2026-09-28T12:43:04-04:00",
+   "role": "Cybersecurity Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 157675,
+    "max": 238500,
+    "currency": "USD",
+    "period": "year",
+    "text": "$157,675 — $238,500 USD"
+   },
+   "mandatory": [
+    "Incident response",
+    "ETL",
+    "CI/CD",
+    "Git",
+    "SQL",
+    "Python",
+    "Data visualization",
+    "SIEM",
+    "AWS",
+    "Docker",
+    "Linux",
+    "Stakeholder communication"
+   ],
+   "preferred": [
+    "Spark",
+    "Airflow",
+    "LLMs",
+    "Terraform"
+   ],
+   "quotes": [
+    {
+     "skill": "AWS",
+     "text": "Working knowledge of AWS, Linux, containers, and EDR."
+    },
+    {
+     "skill": "SQL",
+     "text": "Strong Python and SQL skills, with experience analyzing large datasets to build and validate detections."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-stripe-8233889",
+   "title": "Offensive Security Engineer",
+   "company": "Stripe",
+   "location": "US - Remote",
+   "remote": true,
+   "url": "https://stripe.com/jobs/search?gh_jid=8233889",
+   "postedAt": "2026-09-25T14:53:02-04:00",
+   "role": "Cybersecurity Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 170400,
+    "max": 255700,
+    "currency": "USD",
+    "period": "year",
+    "text": "$170,400 – $255,700"
+   },
+   "mandatory": [
+    "Network security",
+    "REST APIs",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Incident response",
+    "Stakeholder communication",
+    "Leadership",
+    "Python",
+    "Go",
+    "Communication"
+   ],
+   "preferred": [
+    "Spark",
+    "SIEM",
+    "Git",
+    "LLMs"
+   ],
+   "quotes": [
+    {
+     "skill": "Python",
+     "text": "Strong programming skills in Python, Go, or similar languages, with demonstrated experience building tools, automation, or custom exploits"
+    },
+    {
+     "skill": "REST APIs",
+     "text": "Conduct comprehensive penetration tests across web applications, APIs, cloud environments (AWS/GCP/Azure), mobile applications, and"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-twilio-8160279",
+   "title": "Staff Enterprise Security Engineer, AI Security",
+   "company": "Twilio",
+   "location": "Remote - US",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/twilio/jobs/8160279",
+   "postedAt": "2026-08-26T15:25:54-04:00",
+   "role": "Cybersecurity Analyst",
+   "level": "Lead",
+   "salary": {
+    "min": 155520,
+    "max": 194400,
+    "currency": "USD",
+    "period": "year",
+    "text": "$155,520 - $194,400"
+   },
+   "mandatory": [
+    "Risk management",
+    "Product strategy",
+    "Python",
+    "Go",
+    "Terraform",
+    "Leadership",
+    "AWS",
+    "GCP",
+    "Kubernetes",
+    "Java"
+   ],
+   "preferred": [
+    "Stakeholder communication",
+    "Communication"
+   ],
+   "quotes": [
+    {
+     "skill": "Java",
+     "text": "Strong proficiency in programming languages such as Python, Go, or Java."
+    },
+    {
+     "skill": "AWS",
+     "text": "Expertise in cloud security (AWS, GCP) and container security (Kubernetes)."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-dropbox-8280093",
+   "title": "Senior Corporate Enterprise Platform Engineer, Windows",
+   "company": "Dropbox",
+   "location": "Remote - US: Select locations",
+   "remote": true,
+   "url": "https://jobs.dropbox.com/listing/8280093?gh_jid=8280093",
+   "postedAt": "2026-10-16T15:01:58-04:00",
+   "role": "DevOps Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 159100,
+    "max": 215300,
+    "currency": "USD",
+    "period": "year",
+    "text": "$159,100 — $215,300 USD"
+   },
+   "mandatory": [
+    "Leadership",
+    "Stakeholder communication",
+    "Risk management",
+    "Python",
+    "Go",
+    "Git",
+    "Communication",
+    "SQL",
+    "CI/CD",
+    "Linux"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "osquery and SQL"
+    },
+    {
+     "skill": "Linux",
+     "text": "Experience supporting developer-heavy, distributed environments and contributing reusable automation across Windows, macOS, or Linux."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-duolingo-8784381002",
+   "title": "Senior Site Reliability Engineer",
+   "company": "Duolingo",
+   "location": "New York, NY; Pittsburgh, PA",
+   "remote": false,
+   "url": "https://careers.duolingo.com/jobs/8784381002?gh_jid=8784381002",
+   "postedAt": "2026-09-04T14:19:23-04:00",
+   "role": "DevOps Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 182800,
+    "max": 247300,
+    "currency": "USD",
+    "period": "year",
+    "text": "$182,800 — $247,300 USD"
+   },
+   "mandatory": [
+    "Incident response",
+    "Docker",
+    "Kubernetes",
+    "SQL"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Incident response",
+     "text": "Maintain and document sustainable postmortem/incident response practices"
+    },
+    {
+     "skill": "SQL",
+     "text": "Experience assessing reliability and troubleshooting issues in Dynamo, MySQL, and/or PostgreSQL databases"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-gemini-8186546",
+   "title": "Staff Platform Engineer",
+   "company": "Gemini",
+   "location": "New York, New York; Miami, Florida; Remote (USA)",
+   "remote": true,
+   "url": "https://boards.greenhouse.io/embed/job_app?for=gemini&token=8186546&gh_jid=8186546",
+   "postedAt": "2026-09-21T11:39:27-04:00",
+   "role": "DevOps Engineer",
+   "level": "Lead",
+   "salary": {
+    "min": 168000,
+    "max": 240000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$168,000 - $240,000"
+   },
+   "mandatory": [
+    "Leadership",
+    "CI/CD",
+    "Stakeholder communication",
+    "Python",
+    "TypeScript",
+    "REST APIs",
+    "Design systems",
+    "Prototyping",
+    "Go",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Terraform",
+    "Docker",
+    "Kubernetes",
+    "Network security",
+    "Data visualization",
+    "Incident response",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Incident response",
+     "text": "Working knowledge of SLOs, error budgets, incident response, blameless postmortems, and techniques for reducing operational toil."
+    },
+    {
+     "skill": "Network security",
+     "text": "Experience owning and managing cloud network security controls, including network firewalls, DNS filtering, and network segmentation."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-mercury-6221407004",
+   "title": "Senior Infrastructure Engineer",
+   "company": "Mercury",
+   "location": "San Francisco, CA, New York, NY, Portland, OR, or Remote within Canada or United States",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/mercury/jobs/6221407004",
+   "postedAt": "2026-10-09T13:57:48-04:00",
+   "role": "DevOps Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 166600,
+    "max": 250900,
+    "currency": "USD",
+    "period": "year",
+    "text": "$166,600 — $250,900 USD"
+   },
+   "mandatory": [
+    "Kubernetes",
+    "AWS",
+    "Terraform",
+    "Git",
+    "CI/CD"
+   ],
+   "preferred": [
+    "Risk management",
+    "Leadership"
+   ],
+   "quotes": [
+    {
+     "skill": "Terraform",
+     "text": "Terraform"
+    },
+    {
+     "skill": "AWS",
+     "text": "AWS Services"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-mongodb-6982487",
+   "title": "Staff Site Reliability Engineer, Infrastructure Security",
+   "company": "MongoDB",
+   "location": "Austin; Boston; Chicago; Dallas; Denver; New York; San Francisco; Seattle; Washington DC",
+   "remote": false,
+   "url": "https://www.mongodb.com/careers/job/?gh_jid=6982487",
+   "postedAt": "2026-01-15T08:45:09-05:00",
+   "role": "DevOps Engineer",
+   "level": "Lead",
+   "salary": {
+    "min": 151000,
+    "max": 297000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$151,000 — $297,000 USD"
+   },
+   "mandatory": [
+    "CI/CD",
+    "Risk management",
+    "Linux",
+    "Incident response",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Network security",
+    "Terraform",
+    "SIEM",
+    "Python",
+    "C++",
+    "Kubernetes"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Python",
+     "text": "Strong coding skills in Go (Golang), Python, C, C++, or Rust"
+    },
+    {
+     "skill": "Kubernetes",
+     "text": "Demonstrated experience owning infrastructure in Linux, Kubernetes, and at least one major cloud provider (AWS, GCP, or Azure)"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-okta-8268917",
+   "title": "Senior Site Reliability Engineer  - EPG",
+   "company": "Okta",
+   "location": "Bellevue, Washington; San Francisco, California",
+   "remote": false,
+   "url": "https://www.okta.com/company/careers/opportunity/8268917?gh_jid=8268917",
+   "postedAt": "2026-10-12T16:08:40-04:00",
+   "role": "DevOps Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 165000,
+    "max": 226600,
+    "currency": "USD",
+    "period": "year",
+    "text": "$165,000 — $226,600 USD"
+   },
+   "mandatory": [
+    "Incident response",
+    "Risk management",
+    "Data visualization",
+    "Python",
+    "Go",
+    "Terraform",
+    "CI/CD",
+    "Leadership",
+    "Git",
+    "Kubernetes",
+    "SIEM",
+    "SQL",
+    "Snowflake",
+    "AWS",
+    "GCP",
+    "Linux",
+    "Communication",
+    "Machine learning"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "SIEM",
+     "text": "Observability: Datadog, Splunk, Graphana"
+    },
+    {
+     "skill": "SQL",
+     "text": "Data Stores: PostgreSQL, Redis, OpenSearch, Snowflake"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-reddit-8331341",
+   "title": "Senior Software Engineer, Infrastructure Engineering",
+   "company": "Reddit",
+   "location": "Remote - United States",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/reddit/jobs/8331341",
+   "postedAt": "2026-10-28T19:00:05-04:00",
+   "role": "DevOps Engineer",
+   "level": "Senior",
+   "salary": {
+    "min": 190000,
+    "max": 267000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$190,000 — $267,000 USD"
+   },
+   "mandatory": [
+    "Communication",
+    "Risk management",
+    "Stakeholder communication",
+    "BigQuery",
+    "Product analytics",
+    "REST APIs",
+    "Leadership",
+    "Machine learning",
+    "Python",
+    "Java",
+    "C++",
+    "AWS",
+    "GCP",
+    "Kubernetes"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Risk management",
+     "text": "GRC (Governance, Risk & Compliance):"
+    },
+    {
+     "skill": "AWS",
+     "text": "Experience with essential cloud infrastructure (Kubernetes, IC/CD, AWS, GCP)"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-scaleai-4674863005",
+   "title": "DevOps Engineer, Infrastructure & Security",
+   "company": "Scale AI",
+   "location": "Washington, DC",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/scaleai/jobs/4674863005",
+   "postedAt": "2026-03-18T17:34:04-04:00",
+   "role": "DevOps Engineer",
+   "level": "Unspecified",
+   "salary": {
+    "min": 198400,
+    "max": 311000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$198,400 — $311,000 USD"
+   },
+   "mandatory": [
+    "CI/CD",
+    "Machine learning"
+   ],
+   "preferred": [
+    "Docker",
+    "Kubernetes",
+    "Terraform",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Python",
+    "Linux",
+    "Git",
+    "Communication",
+    "MLOps"
+   ],
+   "quotes": [
+    {
+     "skill": "CI/CD",
+     "text": "to be at the forefront of building out and enhancing our CI/CD pipelines. You will play a crucial role in streamlining our Software"
+    },
+    {
+     "skill": "Machine learning",
+     "text": "aspect of this role will be seamlessly integrating various machine learning (ML) tasks and updates into our SDLC, transforming currently"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-axios-8164656",
+   "title": "Salesforce Business Analyst",
+   "company": "Axios",
+   "location": "Remote (Washington, DC Preferred)",
+   "remote": true,
+   "url": "https://job-boards.greenhouse.io/axios/jobs/8164656",
+   "postedAt": "2026-08-28T14:17:28-04:00",
+   "role": "Business Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 65000,
+    "max": 75000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$65,000 - $75,000"
+   },
+   "mandatory": [
+    "Data visualization",
+    "Leadership",
+    "Product strategy",
+    "Stakeholder communication",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Product strategy",
+     "text": "Build and optimize a Salesforce environment that supports Axios’ evolving revenue organization, sales processes, and go-to-market strategy."
+    },
+    {
+     "skill": "Data visualization",
+     "text": "for Salesforce Media Cloud, managing users, permissions, page layouts, flows, reports, dashboards, validation rules, and automation."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-block-5439140008",
+   "title": "Business Intelligence Analyst",
+   "company": "Block",
+   "location": "San Francisco, CA, United States of America",
+   "remote": false,
+   "url": "https://block.xyz/careers/jobs/5439140008?gh_jid=5439140008",
+   "postedAt": "2026-09-29T17:10:41-04:00",
+   "role": "Business Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 135200,
+    "max": 202800,
+    "currency": "USD",
+    "period": "year",
+    "text": "$135,200 — $202,800 USD"
+   },
+   "mandatory": [
+    "Accounting",
+    "Product strategy",
+    "Data visualization",
+    "Stakeholder communication",
+    "Risk management",
+    "Leadership",
+    "Business analysis",
+    "SQL",
+    "ETL",
+    "Excel",
+    "Communication"
+   ],
+   "preferred": [
+    "Python",
+    "Tableau",
+    "Looker",
+    "Snowflake",
+    "BigQuery"
+   ],
+   "quotes": [
+    {
+     "skill": "Excel",
+     "text": "Advanced Excel proficiency (complex formulas, pivot tables) and experience with reconciliation tooling and banking portals."
+    },
+    {
+     "skill": "ETL",
+     "text": "(or working independently) to design, build, validate, and maintain data pipelines, with the ability to make sound technical trade-offs."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-datadog-8002771",
+   "title": "Senior Financial Systems Analyst",
+   "company": "Datadog",
+   "location": "New York, New York, USA",
+   "remote": false,
+   "url": "https://careers.datadoghq.com/detail/8002771/?gh_jid=8002771",
+   "postedAt": "2026-06-16T08:00:39-04:00",
+   "role": "Business Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 101000,
+    "max": 147000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$101,000 — $147,000 USD"
+   },
+   "mandatory": [
+    "SQL",
+    "Python",
+    "Tableau",
+    "Stakeholder communication",
+    "Financial modeling",
+    "Accounting",
+    "Data visualization",
+    "Power BI",
+    "Looker"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Power BI",
+     "text": "Have experience building dashboards and reports using Tableau or similar business intelligence tools such as Power BI or Looker."
+    },
+    {
+     "skill": "Data visualization",
+     "text": "Build and maintain dashboards and reporting tools that monitor financial and operational performance and support evolving business"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-elastic-8107090",
+   "title": "Sr. Business Systems Analyst",
+   "company": "Elastic",
+   "location": "United States",
+   "remote": false,
+   "url": "https://jobs.elastic.co/jobs?gh_jid=8107090&gh_jid=8107090",
+   "postedAt": "2026-08-05T18:07:27-04:00",
+   "role": "Business Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 94300,
+    "max": 149200,
+    "currency": "USD",
+    "period": "year",
+    "text": "$94,300 — $149,200 USD"
+   },
+   "mandatory": [
+    "Agile",
+    "Leadership",
+    "Stakeholder communication",
+    "Business analysis",
+    "Communication",
+    "Project management",
+    "Data modeling"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Data modeling",
+     "text": "Broad and deep understanding of the Salesforce ecosystem, including data model, platform capabilities, and integrations."
+    },
+    {
+     "skill": "Business analysis",
+     "text": "business needs into clear functional requirements; own requirements gathering, feature design, documentation, and end-user testing"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "lv-palantir-26032bad-d713-429d-8b04-2de7db93b5c3",
+   "title": "Procurement Operations Analyst",
+   "company": "Palantir",
+   "location": "Washington, D.C.",
+   "remote": false,
+   "url": "https://jobs.lever.co/palantir/26032bad-d713-429d-8b04-2de7db93b5c3",
+   "postedAt": "2021-08-11T22:56:52.683000+00:00",
+   "role": "Business Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 65000,
+    "max": 85000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$65,000 - $85,000/year"
+   },
+   "mandatory": [
+    "Forecasting",
+    "Stakeholder communication",
+    "Financial modeling",
+    "Accounting",
+    "Risk management",
+    "Communication",
+    "Excel"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Excel",
+     "text": "Strong data analysis skills, with proficiency in Excel."
+    },
+    {
+     "skill": "Financial modeling",
+     "text": "cross-functional teams such as Financial Planning & Analysis (FP&A), Accounting, Legal, Information Security, Compliance and the"
+    }
+   ],
+   "source": "lever"
+  },
+  {
+   "id": "gh-stripe-8354560",
+   "title": "Credit Operations Analyst",
+   "company": "Stripe",
+   "location": "Chicago, IL; Atlanta, GA; Toronto, Canada",
+   "remote": false,
+   "url": "https://stripe.com/jobs/search?gh_jid=8354560",
+   "postedAt": "2026-11-11T12:58:52-05:00",
+   "role": "Business Analyst",
+   "level": "Unspecified",
+   "salary": null,
+   "mandatory": [
+    "Stakeholder communication",
+    "Risk management",
+    "Communication",
+    "SQL",
+    "Data visualization"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "Strong proficiency using SQL to analyze data, drive insights, and create dashboards and visualizations"
+    },
+    {
+     "skill": "Risk management",
+     "text": "have advanced understanding of general credit principals, risk management, and credit modeling. Successful candidates for the role will"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "lv-zoox-85ac55ee-0fdf-4b17-b57f-b09ce0defebe",
+   "title": "Commercial Operations Analyst",
+   "company": "Zoox",
+   "location": "Foster City, CA",
+   "remote": false,
+   "url": "https://jobs.lever.co/zoox/85ac55ee-0fdf-4b17-b57f-b09ce0defebe",
+   "postedAt": "2026-07-01T20:59:17.640000+00:00",
+   "role": "Business Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 144000,
+    "max": 197000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$144,000 - $197,000 per-year-salary"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Leadership",
+    "SQL",
+    "Python",
+    "Excel"
+   ],
+   "preferred": [
+    "Forecasting",
+    "R",
+    "Looker",
+    "Spark",
+    "Data visualization"
+   ],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "Strong technical foundation, with proficiency in SQL and Excel/Sheets and the ability to independently pull, structure, and analyze large,"
+    },
+    {
+     "skill": "Stakeholder communication",
+     "text": "operational and financial data into clear, decision-ready recommendations and narratives for cross-functional partners and leadership."
+    }
+   ],
+   "source": "lever"
+  },
+  {
+   "id": "gh-zscaler-5267177007",
+   "title": "Senior Business Systems Analyst - Salesforce (Marketing IT)",
+   "company": "Zscaler",
+   "location": "Santa Clara, California, USA",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/zscaler/jobs/5267177007",
+   "postedAt": "2026-10-23T17:54:16-04:00",
+   "role": "Business Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 124000,
+    "max": 155000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$124,000 — $155,000 USD"
+   },
+   "mandatory": [
+    "Agile",
+    "Project management",
+    "Stakeholder communication",
+    "Leadership",
+    "SQL",
+    "LLMs",
+    "Risk management",
+    "Business analysis",
+    "Product analytics",
+    "Marketing automation"
+   ],
+   "preferred": [
+    "Machine learning"
+   ],
+   "quotes": [
+    {
+     "skill": "Risk management",
+     "text": "Manage end-to-end execution of cross-departmental initiatives while tracking user adoption, system ROI, and data compliance standards"
+    },
+    {
+     "skill": "Business analysis",
+     "text": "Demonstrated proficiency utilizing AI tools to accelerate BRD generation, user story mapping, and technical business analysis workflows"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-asana-8282522",
+   "title": "Corporate and Strategic Finance, FP&A",
+   "company": "Asana",
+   "location": "San Francisco",
+   "remote": false,
+   "url": "https://www.asana.com/jobs/apply/8282522?gh_jid=8282522",
+   "postedAt": "2026-10-24T12:11:49-04:00",
+   "role": "Financial Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 164000,
+    "max": 186000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$164,000 - $186,000"
+   },
+   "mandatory": [
+    "Product strategy",
+    "Leadership",
+    "Financial modeling",
+    "Accounting",
+    "Forecasting",
+    "Excel",
+    "Spark",
+    "Stakeholder communication",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Excel",
+     "text": "Advanced proficiency in MS Excel and Google Sheets."
+    },
+    {
+     "skill": "Spark",
+     "text": "Prior experience with financial and data analytics tools such as Anaplan and Databricks."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-databricks-8936978002",
+   "title": "Corporate FP&A Manager",
+   "company": "Databricks",
+   "location": "Mountain View, California; San Francisco, California",
+   "remote": false,
+   "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8936978002",
+   "postedAt": "2026-11-12T21:06:04-05:00",
+   "role": "Financial Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 169100,
+    "max": 232550,
+    "currency": "USD",
+    "period": "year",
+    "text": "$169,100 — $232,550 USD"
+   },
+   "mandatory": [
+    "Financial modeling",
+    "Forecasting",
+    "Stakeholder communication",
+    "SQL",
+    "Accounting",
+    "Excel",
+    "Data visualization",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Accounting",
+     "text": "Bachelor's degree in Finance, Accounting, Economics, or a related quantitative field"
+    },
+    {
+     "skill": "Excel",
+     "text": "Strong financial modeling skills in Excel and Google Sheets, with experience in a planning tool such as Anaplan"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-datadog-8267437",
+   "title": "FP&A Analyst, Cloud Finance",
+   "company": "Datadog",
+   "location": "New York, New York, USA",
+   "remote": false,
+   "url": "https://careers.datadoghq.com/detail/8267437/?gh_jid=8267437",
+   "postedAt": "2026-10-13T09:25:59-04:00",
+   "role": "Financial Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 99000,
+    "max": 132000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$99,000 — $132,000 USD"
+   },
+   "mandatory": [
+    "Financial modeling",
+    "Forecasting",
+    "Leadership",
+    "Excel",
+    "Accounting",
+    "Snowflake"
+   ],
+   "preferred": [
+    "SQL",
+    "Tableau"
+   ],
+   "quotes": [
+    {
+     "skill": "Excel",
+     "text": "Assist in maintaining the hosting forecast models across Excel and Pigment."
+    },
+    {
+     "skill": "Accounting",
+     "text": "Partner with Controllership on accounting support for monthly hosting close files."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-discord-8865033002",
+   "title": "Strategic Finance Analyst",
+   "company": "Discord",
+   "location": "San Francisco Bay Area",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/discord/jobs/8865033002",
+   "postedAt": "2026-11-10T15:23:17-05:00",
+   "role": "Financial Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 116000,
+    "max": 130500,
+    "currency": "USD",
+    "period": "year",
+    "text": "$116,000 — $130,500 USD"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Forecasting",
+    "A/B testing",
+    "Product analytics",
+    "Excel",
+    "Looker",
+    "Data visualization",
+    "ETL",
+    "Accounting",
+    "Financial modeling",
+    "SQL"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Financial modeling",
+     "text": "1+ years in investment banking, top-tier consulting, or high-growth tech FP&A with heavy financial-modeling ownership."
+    },
+    {
+     "skill": "SQL",
+     "text": "Strong mastery of Excel & modelling techniques, experience with SQL, FP&A tools, and Data visualization tools also encouraged."
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "gh-klaviyo-8196940003",
+   "title": "Lead Analyst, Strategic Finance & Analytics",
+   "company": "Klaviyo",
+   "location": "Boston, MA",
+   "remote": false,
+   "url": "https://www.klaviyo.com/careers/jobs/8196940003?gh_jid=8196940003",
+   "postedAt": "2026-11-06T11:43:29-05:00",
+   "role": "Financial Analyst",
+   "level": "Lead",
+   "salary": {
+    "min": 148000,
+    "max": 222000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$148,000 — $222,000 USD"
+   },
+   "mandatory": [
+    "Product strategy",
+    "Forecasting",
+    "LLMs",
+    "Financial modeling",
+    "dbt",
+    "Stakeholder communication",
+    "Leadership",
+    "Statistics",
+    "Machine learning",
+    "SQL",
+    "Python"
+   ],
+   "preferred": [
+    "Data visualization"
+   ],
+   "quotes": [
+    {
+     "skill": "dbt",
+     "text": "on reliable pipelines and dbt models that give forecasting a clean, trusted foundation."
+    },
+    {
+     "skill": "SQL",
+     "text": "You're highly proficient in SQL and Python or R, with experience building production-quality analytical solutions, and you're familiar with"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "lv-outreach-f7020abe-4ddd-4878-a33f-5c410924b04d",
+   "title": "Senior Financial Analyst",
+   "company": "Outreach",
+   "location": "Seattle, WA",
+   "remote": false,
+   "url": "https://jobs.lever.co/outreach/f7020abe-4ddd-4878-a33f-5c410924b04d",
+   "postedAt": "2026-09-04T19:54:13.269000+00:00",
+   "role": "Financial Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 110000,
+    "max": 125000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$110,000 - $125,000 per-year-salary"
+   },
+   "mandatory": [
+    "Leadership",
+    "Financial modeling",
+    "Forecasting",
+    "Accounting",
+    "Business analysis",
+    "Excel",
+    "Communication"
+   ],
+   "preferred": [],
+   "quotes": [
+    {
+     "skill": "Business analysis",
+     "text": "Proven experience building financial models and performing business analysis, with strong analytical and problem-solving skills"
+    },
+    {
+     "skill": "Excel",
+     "text": "Advanced Excel skills, including complex formulas, pivot tables, and model building, with working proficiency in PowerPoint and Word"
+    }
+   ],
+   "source": "lever"
+  },
+  {
+   "id": "gh-twitch-8931183002",
+   "title": "Senior Financial Analyst, AI Transformation",
+   "company": "Twitch",
+   "location": "Seattle, WA",
+   "remote": false,
+   "url": "https://job-boards.greenhouse.io/twitch/jobs/8931183002",
+   "postedAt": "2026-11-04T17:11:28-05:00",
+   "role": "Financial Analyst",
+   "level": "Senior",
+   "salary": {
+    "min": 80400,
+    "max": 117100,
+    "currency": "USD",
+    "period": "year",
+    "text": "$80,400 — $117,100 USD"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Financial modeling",
+    "Leadership",
+    "ETL",
+    "Forecasting",
+    "Business analysis",
+    "Accounting"
+   ],
+   "preferred": [
+    "LLMs"
+   ],
+   "quotes": [
+    {
+     "skill": "Business analysis",
+     "text": "Technology & ROI Business Analysis:"
+    },
+    {
+     "skill": "Accounting",
+     "text": "Bachelor's degree in finance, accounting, business, economics, or a related analytical field"
+    }
+   ],
+   "source": "greenhouse"
+  },
+  {
+   "id": "lv-zoox-eacbb34f-e823-4827-90bf-bc8044b660b1",
+   "title": "Financial Analyst, Marketing and Commercial",
+   "company": "Zoox",
+   "location": "Foster City, CA",
+   "remote": false,
+   "url": "https://jobs.lever.co/zoox/eacbb34f-e823-4827-90bf-bc8044b660b1",
+   "postedAt": "2026-11-04T22:36:45.129000+00:00",
+   "role": "Financial Analyst",
+   "level": "Unspecified",
+   "salary": {
+    "min": 165000,
+    "max": 204000,
+    "currency": "USD",
+    "period": "year",
+    "text": "$165,000 - $204,000 per-year-salary"
+   },
+   "mandatory": [
+    "Stakeholder communication",
+    "Financial modeling",
+    "Forecasting",
+    "Accounting",
+    "Data visualization",
+    "Product analytics",
+    "Spark",
+    "Leadership",
+    "SQL",
+    "Excel",
+    "Tableau",
+    "Looker"
+   ],
+   "preferred": [
+    "A/B testing",
+    "Python",
+    "R"
+   ],
+   "quotes": [
+    {
+     "skill": "SQL",
+     "text": "Proficiency in SQL and advanced Excel/Sheets, plus experience with planning and reporting tools (Anaplan, Looker, Tableau, etc.)"
+    },
+    {
+     "skill": "Financial modeling",
+     "text": "The FP&A team at Zoox drives financial analysis of key strategic investments, maintains short and long term financial models, and develops"
+    }
+   ],
+   "source": "lever"
+  }
+ ]
+}
