@@ -8,6 +8,7 @@ What's new vs prototype 1:
 - **Readiness** for the target role + **progress** chart across report versions
 - **History**: every new report archives the previous one as a PDF (`/api/history/<id>.pdf`); the current report downloads at `/api/report.pdf`
 - About section with picture blocks on the landing page
+- SQLite database with consent, CV retention, data export / account deletion and an audited admin view (see [DATA.md](DATA.md))
 - Split for deployment: `frontend/` → Vercel, `backend/` → Railway (see [DEPLOY.md](DEPLOY.md))
 
 ## Run locally
@@ -20,6 +21,6 @@ No dependencies (Python 3.9+ standard library). Refresh real vacancies: `pip ins
 
 ## Structure
 ```
-frontend/   index.html, styles.css, app.js, map.js, config.js, vercel.json
-backend/    server.py (API), report_pdf.py (PDF writer), data/ (jobs + taxonomy), scraper/, railway.json, Procfile
+frontend/   index.html, styles.css, app.js, map.js, admin.html, admin.js, config.js, vercel.json
+backend/    server.py (API), db.py (SQLite + privacy rules), report_pdf.py (PDF writer), data/ (jobs + taxonomy), scraper/, railway.json, Procfile
 ```

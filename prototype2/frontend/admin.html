@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>tirek admin</title>
+<script>try{var t=localStorage.getItem('tirek-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mu);font-weight:500}
+tr.click{cursor:pointer}tr.click:hover{background:var(--soft)}
+pre{white-space:pre-wrap;background:var(--soft);border-radius:16px;padding:14px;font-size:12px;max-height:360px;overflow:auto}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpis .blk{margin:0;padding:18px}.kpis .big{font-size:34px}
+@media(max-width:800px){.kpis{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><a class="logo" href="./"><i></i>tirek <span class="chip y" style="margin:0 0 0 6px">admin</span></a>
+  <nav id="tabs" class="hide"><button data-t="overview" class="on">Overview</button><button data-t="feedback">Feedback</button><button data-t="users">Users</button><button data-t="audit">Access log</button></nav>
+  <div class="tools"><button class="btn small ghost hide" id="out">Lock</button></div></header>
+<main>
+  <form class="card auth" id="login">
+    <h2>Admin access</h2>
+    <p class="sm mu">Enter the ADMIN_TOKEN configured on the server. Personal data is masked in lists; opening a user's details is recorded in the access log. Use this only for support and product quality.</p>
+    <label>Admin token<input type="password" id="tok" autocomplete="off" required></label>
+    <div class="ferr" id="lerr"></div>
+    <button class="btn blue">Open</button>
+  </form>
+  <section id="view"></section>
+</main>
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

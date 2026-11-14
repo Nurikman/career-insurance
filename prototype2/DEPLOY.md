@@ -6,7 +6,7 @@ Browser ──► Vercel (static frontend)
               ▼
             Railway (python3 server.py) ──► OpenAI API
               │
-              └─ Volume /data  (users, sessions, reports, PDFs)
+              └─ Volume /data  (tirek.db: users, consents, reports, feedback, audit log)
 ```
 
 ## 1. Backend on Railway
@@ -18,7 +18,9 @@ Browser ──► Vercel (static frontend)
    |---|---|
    | `OPENAI_API_KEY` | your key |
    | `OPENAI_MODEL` | e.g. `gpt-4o-mini` (optional) |
-   | `DATA_DIR` | `/data` |
+   | `DATA_DIR` | `/data` (SQLite database `tirek.db` lives here) |
+   | `ADMIN_TOKEN` | long random string, enables `/admin.html` |
+   | `CV_RETENTION_DAYS` | `90` (optional) |
 4. Settings → Networking → **Generate Domain**, e.g. `https://tirek-api.up.railway.app`. Check `https://…/api/health`.
 
 ## 2. Frontend on Vercel
@@ -32,6 +34,7 @@ Browser ──► Vercel (static frontend)
 - Note: some browsers block third-party cookies, so the rewrite above is more reliable.
 
 ## Notes
-- Without a volume, Railway's filesystem resets on each deploy (accounts and PDFs would be lost).
+- Without a volume, Railway's filesystem resets on each deploy (the database would be lost).
+- Privacy, consent and admin access are described in [DATA.md](DATA.md).
 - The job dataset ships with the backend (`backend/data/jobs_us.json`). Re-run the scraper locally and redeploy to refresh it.
 - Never commit `.env`; set secrets in Railway variables.

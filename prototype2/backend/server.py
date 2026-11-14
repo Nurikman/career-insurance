@@ -17,6 +17,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from db import DB, CONSENT_VERSION
 from collections import defaultdict
 from http.cookies import SimpleCookie
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -40,9 +41,9 @@ load_env()
 STATIC = ROOT / "data"                                                   # bundled read-only data (jobs, taxonomy)
 DATA = Path(os.environ.get("DATA_DIR") or ROOT / "data")                 # writable: users, sessions, reports (Railway volume)
 PUBLIC = Path(os.environ.get("FRONTEND_DIR") or ROOT.parent / "frontend")  # served only when present (local dev)
-LOGS, USERDATA = DATA / "logs", DATA / "userdata"
-for d in (LOGS, USERDATA):
-    d.mkdir(parents=True, exist_ok=True)
+DATA.mkdir(parents=True, exist_ok=True)
+ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")                         # enables /admin.html; use a long random value
+CV_RETENTION_DAYS = int(os.environ.get("CV_RETENTION_DAYS", "90"))       # stored CV text is deleted after this many days
 ALLOWED_ORIGINS = {o.strip().rstrip("/") for o in os.environ.get("ALLOWED_ORIGINS", "").split(",") if o.strip()}
 COOKIE_ATTRS = "SameSite=None; Secure" if os.environ.get("CROSS_SITE_COOKIES") == "1" else "SameSite=Lax"
 OPENAI_KEY =os.environ.get("OPENAI_API_KEY", "")
@@ -95,29 +96,17 @@ class ApiError(Exception):
         self.status, self.message = status, message
 
 
-# ---------- storage ----------
-def read_json(path, default):
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        return default
-
-
-def write_json(path, obj):
-    tmp = path.with_suffix(".tmp")
-    tmp.write_text(json.dumps(obj, ensure_ascii=False, indent=1), encoding="utf-8")
-    tmp.replace(path)
-
-
-USERS_F, SESS_F = DATA / "users.json", DATA / "sessions.json"
+# ---------- storage (SQLite, see db.py) ----------
+DBX = DB(DATA / "tirek.db")
+DBX.purge(CV_RETENTION_DAYS)
 
 
 def user_state(uid):
-    return read_json(USERDATA / f"{uid}.json", {})
+    return DBX.state(uid)
 
 
 def save_state(uid, st):
-    write_json(USERDATA / f"{uid}.json", st)
+    DBX.save_state(uid, st)
 
 
 def hash_pw(pw, salt):
@@ -125,7 +114,8 @@ def hash_pw(pw, salt):
 
 
 def public_user(u):
-    return {k: u[k] for k in ("id", "name", "surname", "country", "email")}
+    return {**{k: u[k] for k in ("id", "name", "surname", "country", "email")},
+            "consent": {"storeCv": bool(u["consent_store_cv"]), "research": bool(u["consent_research"]), "version": u["consent_version"]}}
 
 
 # ---------- LLM ----------
@@ -345,7 +335,9 @@ P2 = ("You are a labor market and career transition analyst. Analyze the supplie
 def api_report(body, u):
     uid = u["id"]
     cv, about = (body.get("cvText") or "").strip()[:12000], (body.get("about") or "").strip()[:4000]
-    cur, tgt = str(body.get("currentRole", "")), str(body.get("targetRole", ""))
+    if not cv and u["consent_store_cv"] and body.get("useSavedCv"):  # reuse the CV the user chose to keep
+        cv = ((DBX.profile(uid) or {}).get("cv_text") or "")[:12000]
+    cur, tgt =str(body.get("currentRole", "")), str(body.get("targetRole", ""))
     if len(cv) + len(about) < 40:
         raise ApiError(400, "Upload your CV or tell us about yourself (at least a few sentences).")
     if tgt not in ROLES:
@@ -428,13 +420,13 @@ def api_report(body, u):
         "dataset": {"count": len(JOBS["jobs"]), "scrapedAt": JOBS["meta"].get("scrapedAt"), "note": JOBS["meta"].get("note"),
                     "estimatesNote": TAX["note"]},
     }
+    report["id"] = DBX.add_report(uid, report)  # every report is kept: history + PDF download
+    DBX.save_profile(uid, body, cv, str(body.get("cvName", ""))[:120], u["consent_store_cv"])
     st = user_state(uid)
-    if st.get("report"):  # archive the previous report as a PDF before replacing it
-        archive_report(uid, st)
     st.update({"input": {k: body.get(k) for k in ("about", "currentRole", "targetRole", "targetSalary", "studyHours")},
-               "report": report, "roadmap": None, "interview": None, "result": None})
+               "report": report, "roadmap": None, "interview": None, "result": None, "feedbackDone": st.get("feedbackDone", False)})
     save_state(uid, st)
-    append_log("events.jsonl", {"name": "report_generated", "uid": uid})
+    DBX.event(uid, "report_generated")
     return report
 
 
@@ -576,7 +568,7 @@ def api_submit(body, u):
     result = {"mcq": mcq_res, "mcqScore": sum(m["correct"] for m in mcq_res), "mcqTotal": len(mcq_res), "open": evals}
     st["result"] = result
     save_state(u["id"], st)
-    append_log("events.jsonl", {"name": "interview_completed", "uid": u["id"]})
+    DBX.event(u["id"], "interview_completed")
     return result
 
 
@@ -594,81 +586,151 @@ def api_signup(body, _):
         raise ApiError(400, "Please enter a valid email (e.g. name@gmail.com).")
     if len(pw) < 8:
         raise ApiError(400, "Password must be at least 8 characters.")
-    with _lock:
-        users = read_json(USERS_F, {})
-        if email in users:
-            raise ApiError(409, "An account with this email already exists. Please log in.")
-        salt = secrets.token_hex(16)
-        u = {"id": secrets.token_hex(8), "name": name, "surname": surname, "country": country, "email": email,
-             "salt": salt, "hash": hash_pw(pw, salt), "created": int(time.time())}
-        users[email] = u
-        write_json(USERS_F, users)
-    return new_session(u)
+    if body.get("terms") is not True:
+        raise ApiError(400, "Please accept the Terms and Privacy Policy to create an account.")
+    if DBX.user_by_email(email):
+        raise ApiError(409, "An account with this email already exists. Please log in.")
+    salt = secrets.token_hex(16)
+    uid = secrets.token_hex(8)
+    DBX.create_user({"id": uid, "name": name, "surname": surname, "country": country, "email": email, "salt": salt,
+                     "hash": hash_pw(pw, salt)}, body.get("storeCv") is True, body.get("research") is True)
+    DBX.event(uid, "signup")
+    return new_session(DBX.user_by_id(uid))
 
 
 def api_login(body, _):
     email, pw = str(body.get("email", "")).strip().lower(), str(body.get("password", ""))
-    u = read_json(USERS_F, {}).get(email)
-    if not u or not hmac.compare_digest(u["hash"], hash_pw(pw, u["salt"])):
+    u = DBX.user_by_email(email)
+    if not u or not hmac.compare_digest(u["pw_hash"], hash_pw(pw, u["pw_salt"])):
         raise ApiError(401, "Wrong email or password.")
     return new_session(u)
 
 
 def new_session(u):
     tok = secrets.token_urlsafe(32)
-    with _lock:
-        s = read_json(SESS_F, {})
-        s[tok] = {"uid": u["id"], "email": u["email"], "exp": int(time.time()) + 7 * 86400}
-        write_json(SESS_F, s)
+    DBX.add_session(tok, u["id"], 7 * 86400)
     return {"user": public_user(u), "_cookie": tok}
 
 
 def session_user(token):
-    if not token:
-        return None
-    s = read_json(SESS_F, {}).get(token)
-    if not s or s["exp"] < time.time():
-        return None
-    return read_json(USERS_F, {}).get(s["email"])
+    return DBX.session_user(token)
 
 
 def api_logout(body, u, token=None):
-    with _lock:
-        s = read_json(SESS_F, {})
-        s.pop(token, None)
-        write_json(SESS_F, s)
+    DBX.drop_session(token)
     return {"ok": True, "_cookie": ""}
 
 
 def api_me(u):
     st = user_state(u["id"])
-    return {"user": public_user(u), "input": st.get("input"), "report": st.get("report"), "roadmap": st.get("roadmap"),
+    pr = DBX.profile(u["id"]) or {}
+    inp = {"currentRole": pr.get("current_role"), "targetRole": pr.get("target_role"), "targetSalary": pr.get("target_salary"),
+           "studyHours": pr.get("study_hours"), "about": pr.get("about") or ""} if pr else None
+    return {"user": public_user(u), "input": inp, "savedCv": pr.get("cv_name") if pr.get("cv_text") else None,
+            "report": st.get("report"), "roadmap": st.get("roadmap"),
             "interview": public_interview(st["interview"]) if st.get("interview") else None, "result": st.get("result"),
-            "feedbackDone": bool(st.get("feedbackDone")), "history": history_view(st)}
-
-
-def append_log(name, record):
-    record["ts"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    with open(LOGS / name, "a", encoding="utf-8") as f:
-        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+            "feedbackDone": bool(st.get("feedbackDone")), "history": history_view(u["id"])}
 
 
 def api_event(body, u):
     name = str(body.get("name", ""))[:40]
     if not re.fullmatch(r"[a-z_]+", name):
         raise ApiError(400, "Bad event name.")
-    append_log("events.jsonl", {"name": name, "uid": u["id"] if u else None})
+    DBX.event(u["id"] if u else None, name)
     return {"ok": True}
 
 
 def api_feedback(body, u):
     rating = body.get("helpfulRating")
-    append_log("feedback.jsonl", {"uid": u["id"], "useful": rating if rating in (1, 2, 3, 4, 5) else None,
-                                  "buyPro": str(body.get("buyPro", ""))[:10], "comment": str(body.get("comment", ""))[:1000]})
+    DBX.add_feedback(u["id"], rating if rating in (1, 2, 3, 4, 5) else None, str(body.get("buyPro", ""))[:10],
+                     str(body.get("comment", ""))[:1000])
+    DBX.event(u["id"], "feedback_sent")
     st = user_state(u["id"])
     st["feedbackDone"] = True
     save_state(u["id"], st)
     return {"ok": True}
+
+
+# ---------- user data rights ----------
+def api_consent(body, u):
+    kind = body.get("kind")
+    if kind not in ("store_cv", "research"):
+        raise ApiError(400, "Unknown consent.")
+    DBX.set_consent(u["id"], kind, bool(body.get("value")))
+    return {"user": public_user(DBX.user_by_id(u["id"]))}
+
+
+def api_delete_account(body, u, token=None):
+    if not hmac.compare_digest(u["pw_hash"], hash_pw(str(body.get("password", "")), u["pw_salt"])):
+        raise ApiError(401, "Wrong password.")
+    DBX.delete_user(u["id"])
+    return {"ok": True, "_cookie": ""}
+
+
+def export_data(u):
+    pr = DBX.profile(u["id"]) or {}
+    return {"exportedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "account": {k: u[k] for k in ("id", "email", "name", "surname", "country", "created_at", "last_login_at",
+                                          "terms_accepted_at", "consent_version", "consent_store_cv", "consent_research")},
+            "consentLog": DBX.q("SELECT created_at,kind,value,version FROM consent_log WHERE user_id=? ORDER BY id", (u["id"],)),
+            "profile": pr, "reports": DBX.reports(u["id"]), "state": user_state(u["id"]),
+            "feedback": DBX.q("SELECT created_at,rating,buy_pro,comment FROM feedback WHERE user_id=?", (u["id"],)),
+            "events": DBX.q("SELECT created_at,name FROM events WHERE user_id=?", (u["id"],))}
+
+
+# ---------- admin (token-protected, masked by default, every access audited) ----------
+def mask_email(e):
+    name, _, dom = e.partition("@")
+    return (name[:1] + "***@" + dom) if dom else "***"
+
+
+def admin_get(path, ip):
+    if path == "/api/admin/overview":
+        DBX.audit(ip, "overview")
+        users = DBX.one("SELECT COUNT(*) n, SUM(consent_store_cv) cv, SUM(consent_research) research FROM users")
+        return {"users": users, "reports": DBX.one("SELECT COUNT(*) n FROM reports")["n"],
+                "feedback": DBX.one("SELECT COUNT(*) n, ROUND(AVG(rating),2) avg FROM feedback"),
+                "buyPro": DBX.q("SELECT buy_pro answer, COUNT(*) n FROM feedback GROUP BY buy_pro ORDER BY n DESC"),
+                "funnel": DBX.q("SELECT name, COUNT(*) n, COUNT(DISTINCT user_id) users FROM events GROUP BY name ORDER BY n DESC"),
+                "countries": DBX.q("SELECT country, COUNT(*) n FROM users GROUP BY country ORDER BY n DESC LIMIT 10"),
+                "retention": {"cvDays": CV_RETENTION_DAYS, "consentVersion": CONSENT_VERSION}}
+    if path == "/api/admin/feedback":
+        DBX.audit(ip, "list_feedback")
+        return {"items": DBX.q("SELECT f.id, f.created_at, f.rating, f.buy_pro, f.comment, u.country, substr(f.user_id,1,6) user_ref "
+                                "FROM feedback f LEFT JOIN users u ON u.id=f.user_id ORDER BY f.id DESC LIMIT 500")}
+    if path == "/api/admin/users":
+        DBX.audit(ip, "list_users")
+        rows = DBX.q("SELECT u.id, u.email, u.name, u.surname, u.country, u.created_at, u.last_login_at, u.consent_store_cv, u.consent_research, "
+                     "(SELECT COUNT(*) FROM reports r WHERE r.user_id=u.id) reports, "
+                     "(SELECT p.cv_text IS NOT NULL FROM profiles p WHERE p.user_id=u.id) has_cv FROM users u ORDER BY u.created_at DESC LIMIT 500")
+        for r in rows:  # masked list view; full details only on the per-user (audited) endpoint
+            r["email"] = mask_email(r["email"])
+            r["name"] = f"{r['name'][:1]}. {r['surname'][:1]}."
+            r.pop("surname")
+        return {"items": rows}
+    if path == "/api/admin/audit":
+        return {"items": DBX.q("SELECT * FROM admin_audit ORDER BY id DESC LIMIT 300")}
+    m = re.fullmatch(r"/api/admin/users/([0-9a-f]{16})", path)
+    if m:
+        uid = m.group(1)
+        u = DBX.user_by_id(uid)
+        if not u:
+            raise ApiError(404, "User not found.")
+        DBX.audit(ip, "view_user", uid)
+        pr = DBX.profile(uid) or {}
+        reps = DBX.reports(uid)
+        last = reps[0] if reps else None
+        return {"account": {k: u[k] for k in ("id", "email", "name", "surname", "country", "created_at", "last_login_at",
+                                              "consent_store_cv", "consent_research", "consent_version")},
+                "profile": {k: pr.get(k) for k in ("current_role", "target_role", "target_salary", "study_hours", "updated_at")},
+                "cv": ({"name": pr.get("cv_name"), "savedAt": pr.get("cv_saved_at"), "about": pr.get("about"), "text": pr.get("cv_text")}
+                       if u["consent_store_cv"] and (pr.get("cv_text") or pr.get("about")) else None),
+                "cvNote": None if u["consent_store_cv"] else "User did not consent to storing CV text.",
+                "extracted": last.get("profile") if last else None,
+                "reports": [{"id": r["id"], "createdAt": r["createdAt"], "score": r["risk"]["score"], "targetRole": r["targetRole"],
+                             "value": {k: (r.get("value") or {}).get(k) for k in ("min", "max", "median")}} for r in reps],
+                "feedback": DBX.q("SELECT created_at,rating,buy_pro,comment FROM feedback WHERE user_id=?", (uid,))}
+    raise ApiError(404, "Not found")
 
 
 # ---------- market value (salary you deserve now) ----------
@@ -702,31 +764,20 @@ def market_value(vac, target):
     return res
 
 
-# ---------- report history (PDF archive) ----------
+# ---------- report history ----------
 def snapshot(rep):
     v = rep.get("value") or {}
-    return {"createdAt": rep["createdAt"], "score": rep["risk"]["score"], "targetRole": rep["targetRole"],
+    return {"id": rep.get("id"), "createdAt": rep["createdAt"], "score": rep["risk"]["score"], "targetRole": rep["targetRole"],
             "valueMin": v.get("min"), "valueMax": v.get("max"), "readiness": v.get("readiness")}
 
 
-def archive_report(uid, st):
-    from report_pdf import render_report
-    rep = st["report"]
-    rid = re.sub(r"[^0-9]", "", rep["createdAt"])[:14] or str(int(time.time()))
-    folder = USERDATA / uid
-    folder.mkdir(exist_ok=True)
-    u = next((x for x in read_json(USERS_F, {}).values() if x["id"] == uid), {})
-    (folder / f"{rid}.pdf").write_bytes(render_report(rep, f"{u.get('name', '')} {u.get('surname', '')}".strip()))
-    st.setdefault("history", []).insert(0, {"id": rid, **snapshot(rep)})
-
-
-def history_view(st):
-    cur = [snapshot(st["report"])] if st.get("report") else []
-    return {"items": st.get("history", []), "progress": list(reversed(st.get("history", []))) + cur}
+def history_view(uid):
+    reps = [snapshot(r) for r in DBX.reports(uid)]  # newest first; the first one is the current report
+    return {"items": reps[1:], "progress": list(reversed(reps))}
 
 
 PUBLIC_POST = {"/api/signup": api_signup, "/api/login": api_login, "/api/event": api_event}
-AUTH_POST = {"/api/report": api_report, "/api/roadmap": api_roadmap, "/api/interview/questions": api_questions,
+AUTH_POST = {"/api/me/consent": api_consent, "/api/me/delete": api_delete_account, "/api/report": api_report, "/api/roadmap": api_roadmap, "/api/interview/questions": api_questions,
              "/api/interview/submit": api_submit, "/api/feedback": api_feedback, "/api/logout": api_logout}
 
 
@@ -780,21 +831,43 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split("?")[0]
-        if path.startswith("/api/history/") or path == "/api/report.pdf":
+        if path.startswith("/api/admin/"):
+            try:
+                auth = self.headers.get("Authorization", "")
+                if len(ADMIN_TOKEN) < 24:
+                    raise ApiError(403, "Admin is disabled. Set ADMIN_TOKEN (24+ characters) on the server.")
+                if not hmac.compare_digest(auth, "Bearer " + ADMIN_TOKEN):
+                    DBX.audit(self.client_address[0], "denied", path)
+                    raise ApiError(401, "Wrong admin token.")
+                return self.send_json(200, admin_get(path, self.client_address[0]))
+            except ApiError as e:
+                return self.send_json(e.status, {"error": e.message})
+        if path.startswith("/api/history/") or path in ("/api/report.pdf", "/api/me/export"):
             u = session_user(self.token())
             if not u:
                 return self.send_json(401, {"error": "Not logged in."})
-            st = user_state(u["id"])
+            if path == "/api/me/export":
+                data = json.dumps(export_data(u), ensure_ascii=False, indent=1).encode()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Content-Disposition", 'attachment; filename="tirek-my-data.json"')
+                self.send_header("Content-Length", str(len(data)))
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                self.wfile.write(data)
+                return
+            from report_pdf import render_report
+            name = f"{u['name']} {u['surname']}"
             if path == "/api/report.pdf":
+                st = user_state(u["id"])
                 if not st.get("report"):
                     return self.send_json(404, {"error": "No report yet."})
-                from report_pdf import render_report
-                return self.send_pdf(render_report(st["report"], f"{u['name']} {u['surname']}"), "tirek-report-current.pdf")
+                return self.send_pdf(render_report(st["report"], name), "tirek-report-current.pdf")
             rid = path.rsplit("/", 1)[-1].removesuffix(".pdf")
-            f = USERDATA / u["id"] / f"{rid}.pdf"
-            if not re.fullmatch(r"\d{8,14}", rid) or not f.exists():
+            rep = DBX.report(u["id"], int(rid)) if rid.isdigit() else None
+            if not rep:
                 return self.send_json(404, {"error": "Report not found."})
-            return self.send_pdf(f.read_bytes(), f"tirek-report-{rid}.pdf")
+            return self.send_pdf(render_report(rep, name), f"tirek-report-{rep['createdAt'][:10]}.pdf")
         if path.startswith("/api/"):
             pass
         elif not PUBLIC.exists():
@@ -823,7 +896,7 @@ class Handler(SimpleHTTPRequestHandler):
                 if not u:
                     raise ApiError(401, "Please log in again.")
                 fn = AUTH_POST[path]
-                return self.send_json(200, fn(body, u, tok) if fn is api_logout else fn(body, u))
+                return self.send_json(200, fn(body, u, tok) if fn in (api_logout, api_delete_account) else fn(body, u))
             self.send_json(404, {"error": "Not found"})
         except ApiError as e:
             self.send_json(e.status, {"error": e.message})

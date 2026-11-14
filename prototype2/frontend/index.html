@@ -91,10 +91,45 @@
       <datalist id="countries"><option>United States</option><option>Kazakhstan</option><option>Kyrgyzstan</option><option>Uzbekistan</option><option>United Kingdom</option><option>Germany</option><option>Canada</option><option>India</option><option>Turkey</option><option>United Arab Emirates</option></datalist>
       <label>Gmail<input type="email" name="email" autocomplete="email" placeholder="name@gmail.com" required></label>
       <label>Password<input type="password" name="password" autocomplete="new-password" minlength="8" placeholder="8+ characters" required></label>
+      <div class="consents">
+        <label class="ck"><input type="checkbox" name="terms" required> <span>I agree to the <a href="#/privacy" target="_blank">Terms &amp; Privacy Policy</a> <em>(required)</em></span></label>
+        <label class="ck"><input type="checkbox" name="storeCv"> <span>Keep my CV text so I can reuse it — deleted after 90 days <em>(optional)</em></span></label>
+        <label class="ck"><input type="checkbox" name="research"> <span>Use my anonymised results to improve tirek <em>(optional)</em></span></label>
+      </div>
       <div class="ferr"></div>
       <button class="btn blue" type="submit">Sign up</button>
       <p class="sm mu">Have an account? <a href="#/login">Log in</a></p>
     </form>
+  </section>
+
+  <!-- PRIVACY -->
+  <section id="v-privacy" class="hide">
+    <div class="card privacy" style="max-width:760px;margin:20px auto">
+      <span class="chip b">Privacy</span>
+      <h1 style="margin-top:12px">Your data, your choice</h1>
+      <p class="mu">Version 2026-11-15 · plain-language summary.</p>
+      <h3>What we store</h3>
+      <ul>
+        <li><b>Account:</b> name, surname, country, email, password (hashed — we never see it).</li>
+        <li><b>Career goal:</b> current and target role, target salary, study time.</li>
+        <li><b>Reports:</b> skills and experience extracted from your CV, risk score, salary range, roadmap and interview results — so you can see history and download PDFs.</li>
+        <li><b>CV text and “About you”:</b> <u>only if you opt in</u>. Deleted automatically after 90 days, or immediately when you withdraw consent.</li>
+        <li><b>Feedback and usage events</b> (e.g. “report generated”) to improve the product.</li>
+      </ul>
+      <h3>Why</h3>
+      <p>Only to give you your career report and improve tirek. We never sell your data and never use it for hiring decisions or advertising.</p>
+      <h3>Who processes it</h3>
+      <p>Your CV and profile text are sent to OpenAI to generate the report (as a processor; OpenAI states that API data is not used for model training by default). Data is hosted on our server (Railway). Job data comes from public employer job boards.</p>
+      <h3>Who can see it</h3>
+      <p>Only you, and the tirek team for support and quality checks. Team access shows masked emails and names by default; opening full details of an account is logged.</p>
+      <h3>Your rights</h3>
+      <ul>
+        <li>Download all your data (Profile → Your data → Download).</li>
+        <li>Change or withdraw consent at any time.</li>
+        <li>Delete your account and everything linked to it — immediately and permanently.</li>
+      </ul>
+      <p class="sm mu">Questions: contact the tirek team. AI results are estimates for learning and planning, not financial, legal or hiring advice.</p>
+    </div>
   </section>
 
   <section id="v-profile" class="hide"></section>
@@ -103,6 +138,7 @@
   <section id="v-interview" class="hide"></section>
   <section id="v-feedback" class="hide"></section>
 </main>
+<footer><a href="#/privacy">Privacy</a><span>© tirek</span></footer>
 <div id="toast" role="status"></div>
 
 <script src="config.js"></script>

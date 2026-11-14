@@ -166,3 +166,11 @@ blockquote{margin:6px 0;padding:4px 12px;border-left:3px solid var(--blue);color
 }
 @media(max-width:560px){.grid4{grid-template-columns:1fr}.authcta{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* consent + privacy + footer */
+.consents{display:flex;flex-direction:column;gap:8px;margin:4px 0}
+.auth label.ck{flex-direction:row;align-items:flex-start;gap:10px;color:var(--tx);font-size:13px}
+.ck input{width:18px;height:18px;margin-top:1px;accent-color:var(--blue);flex:none}
+.ck em{color:var(--mu);font-style:normal}
+.privacy h3{margin-top:22px}.privacy ul{padding-left:20px}.privacy li{margin:6px 0}
+footer{max-width:1200px;margin:0 auto;padding:20px;display:flex;gap:16px;justify-content:center;font-size:13px;color:var(--mu)}
+footer a{color:var(--mu)}

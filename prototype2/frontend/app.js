@@ -17,7 +17,7 @@ const track = name => api('/api/event', { name }).catch(() => {});
 
 let ME = null, ROLES = [], CV = { text: '', name: '' }, SEL = new Set(), ONLY_GAPS = true, PICKS = {};
 const TABS = [['profile', 'Profile'], ['report', 'Report'], ['roadmap', 'Roadmap'], ['interview', 'AI interview'], ['feedback', 'Feedback']];
-const PUBLIC = ['landing', 'login', 'signup'], VIEWS = [...PUBLIC, ...TABS.map(t => t[0])];
+const PUBLIC = ['landing', 'login', 'signup', 'privacy'], VIEWS = [...PUBLIC, ...TABS.map(t => t[0])];
 const SALARIES = ['Under $50k', '$50k–$75k', '$75k–$100k', '$100k–$130k', '$130k–$160k', '$160k–$200k', '$200k+'];
 const HOURS = ['1–2 h / week', '3–5 h / week', '6–10 h / week', '10+ h / week'];
 
@@ -27,9 +27,9 @@ function route() {
   let view = h.startsWith('app/') ? h.slice(4) : (h || 'landing');
   if (!VIEWS.includes(view)) view = 'landing';
   if (!ME && !PUBLIC.includes(view)) { location.hash = '#/login'; return; }
-  if (ME && PUBLIC.includes(view)) { location.hash = '#/app/' + (ME.report ? 'report' : 'profile'); return; }
+  if (ME && PUBLIC.includes(view) && view !== 'privacy') { location.hash = '#/app/' + (ME.report ? 'report' : 'profile'); return; }
   VIEWS.forEach(v => $('#v-' + v).classList.toggle('hide', v !== view));
-  const app = !PUBLIC.includes(view);
+  const app = !PUBLIC.includes(view) || (view === 'privacy' && !!ME);
   ['#nav', '#logout', '#who', '#mus'].forEach(s => $(s).classList.toggle('hide', !app));
   $('#vol').classList.toggle('hide', !app || !play);
   if (app) {
@@ -48,7 +48,9 @@ addEventListener('hashchange', route);
 async function authSubmit(e, path) {
   e.preventDefault(); const f = e.target, b = f.querySelector('button[type=submit]'), err = f.querySelector('.ferr');
   err.textContent = ''; b.disabled = true;
-  try { await api(path, Object.fromEntries(new FormData(f).entries())); ME = await api('/api/me'); f.reset(); location.hash = '#/app/profile'; toast('Welcome, ' + ME.user.name); }
+  const data = Object.fromEntries(new FormData(f).entries());
+  f.querySelectorAll('input[type=checkbox]').forEach(c => data[c.name] = c.checked);
+  try { await api(path, data); ME = await api('/api/me'); f.reset(); location.hash = '#/app/profile'; toast('Welcome, ' + ME.user.name); }
   catch (x) { err.textContent = x.message; }
   b.disabled = false;
 }
@@ -70,6 +72,7 @@ function renderProfile() {
     <div class="card"><h2>CV</h2>
       <label class="drop ${CV.text ? 'ok' : ''}">${CV.text ? `✓ ${esc(CV.name)}` : '<b>Upload PDF or .txt</b>'}<input type="file" id="cvFile" accept="application/pdf,.txt,text/plain" hidden></label>
       <div class="row" style="margin-top:12px"><button class="btn ghost small" id="sample">Try a sample CV</button>${CV.text ? '<button class="btn ghost small" id="clearCv">Remove</button>' : ''}</div>
+      ${!CV.text && ME.savedCv ? `<label class="row sm" style="margin-top:12px"><input type="checkbox" id="useSaved" checked> Use my saved CV (${esc(ME.savedCv)})</label>` : ''}
       <div id="cvErr"></div>
     </div>
     <div class="card"><h2>About you</h2>
@@ -83,7 +86,9 @@ function renderProfile() {
       <label class="fld">Study time<select id="hours">${opt(HOURS, inp.studyHours || '3–5 h / week')}</select></label>
     </div><div id="pErr"></div>
     <div class="row" style="margin-top:18px;justify-content:flex-end"><button class="btn blue big" id="gen">Generate career report →</button></div>
-  </div>`;
+  </div>
+  ${privacyCard()}`;
+  bindPrivacy();
   $('#cvFile').onchange = readCv;
   $('#sample').onclick = () => { CV = { text: SAMPLE, name: 'sample-cv.txt' }; keepInput(); renderProfile(); };
   $('#clearCv') && ($('#clearCv').onclick = () => { CV = { text: '', name: '' }; keepInput(); renderProfile(); });
@@ -107,17 +112,42 @@ async function readCv(e) {
   } catch (x) { fail('Could not read this file.'); }
 }
 async function generate() {
-  keepInput(); const i = ME.input;
-  if ((CV.text + i.about).trim().length < 40) { $('#pErr').innerHTML = '<div class="err">Upload a CV or write a few sentences about you.</div>'; return; }
+  keepInput(); const i = ME.input, useSaved = !CV.text && !!$('#useSaved')?.checked;
+  if ((CV.text + i.about).trim().length < 40 && !useSaved) { $('#pErr').innerHTML = '<div class="err">Upload a CV or write a few sentences about you.</div>'; return; }
   track('report_started');
   $('#v-profile').innerHTML = `<div class="card">${spin('Building your report')}</div>`;
   const steps = ['Reading your profile', 'Matching 100 real US vacancies', 'Calculating risk and market value', 'Finding alternative roles'];
   let k = 0; $('#loadStep').textContent = steps[k++];
   const iv = setInterval(() => { const e = $('#loadStep'); if (e) e.textContent = steps[Math.min(k++, steps.length - 1)]; }, 3000);
   try {
-    await api('/api/report', { cvText: CV.text, about: i.about, currentRole: i.currentRole, targetRole: i.targetRole, targetSalary: i.targetSalary, studyHours: i.studyHours });
+    await api('/api/report', { cvText: CV.text, cvName: CV.name, useSavedCv: useSaved, about: i.about, currentRole: i.currentRole, targetRole: i.targetRole, targetSalary: i.targetSalary, studyHours: i.studyHours });
     ME = await api('/api/me'); SEL.clear(); clearInterval(iv); location.hash = '#/app/report'; route();
   } catch (x) { clearInterval(iv); renderProfile(); $('#pErr').innerHTML = `<div class="err">${esc(x.message)}</div>`; }
+}
+
+// ---------- privacy controls (consent, export, delete) ----------
+function privacyCard() {
+  const c = ME.user.consent || {};
+  return `<div class="card"><div class="row between"><h2 style="margin:0">Your data</h2><a class="sm" href="#/privacy">Privacy policy</a></div>
+    <label class="row sm" style="margin-top:12px"><input type="checkbox" data-consent="store_cv" ${c.storeCv ? 'checked' : ''}> Keep my CV text so I can reuse it (auto-deleted after 90 days)</label>
+    <label class="row sm" style="margin-top:6px"><input type="checkbox" data-consent="research" ${c.research ? 'checked' : ''}> Use my anonymised results to improve tirek</label>
+    <div class="row" style="margin-top:14px"><a class="btn ghost small" href="${API}/api/me/export">Download my data</a><button class="btn ghost small" id="delAcc">Delete my account</button></div></div>`;
+}
+function bindPrivacy() {
+  $$('[data-consent]').forEach(c => c.onchange = async () => {
+    try { ME.user = (await api('/api/me/consent', { kind: c.dataset.consent, value: c.checked })).user; if (!c.checked && c.dataset.consent === 'store_cv') ME.savedCv = null; toast(c.checked ? 'Saved' : 'Consent withdrawn'); keepScroll(renderProfile); }
+    catch (x) { toast(x.message); c.checked = !c.checked; }
+  });
+  $('#delAcc').onclick = () => {
+    $('#delAcc').closest('.row').insertAdjacentHTML('afterend', `<div class="err" id="delBox"><b>This permanently deletes your account, CV, reports and history.</b> Feedback stays only as anonymous text.
+      <div class="row" style="margin-top:10px"><input type="password" id="delPw" placeholder="Your password" style="max-width:240px;background:#fff;color:#111317"><button class="btn small" id="delGo">Delete forever</button><button class="btn ghost small" id="delNo">Cancel</button></div></div>`);
+    $('#delAcc').disabled = true;
+    $('#delNo').onclick = () => { $('#delBox').remove(); $('#delAcc').disabled = false; };
+    $('#delGo').onclick = async () => {
+      try { await api('/api/me/delete', { password: $('#delPw').value }); ME = null; CV = { text: '', name: '' }; location.hash = '#/'; toast('Your account and data were deleted'); }
+      catch (x) { toast(x.message); }
+    };
+  };
 }
 
 // ---------- report ----------

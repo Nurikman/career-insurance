@@ -1,7 +1,9 @@
 .env
 data/logs/
+data/userdata/
 data/users.json
 data/sessions.json
-data/userdata/
+data/*.db
+data/*.db-*
 __pycache__/
 *.tmp
