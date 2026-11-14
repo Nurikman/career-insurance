@@ -587,7 +587,7 @@ def api_signup(body, _):
     if len(pw) < 8:
         raise ApiError(400, "Password must be at least 8 characters.")
     if body.get("terms") is not True:
-        raise ApiError(400, "Please accept the Terms and Privacy Policy to create an account.")
+        raise ApiError(400, "Please tick “I agree to the Terms & Privacy Policy” below the password. If you don't see it, refresh the page.")
     if DBX.user_by_email(email):
         raise ApiError(409, "An account with this email already exists. Please log in.")
     salt = secrets.token_hex(16)
