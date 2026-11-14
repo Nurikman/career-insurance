@@ -1,248 +1,310 @@
-// Career Insurance prototype: profile → report → AI interview → growth plan → feedback
+// tirek — Career Insurance: landing → auth → profile → report → roadmap → interview → feedback
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const pct = x => Math.round(x * 100) + '%';
-let tt; function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => e.classList.remove('on'), 2400); }
-
-let sid = 'anon'; try { sid = sessionStorage.getItem('sid') || crypto.randomUUID(); sessionStorage.setItem('sid', sid); } catch (e) { sid = Math.random().toString(36).slice(2); }
-const S = { tab: 'main', data: null, skills: [], method: '', report: null, sim: new Set(), gap: null, qs: null, qi: 0, evals: [], done: { report: 0, interview: 0 }, fb: { rating: 0 } };
-const TABS = [['main', 'Main'], ['profile', '1 · Profile'], ['report', '2 · Career report'], ['interview', '3 · AI interview'], ['plan', '4 · Growth plan']];
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+let tt; function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => e.classList.remove('on'), 2600); }
+const spin = t => `<div class="loading"><span class="spin" style="width:28px;height:28px"></span><b>${esc(t)}</b><span class="sm" id="loadStep"></span></div>`;
 
 async function api(path, body) {
   const r = await fetch(path, body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : {});
   const j = await r.json().catch(() => ({ error: 'Server returned an invalid response.' }));
+  if (r.status === 401 && path !== '/api/login' && path !== '/api/me') { ME = null; location.hash = '#/login'; }
   if (!r.ok) throw new Error(j.error || 'Request failed.');
   return j;
 }
-const track = name => api('/api/event', { name, sid }).catch(() => {});
+const track = name => api('/api/event', { name }).catch(() => {});
 
-// ---------- navigation ----------
-function nav() {
-  $('#nav').innerHTML = TABS.map(([k, n]) => {
-    const ok = (k === 'report' && S.report) || (k === 'interview' && S.done.interview) || (k === 'plan' && S.evals.length);
-    return `<button class="${S.tab === k ? 'on' : ''}" data-t="${k}">${n}${ok ? '<i>✓</i>' : ''}</button>`;
-  }).join('');
-  $$('#nav button').forEach(b => b.onclick = () => go(b.dataset.t));
+let ME = null, ROLES = [], CV = { text: '', name: '' }, SEL = new Set(), ONLY_GAPS = true, PICKS = {};
+const TABS = [['profile', 'Profile'], ['report', 'Career report'], ['roadmap', 'Learning roadmap'], ['interview', 'AI interview'], ['feedback', 'Feedback']];
+const PUBLIC = ['landing', 'login', 'signup'], VIEWS = [...PUBLIC, ...TABS.map(t => t[0])];
+const SALARIES = ['Under $50k', '$50k–$75k', '$75k–$100k', '$100k–$130k', '$130k–$160k', '$160k–$200k', '$200k+'];
+const HOURS = ['1–2 h / week', '3–5 h / week', '6–10 h / week', '10+ h / week'];
+
+// ---------- routing ----------
+function route() {
+  const h = location.hash.replace(/^#\/?/, '');
+  let view = h.startsWith('app/') ? h.slice(4) : (h || 'landing');
+  if (!VIEWS.includes(view)) view = 'landing';
+  if (!ME && !PUBLIC.includes(view)) { location.hash = '#/login'; return; }
+  if (ME && PUBLIC.includes(view)) { location.hash = '#/app/' + (ME.report ? 'report' : 'profile'); return; }
+  VIEWS.forEach(v => $('#v-' + v).classList.toggle('hide', v !== view));
+  const app = !PUBLIC.includes(view);
+  ['#nav', '#logout', '#who', '#mus', '#theme'].forEach(s => $(s).classList.toggle('hide', !app));
+  if (!app) $('#vol').classList.add('hide'); else $('#vol').classList.toggle('hide', !play);
+  if (app) {
+    $('#who').textContent = ME.user.name + ' ' + ME.user.surname;
+    $('#nav').innerHTML = TABS.map(([k, n]) => `<button class="${k === view ? 'on' : ''}" data-t="${k}">${n}${done(k) ? '<i>✓</i>' : ''}</button>`).join('');
+    $$('#nav button').forEach(b => b.onclick = () => location.hash = '#/app/' + b.dataset.t);
+  }
+  if (view === 'landing') window.TirekMap && TirekMap.resize();
+  ({ profile: renderProfile, report: renderReport, roadmap: renderRoadmap, interview: renderInterview, feedback: renderFeedback })[view]?.();
+  scrollTo(0, 0);
 }
-function go(t) {
-  S.tab = t;
-  TABS.forEach(([k]) => $('#v-' + k).classList.toggle('hide', k !== t));
-  nav(); scrollTo({ top: 0, behavior: 'smooth' });
-  if (t === 'main') window.TirekMap && TirekMap.resize();
-  ({ report: renderReport, interview: renderInterview, plan: renderPlan })[t]?.();
+const done = k => ({ profile: !!ME.report, report: !!ME.roadmap, roadmap: !!ME.roadmap, interview: !!ME.result, feedback: ME.feedbackDone })[k];
+addEventListener('hashchange', route);
+
+// ---------- auth ----------
+function formJSON(f) { return Object.fromEntries(new FormData(f).entries()); }
+async function authSubmit(e, path) {
+  e.preventDefault(); const f = e.target, b = f.querySelector('button[type=submit]'), err = f.querySelector('.ferr');
+  err.textContent = ''; b.disabled = true;
+  try { await api(path, formJSON(f)); ME = await api('/api/me'); f.reset(); location.hash = '#/app/profile'; toast('Welcome, ' + ME.user.name + '!'); }
+  catch (x) { err.textContent = x.message; }
+  b.disabled = false;
 }
+$('#loginForm').onsubmit = e => authSubmit(e, '/api/login');
+$('#signupForm').onsubmit = e => authSubmit(e, '/api/signup');
+$('#logout').onclick = async () => { await api('/api/logout', {}).catch(() => {}); ME = null; CV = { text: '', name: '' }; SEL.clear(); location.hash = '#/'; toast('You are logged out'); };
 
 // ---------- profile ----------
-const taxonomy = () => [...new Set(S.data.jobs.flatMap(j => [...j.mandatory, ...j.preferred].map(r => r.skill)).concat(S.data.extraSkills))].sort();
-function renderSkills() {
-  const box = $('#skills');
-  box.innerHTML = S.skills.length ? S.skills.map((s, i) => `<button class="chip ${s.confirmed ? 'ok' : ''}" data-i="${i}" title="${esc(s.evidence ? 'Evidence: “' + s.evidence + '”' : 'No quote from CV')}">${s.confirmed ? '✓ ' : ''}${esc(s.name)}<span class="x" data-del="${i}" aria-label="Remove">×</span></button>`).join('')
-    + (S.method ? `<p class="mu sm" style="margin:4px 0 0">Suggested by ${S.method === 'ai' ? 'AI with quotes from your CV (hover a chip)' : 'keyword matching'}. Click a chip to confirm it.</p>` : '')
-    : '<p class="mu sm">No skills yet. Extract from CV or add manually.</p>';
-  $$('#skills [data-i]').forEach(b => b.onclick = e => {
-    const del = e.target.dataset.del;
-    if (del !== undefined) S.skills.splice(+del, 1); else S.skills[+b.dataset.i].confirmed = !S.skills[+b.dataset.i].confirmed;
-    renderSkills();
-  });
-  const have = new Set(S.skills.map(s => s.name));
-  $('#addSkill').innerHTML = taxonomy().filter(t => !have.has(t)).map(t => `<option>${esc(t)}</option>`).join('');
-  $('#toReport').disabled = !S.skills.some(s => s.confirmed);
-}
-function initProfile() {
-  $('#samples').innerHTML = S.data.samples.map(s => `<button class="btn soft small" data-s="${s.id}">Sample: ${esc(s.label)}</button>`).join('');
-  $$('[data-s]').forEach(b => b.onclick = () => { const s = S.data.samples.find(x => x.id === b.dataset.s); $('#cv').value = s.cv; $('#role').value = s.role; toast('Sample profile loaded — now extract skills'); });
-  $('#addBtn').onclick = () => { const v = $('#addSkill').value; if (v) { S.skills.push({ name: v, evidence: '', confirmed: true }); renderSkills(); } };
-  $('#confirmAll').onclick = () => { S.skills.forEach(s => s.confirmed = true); renderSkills(); };
-  $('#extract').onclick = async () => {
-    const b = $('#extract'); $('#pErr').innerHTML = '';
-    b.disabled = true; b.innerHTML = '<span class="spin"></span>Extracting…';
-    try {
-      const r = await api('/api/profile', { cvText: $('#cv').value });
-      S.skills = r.skills; S.method = r.method;
-      if (r.notice) $('#pErr').innerHTML = `<div class="notice">${esc(r.notice)}</div>`;
-      if (!r.skills.length) $('#pErr').innerHTML += '<div class="notice">No known skills found. Add them manually on the right.</div>';
-      renderSkills();
-    } catch (e) { $('#pErr').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
-    b.disabled = false; b.textContent = 'Extract skills';
-  };
-  $('#pdf').onchange = async e => {
-    const f = e.target.files[0]; if (!f) return;
-    if (f.size > 5e6) return ($('#pdfNote').textContent = 'PDF is larger than 5 MB — paste text instead.');
-    if (!window.pdfjsLib) return ($('#pdfNote').textContent = 'PDF reader unavailable — paste text instead.');
-    try {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise; let text = '';
-      for (let i = 1; i <= Math.min(pdf.numPages, 8); i++) text += (await (await pdf.getPage(i)).getTextContent()).items.map(x => x.str).join(' ') + '\n';
-      if (text.trim().length < 50) { $('#pdfNote').textContent = 'No text found (scanned PDF?). Paste your CV text instead.'; return; }
-      $('#cv').value = text.trim(); $('#pdfNote').textContent = `Read ${pdf.numPages} page(s) from ${f.name}`;
-    } catch (err) { $('#pdfNote').textContent = 'Could not read this PDF. Paste your CV text instead.'; }
-    e.target.value = '';
-  };
-  $('#toReport').onclick = () => { track('report_started'); S.report = compute(confirmed()); S.sim.clear(); S.gap = S.report.topGaps[0]?.skill || null; S.qs = null; S.evals = []; S.done.interview = 0; track('report_generated'); go('report'); };
-  renderSkills();
-}
-const confirmed = () => new Set(S.skills.filter(s => s.confirmed).map(s => s.name));
-
-// ---------- matching (deterministic, same snapshot) ----------
-function compute(have) {
-  const jobs = S.data.jobs, N = jobs.length, auth = $('#auth').value;
-  const matches = jobs.map(j => {
-    const missing = j.mandatory.filter(r => !have.has(r.skill)), matched = j.mandatory.filter(r => have.has(r.skill));
-    const status = missing.length ? 'gap' : (j.workAuthRequired && auth !== 'yes') ? 'clarify' : 'fit';
-    return { job: j, status, missing, matched, prefHave: j.preferred.filter(r => have.has(r.skill)) };
-  });
-  const demand = {};
-  jobs.forEach(j => { j.mandatory.forEach(r => { (demand[r.skill] ||= { m: 0, p: 0, cites: [] }).m++; demand[r.skill].cites.push({ co: j.company, q: r.quote, url: j.sourceUrl }); });
-    j.preferred.forEach(r => { (demand[r.skill] ||= { m: 0, p: 0, cites: [] }).p++; }); });
-  const topGaps = Object.entries(demand).filter(([k, d]) => !have.has(k) && d.m > 0)
-    .sort((a, b) => b[1].m - a[1].m || b[1].p - a[1].p).slice(0, 3)
-    .map(([skill, d]) => ({ skill, demand: d.m / N, mCount: d.m, pCount: d.p, citations: d.cites.slice(0, 2) }));
-  const c = k => matches.filter(m => m.status === k).length;
-  return { sampleSize: N, snapshotDate: S.data.snapshot.date, matches, topGaps, fit: c('fit'), clarify: c('clarify'), gap: c('gap'), matchRate: c('fit') / N, enough: N >= 5 };
-}
-
-function renderReport() {
-  const v = $('#v-report'), R = S.report;
-  if (!R) { v.innerHTML = `<div class="card empty">No report yet.<br><br><button class="btn" onclick="go('profile')">Start with your profile →</button></div>`; return; }
-  const snap = S.data.snapshot;
-  const missingAll = [...new Set(R.matches.flatMap(m => m.missing.map(r => r.skill)))];
-  const simR = S.sim.size ? compute(new Set([...confirmed(), ...S.sim])) : null;
-  v.innerHTML = `
-  <div class="card">
-    <div class="row" style="justify-content:space-between"><div><h2>Career report: ${esc($('#role').value || 'Data Analyst')} → Senior Data Analyst</h2>
-      <p class="mu sm" style="margin:0">Market: ${esc(snap.market)} · Snapshot ${esc(snap.date)} · ${R.sampleSize} postings · <b>${esc(snap.label)}</b></p></div>
-      <button class="btn soft small" onclick="go('profile')">Edit skills</button></div>
-    ${R.enough ? '' : '<div class="notice">Not enough data: fewer than 5 postings in this snapshot — results are indicative only.</div>'}
-    <div class="kpis">
-      <div class="kpi"><b>${R.fit}</b><span class="sm">Fit</span></div>
-      <div class="kpi"><b>${R.clarify}</b><span class="sm">Need to clarify</span></div>
-      <div class="kpi"><b>${R.gap}</b><span class="sm">Gap</span></div>
-      <div class="kpi"><b>${pct(R.matchRate)}</b><span class="sm">Match rate (fit / ${R.sampleSize})</span></div>
+const SAMPLE = `Maya R. — Data Analyst, New York, NY. 4 years of experience.
+Data Analyst at a retail marketplace (2022–present): SQL queries in PostgreSQL on orders and customer behavior; Tableau dashboards for merchandising; automated monthly reporting with Python (pandas), saving 6 hours per month; presented findings to stakeholders in leadership reviews.
+Junior Analyst at a logistics company (2020–2022): advanced Excel modeling with pivot tables, tracked funnel and retention metrics.
+Education: BA Economics, CUNY. Preferred: hybrid in New York, $110k+.`;
+function renderProfile() {
+  const inp = ME.input || {};
+  const opt = (arr, v) => arr.map(x => `<option ${x === v ? 'selected' : ''}>${esc(x)}</option>`).join('');
+  $('#v-profile').innerHTML = `
+  <div class="grid2">
+    <div class="card"><h2>Your CV</h2><p class="mu sm">PDF (text, up to 5 MB) or .txt. The file is read in your browser; the CV is not stored on our server.</p>
+      <label class="drop ${CV.text ? 'ok' : ''}" id="drop" style="display:block;cursor:pointer">${CV.text ? `✓ ${esc(CV.name)} · ${CV.text.length.toLocaleString()} characters read<br><span class="sm mu">Click to replace</span>` : '<b>Upload CV</b><br><span class="sm">Click to choose a file</span>'}
+        <input type="file" id="cvFile" accept="application/pdf,.txt,text/plain" hidden></label>
+      <div class="row" style="margin-top:10px"><button class="btn soft small" id="sample">Use a sample CV</button>${CV.text ? '<button class="btn soft small" id="clearCv">Remove CV</button>' : ''}</div>
+      <div id="cvErr"></div>
     </div>
-    <p class="mu sm" style="margin:0">${esc(snap.sourceNote)}</p>
+    <div class="card"><h2>About yourself</h2>
+      <textarea id="about" style="min-height:190px" placeholder="Work experience, education, skills, preferred workplace, preferred salary, preferred location, work type (Remote / Hybrid / Office)…">${esc(inp.about || '')}</textarea>
+    </div>
+  </div>
+  <div class="card"><h2>Your goal</h2>
+    <div class="grid2" style="grid-template-columns:repeat(4,1fr);gap:12px">
+      <label class="fld">Current role<select id="curRole">${opt([...ROLES, 'Other'], inp.currentRole || 'Data Analyst')}</select></label>
+      <label class="fld">Target role<select id="tgtRole">${opt(ROLES, inp.targetRole || 'Data Scientist')}</select></label>
+      <label class="fld">Target salary (per year)<select id="tgtSal">${opt(SALARIES, inp.targetSalary || '$100k–$130k')}</select></label>
+      <label class="fld">Study time<select id="hours">${opt(HOURS, inp.studyHours || '3–5 h / week')}</select></label>
+    </div>
+    <div id="pErr"></div>
+    <div class="row" style="margin-top:16px;justify-content:flex-end"><button class="btn ac big" id="gen">Generate career report →</button></div>
+  </div>`;
+  $('#cvFile').onchange = readCv;
+  $('#sample').onclick = () => { CV = { text: SAMPLE, name: 'sample-cv.txt' }; keepAbout(); renderProfile(); };
+  $('#clearCv') && ($('#clearCv').onclick = () => { CV = { text: '', name: '' }; keepAbout(); renderProfile(); });
+  $('#gen').onclick = generate;
+}
+function keepAbout() { ME.input = { ...(ME.input || {}), about: $('#about').value, currentRole: $('#curRole').value, targetRole: $('#tgtRole').value, targetSalary: $('#tgtSal').value, studyHours: $('#hours').value }; }
+async function readCv(e) {
+  const f = e.target.files[0]; if (!f) return; keepAbout();
+  const fail = m => { $('#cvErr').innerHTML = `<div class="err">${esc(m)}</div>`; };
+  if (f.size > 5e6) return fail('File is larger than 5 MB. Paste the text into “About yourself” instead.');
+  try {
+    let text = '';
+    if (f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')) {
+      if (!window.pdfjsLib) return fail('PDF reader unavailable. Paste your CV text into “About yourself”.');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
+      for (let i = 1; i <= Math.min(pdf.numPages, 8); i++) text += (await (await pdf.getPage(i)).getTextContent()).items.map(x => x.str).join(' ') + '\n';
+    } else text = await f.text();
+    if (text.trim().length < 50) return fail('No text found in this file (scanned PDF?). Paste your CV into “About yourself”.');
+    CV = { text: text.trim(), name: f.name }; renderProfile();
+  } catch (x) { fail('Could not read this file. Paste your CV into “About yourself”.'); }
+}
+async function generate() {
+  keepAbout(); const i = ME.input;
+  if ((CV.text + i.about).trim().length < 40) { $('#pErr').innerHTML = '<div class="err">Upload your CV or write a few sentences about yourself.</div>'; return; }
+  track('report_started');
+  $('#v-profile').innerHTML = `<div class="card">${spin('Building your career report…')}</div>`;
+  const steps = ['Reading your CV and profile…', 'Comparing your skills with real US vacancies…', 'Calculating your Career Risk Score…', 'Finding alternative roles…'];
+  let k = 0; const iv = setInterval(() => { const e = $('#loadStep'); if (e) e.textContent = steps[Math.min(k++, steps.length - 1)]; }, 2500); $('#loadStep').textContent = steps[k++];
+  try {
+    ME.report = await api('/api/report', { cvText: CV.text, about: i.about, currentRole: i.currentRole, targetRole: i.targetRole, targetSalary: i.targetSalary, studyHours: i.studyHours });
+    ME.roadmap = ME.interview = ME.result = null; SEL.clear(); clearInterval(iv); location.hash = '#/app/report';
+    if (location.hash === '#/app/report') route();
+  } catch (x) { clearInterval(iv); renderProfile(); $('#pErr').innerHTML = `<div class="err">${esc(x.message)}</div>`; }
+}
+
+// ---------- report ----------
+function empty(msg, to, label) { return `<div class="card empty">${esc(msg)}<br><br><a class="btn" href="#/app/${to}">${esc(label)}</a></div>`; }
+const salTxt = s => !s ? 'Not stated in postings' : `${money(s.median)} median/yr <span class="mu sm">(${s.n} posting${s.n > 1 ? 's' : ''} with pay, ${money(s.min)}–${money(s.max)})</span>`;
+const jobSal = s => !s ? '' : (s.text ? esc(s.text) : `${money(s.min)}${s.max ? '–' + money(s.max) : ''}${s.period === 'hour' ? '/h' : '/yr'}`);
+function renderReport() {
+  const R = ME.report, v = $('#v-report');
+  if (!R) { v.innerHTML = empty('No report yet. Fill in your profile first.', 'profile', 'Go to profile →'); return; }
+  const rk = R.risk, lvl = rk.level.split(' ')[0].toLowerCase();
+  const trend = (cls, icon, title, sub, items, lab, labCls) => `<div class="trend"><div class="ico ${cls}">${icon}</div><div><b style="font-size:17px">${title}</b><div class="sm mu">${sub}</div>
+    <div style="margin-top:4px">${items.length ? items.map(x => `<span title="${esc(x.reason)}">${esc(x.skill)}</span>`).join(', ') : '<span class="mu">—</span>'}</div>
+    ${items.length ? `<div class="sm mu" style="margin-top:4px">${items.map(x => esc(x.reason)).filter(Boolean).slice(0, 2).join(' · ')}</div>` : ''}</div><span class="lab pill ${labCls}">${lab}</span></div>`;
+  const vac = R.vacancies.filter(j => !ONLY_GAPS || j.missing.length);
+  v.innerHTML = `
+  <div class="grid2">
+    <div class="card"><div class="riskhead"><h2 style="font-size:24px">Career Risk Score</h2><span class="pill ${lvl}">${esc(rk.level)}</span></div>
+      <div class="bigscore" style="margin-top:10px">${rk.score}/100<small>${esc(rk.formula)}</small></div>
+      <div class="rbar"><i style="width:${rk.score}%"></i></div>
+      <h3 style="font-size:17px">What affects the risk:</h3>
+      ${rk.factors.map(f => `<div class="factor"><b class="w">${Math.round(f.weight * 100)}%</b><div><b>${esc(f.name)}</b> <span class="mu sm">· value ${f.value} → ${f.contribution} pts</span><div class="sm mu">${esc(f.explanation)}</div></div></div>`).join('')}
+      <p class="sm mu" style="margin:10px 0 0">Calculated on the server by a fixed formula, not by AI. Weights are demonstrational; in a real product they must be justified and calibrated on data. ${esc(R.dataset.estimatesNote)}</p>
+    </div>
+    <div class="card"><h2>Skills recommendations</h2>
+      <div class="sm mu">Your detected skills: ${R.skills.map(s => `<span class="tag">${esc(s)}</span>`).join('') || '—'}</div>
+      ${trend('up', '↗', 'Growing skills', 'Skills with rising demand — worth adding', R.growing, 'Growth', 'low')}
+      ${trend('flat', '—', 'Stable skills', 'Skills with steady demand', R.stable, 'Stable', 'medium')}
+      ${trend('down', '↘', 'Declining skills', 'Skills with potentially declining demand', R.declining, 'Risk', 'high')}
+    </div>
   </div>
   <div class="grid2">
-    <div class="card"><h2>Top ${R.topGaps.length} skill gaps</h2><p class="mu sm">Ranked by how many postings list the skill as <b>mandatory</b>.</p>
-      ${R.topGaps.length ? R.topGaps.map((g, i) => `<div class="gapc"><div class="row" style="justify-content:space-between"><b>${i + 1}. ${esc(g.skill)}</b><span class="sm mu">mandatory in ${g.mCount}/${R.sampleSize} · preferred in ${g.pCount}</span></div>
-        <div class="bar"><i style="width:${pct(g.demand)}"></i></div>
-        ${g.citations.map(c => `<blockquote>“${esc(c.q)}” — ${esc(c.co)}</blockquote>`).join('')}
-        <button class="btn small ${i ? 'soft' : ''}" data-gap="${esc(g.skill)}">Practice interview on ${esc(g.skill)} →</button></div>`).join('')
-        : '<p>No mandatory gaps found in this snapshot. Try the interview on a skill you want to strengthen.</p>'}
+    <div class="card"><h2>Alternative directions</h2><p class="sm mu">Skill match = share of the most-requested skills for that role (in ${R.dataset.count} real US postings) that you already have. Click a role for details.</p>
+      <table class="alt"><tr><th>Direction</th><th class="r">Skills match</th></tr>
+      ${R.alternatives.map(a => `<tr><td colspan="2"><details class="altd"><summary><div class="row" style="justify-content:space-between"><b>${esc(a.role)}</b><b>${a.match}%</b></div></summary>
+        <div class="sm" style="margin-top:10px;display:grid;gap:6px">
+          ${a.why ? `<div class="mu">${esc(a.why)}</div>` : ''}
+          <div><b>Skills that already fit:</b> ${[...new Set([...a.haveSkills, ...a.transferable])].map(s => `<span class="tag have">✓ ${esc(s)}</span>`).join('') || '—'}</div>
+          <div><b>Missing skills:</b> ${[...new Set([...a.missingSkills, ...a.aiMissing])].slice(0, 8).map(s => `<span class="tag miss">${esc(s)}</span>`).join('') || '—'}</div>
+          <div><b>Time to transition:</b> ${esc(a.time)} · difficulty ${esc(a.difficulty)} <span class="mu">(estimate)</span></div>
+          <div><b>Salaries:</b> ${salTxt(a.salary)}</div>
+          <div><b>Vacancies in dataset:</b> ${a.vacancies}</div>
+          <div class="links"><b>Courses to start:</b> ${a.courses.map(c => `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title)} ↗</a>`).join('') || '—'}</div>
+        </div></details></td></tr>`).join('')}</table>
     </div>
-    <div class="card"><h2>Skill simulator</h2><p class="mu sm">What if you confirmed one more skill? Recalculated on the same ${R.sampleSize} postings.</p>
-      ${missingAll.map(s => `<label class="row" style="padding:4px 0"><input type="checkbox" data-sim="${esc(s)}" ${S.sim.has(s) ? 'checked' : ''}> ${esc(s)}</label>`).join('') || '<p class="mu">Nothing to simulate — no missing mandatory skills.</p>'}
-      ${simR ? `<div class="notice">With ${[...S.sim].map(esc).join(', ')}: <b>${simR.fit}</b> fit (${simR.fit - R.fit >= 0 ? '+' : ''}${simR.fit - R.fit}), match rate <b>${pct(simR.matchRate)}</b> vs ${pct(R.matchRate)} now.</div>` : ''}
+    <div class="card"><div class="riskhead"><h2>Your 90-day protection plan</h2><span class="pill low">Personalized</span></div>
+      ${R.protectionPlan.map((p, i) => `<div class="plan"><div class="n">${i + 1}</div><div><b>${esc(p.period)}: ${esc(p.focus)}</b><div>${esc(p.actions)}</div><small>Result: ${esc(p.result)}</small></div></div>`).join('') || '<p class="mu">—</p>'}
     </div>
   </div>
-  <div class="card"><h2>Postings</h2><p class="mu sm">Fit = all mandatory skills confirmed and no unknown requirement · Clarify = a mandatory fact is unknown · Gap = a mandatory skill is missing.</p>
-    ${R.matches.map(m => `<div class="job"><div><div class="row"><b>${esc(m.job.company)}: ${esc(m.job.title)}</b><span class="st ${m.status}">${m.status === 'fit' ? 'Fit' : m.status === 'gap' ? 'Gap' : 'Clarify'}</span></div>
-      <div class="sm mu">${esc(m.job.city)} · posted: ${esc(m.job.postingDate || 'not stated')} · salary: ${esc(m.job.salary || 'not stated')}</div>
-      <div style="margin-top:6px">${m.matched.map(r => `<span class="tag have">✓ ${esc(r.skill)}</span>`).join('')}${m.missing.map(r => `<span class="tag miss">✗ ${esc(r.skill)}</span>`).join('')}${m.prefHave.map(r => `<span class="tag">+ ${esc(r.skill)} (preferred)</span>`).join('')}</div>
-      ${m.status === 'clarify' ? '<div class="sm" style="color:var(--warn)">Need to clarify: US work authorization is required, yours is not stated.</div>' : ''}
-      ${m.missing[0] ? `<blockquote>“${esc(m.missing[0].quote)}”</blockquote>` : ''}</div>
-      <a class="sm" href="${esc(m.job.sourceUrl)}" target="_blank" rel="noopener">Similar real postings ↗</a></div>`).join('')}
-  </div>`;
-  $$('[data-gap]').forEach(b => b.onclick = () => { S.gap = b.dataset.gap; S.qs = null; S.evals = []; S.qi = 0; go('interview'); });
-  $$('[data-sim]').forEach(c => c.onchange = () => { c.checked ? S.sim.add(c.dataset.sim) : S.sim.delete(c.dataset.sim); renderReport(); });
+  <div class="card"><div class="riskhead"><div><h2>Vacancies for you</h2><p class="sm mu" style="margin:0">Real US postings (${esc(R.dataset.note || '')} Scraped ${esc((R.dataset.scrapedAt || '').slice(0, 10))}). Pick up to 3 to build your learning roadmap.</p></div>
+      <label class="row sm"><input type="checkbox" id="onlyGaps" ${ONLY_GAPS ? 'checked' : ''}> Only where I lack skills</label></div>
+    ${vac.map(j => `<div class="vac ${SEL.has(j.id) ? 'sel' : ''}"><input type="checkbox" data-j="${esc(j.id)}" ${SEL.has(j.id) ? 'checked' : ''} aria-label="Select ${esc(j.title)}">
+      <div><b>${esc(j.title)}</b> <span class="mu">· ${esc(j.company)}</span>
+        <div class="sm mu">${esc(j.location)}${j.remote ? ' · remote' : ''} · ${esc(j.role)} · ${esc(j.level)}${j.salary ? ' · <b style="color:var(--tx)">' + jobSal(j.salary) + '</b>' : ' · salary not stated'}</div>
+        <div style="margin-top:6px">${j.matched.map(s => `<span class="tag have">✓ ${esc(s)}</span>`).join('')}${j.missing.map(s => `<span class="tag miss">✗ ${esc(s)}</span>`).join('')}</div></div>
+      <div style="text-align:right"><b>${j.fit}%</b><div class="sm mu">skill fit</div><a class="sm" href="${esc(j.url)}" target="_blank" rel="noopener">Open posting ↗</a></div></div>`).join('') || '<p class="mu">No vacancies with skill gaps — uncheck the filter to see all.</p>'}
+  </div>
+  <div class="sticky"><span>Selected <b>${SEL.size}</b> / 3 vacancies</span><button class="btn ac" id="toRoadmap" ${SEL.size ? '' : 'disabled'}>Generate learning roadmap →</button></div>`;
+  $('#onlyGaps').onchange = e => { ONLY_GAPS = e.target.checked; renderReport(); };
+  $$('[data-j]').forEach(c => c.onchange = () => {
+    const id = c.dataset.j;
+    if (c.checked && SEL.size >= 3) { c.checked = false; toast('You can choose up to 3 vacancies'); return; }
+    c.checked ? SEL.add(id) : SEL.delete(id); const y = scrollY; renderReport(); scrollTo(0, y);
+  });
+  $('#toRoadmap').onclick = makeRoadmap;
+}
+async function makeRoadmap() {
+  location.hash = '#/app/roadmap'; $('#v-roadmap').innerHTML = `<div class="card">${spin('Generating your 90-day learning roadmap…')}</div>`;
+  try { ME.roadmap = await api('/api/roadmap', { jobIds: [...SEL] }); ME.interview = ME.result = null; track('roadmap_generated'); $('#v-roadmap').innerHTML = ''; route(); }
+  catch (x) { $('#v-roadmap').innerHTML = `<div class="card"><div class="err">${esc(x.message)}</div><div class="row"><button class="btn" onclick="makeRoadmap()">Retry</button><a class="btn soft" href="#/app/report">Back to report</a></div></div>`; }
+}
+
+// ---------- roadmap ----------
+function renderRoadmap() {
+  const R = ME.roadmap, v = $('#v-roadmap');
+  if (v.querySelector('.loading')) return;
+  if (!R) { v.innerHTML = empty('Choose up to 3 vacancies in your career report to build a roadmap.', 'report', 'Go to career report →'); return; }
+  v.innerHTML = `<div class="card"><div class="riskhead"><div><h2 style="font-size:24px">Your 90-day roadmap: ${esc(R.targetRole)}</h2><p class="mu" style="margin:4px 0 0">${esc(R.summary)}</p></div><span class="pill low">${R.durationDays} days</span></div>
+    <p class="sm" style="margin:12px 0 0"><b>Built for:</b> ${R.vacancies.map(j => `<a href="${esc(j.url)}" target="_blank" rel="noopener">${esc(j.title)} · ${esc(j.company)}</a>`).join(' &nbsp;·&nbsp; ')}</p>
+    <p class="sm" style="margin:6px 0 0"><b>Skills to close:</b> ${R.missingSkills.map(s => `<span class="tag miss">${esc(s)}</span>`).join('') || '—'}</p></div>
+  ${R.milestones.map((m, i) => `<div class="ms"><h3><span>${i + 1}. ${esc(m.period)}: ${m.skills.map(esc).join(', ')}</span>${m.hours ? `<span class="mu sm">~${m.hours} h/week</span>` : ''}</h3>
+    <div class="grid2"><div><b class="sm">Learning objectives</b><ul class="sm">${m.objectives.map(o => `<li>${esc(o)}</li>`).join('')}</ul></div>
+      <div><b class="sm">Practical assignments</b><ul class="sm">${m.assignments.map(o => `<li>${esc(o)}</li>`).join('')}</ul></div></div>
+    <div class="sm"><b>Deliverable:</b> ${esc(m.deliverable)}</div><div class="sm"><b>Measurable outcome:</b> ${esc(m.outcome)}</div>
+    <div class="links" style="margin-top:10px"><b class="sm">Learning materials:</b><br>${m.resources.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener" data-learn>${esc(r.title)} ↗</a>`).join('')}</div></div>`).join('')}
+  <div class="row" style="justify-content:flex-end"><a class="btn ac big" href="#/app/interview">Check yourself: AI interview →</a></div>`;
+  $$('[data-learn]').forEach(a => a.onclick = () => track('learning_action_clicked'));
 }
 
 // ---------- interview ----------
-let timer;
 function renderInterview() {
-  const v = $('#v-interview'); clearInterval(timer);
-  if (!S.report) { v.innerHTML = `<div class="card empty">The interview checks the top gap from your report.<br><br><button class="btn" onclick="go('profile')">Build my report first →</button></div>`; return; }
-  const gaps = S.report.topGaps.map(g => g.skill), opts = gaps.length ? gaps : [...confirmed()];
-  if (!S.gap) S.gap = opts[0];
-  if (!S.qs) {
-    v.innerHTML = `<div class="card" style="max-width:760px;margin:0 auto 16px">
-      <h2>AI practice interview</h2><p class="mu">2 short questions on your gap: one technical, one behavioral. Answer in text (4–8 sentences). Each answer is scored on a fixed rubric: technical correctness, reasoning, evidence, clarity (0–4 each).</p>
-      <label class="sm mu">Skill to practice<select id="gapSel">${opts.map(g => `<option ${g === S.gap ? 'selected' : ''}>${esc(g)}</option>`).join('')}</select></label>
-      <div class="row" style="margin-top:14px"><button class="btn" id="startI">Start interview</button><span class="mu sm">Formative feedback, not a hiring decision.</span></div><div id="iErr"></div></div>`;
-    $('#gapSel').onchange = e => S.gap = e.target.value;
+  const v = $('#v-interview'), I = ME.interview, Res = ME.result;
+  if (v.querySelector('.loading')) return;
+  if (!ME.roadmap) { v.innerHTML = empty('The interview checks skills from your learning roadmap.', 'roadmap', 'Go to roadmap →'); return; }
+  if (!I) {
+    v.innerHTML = `<div class="card" style="max-width:760px;margin:0 auto"><h2>AI interview: ${esc(ME.roadmap.targetRole)}</h2>
+      <p class="mu">5 multiple-choice questions and 2 open questions on the skills from your roadmap. Open answers are scored on a fixed rubric (technical correctness, reasoning, evidence, clarity). Learning feedback — not a hiring decision.</p>
+      <div id="iErr"></div><button class="btn ac" id="startI">Start interview</button></div>`;
     $('#startI').onclick = async () => {
-      const b = $('#startI'); b.disabled = true; b.innerHTML = '<span class="spin"></span>Generating questions…'; $('#iErr').innerHTML = '';
-      try {
-        const r = await api('/api/interview/questions', { targetSkill: S.gap, targetRole: 'Senior Data Analyst', skills: [...confirmed()] });
-        S.qs = r.questions; S.qi = 0; S.evals = []; track('interview_started'); renderInterview();
-      } catch (e) { $('#iErr').innerHTML = `<div class="err">${esc(e.message)} <button class="btn soft small" onclick="renderInterview()">Retry</button></div>`; b.disabled = false; b.textContent = 'Start interview'; }
+      v.innerHTML = `<div class="card">${spin('Preparing your questions…')}</div>`;
+      try { ME.interview = await api('/api/interview/questions', {}); PICKS = {}; track('interview_started'); v.innerHTML = ''; renderInterview(); }
+      catch (x) { v.innerHTML = ''; renderInterview(); $('#iErr').innerHTML = `<div class="err">${esc(x.message)}</div>`; }
     };
     return;
   }
-  const q = S.qs[S.qi], ev = S.evals[S.qi];
+  const mres = Res ? Object.fromEntries(Res.mcq.map(m => [m.id, m])) : {};
   v.innerHTML = `<div style="max-width:860px;margin:0 auto">
-    <div class="card"><div class="row" style="justify-content:space-between"><span class="st fit">Question ${S.qi + 1} of 2 · ${esc(q.questionType)} · ${esc(q.targetSkill)}</span><span class="mu sm" id="tm"></span></div>
-      <h2 style="margin-top:10px">${esc(q.questionText)}</h2>
-      <textarea id="ans" placeholder="Type your answer… Use a concrete example and say why you chose your approach." ${ev ? 'disabled' : ''}>${esc(ev?._answer || '')}</textarea>
-      <div class="row" style="margin-top:10px">${ev ? '' : '<button class="btn" id="sub">Submit answer</button>'}<span class="mu sm" id="wc"></span></div><div id="iErr"></div></div>
-    <div id="evalBox">${ev ? evalHtml(ev) : ''}</div>
-    ${ev ? `<div class="row" style="justify-content:flex-end">${S.qi === 0 ? '<button class="btn" id="next">Next question →</button>' : '<button class="btn ac" onclick="go(\'plan\')">See my growth plan →</button>'}</div>` : ''}</div>`;
-  const ta = $('#ans'), wc = () => $('#wc').textContent = ta.value.trim().split(/\s+/).filter(Boolean).length + ' words';
-  ta.oninput = wc; wc();
-  if (!ev) { const t0 = Date.now(); timer = setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000); $('#tm') && ($('#tm').textContent = `⏱ ${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`); }, 1000); }
-  $('#next') && ($('#next').onclick = () => { S.qi = 1; renderInterview(); });
-  $('#sub') && ($('#sub').onclick = async () => {
-    const answer = ta.value.trim();
-    if (!answer) { $('#iErr').innerHTML = '<div class="err">Please write an answer first.</div>'; return; }
-    const b = $('#sub'); b.disabled = true; b.innerHTML = '<span class="spin"></span>Evaluating…'; $('#iErr').innerHTML = '';
-    try {
-      const r = await api('/api/interview/evaluate', { question: q, answer }); r._answer = answer; S.evals[S.qi] = r;
-      if (S.qi === 1) { S.done.interview = 1; track('interview_completed'); }
-      clearInterval(timer); renderInterview(); nav();
-    } catch (e) { $('#iErr').innerHTML = `<div class="err">${esc(e.message)} Your answer is kept — press Submit to retry.</div>`; b.disabled = false; b.textContent = 'Submit answer'; }
+    ${Res ? `<div class="card"><div class="riskhead"><h2>Your results</h2><span class="pill low">Quiz ${Res.mcqScore}/${Res.mcqTotal}</span></div>
+      <p class="mu sm" style="margin:0">Open answers: ${Res.open.map(o => o.totalScore + '%').join(' · ')} on the rubric. Review the explanations below.</p></div>` : ''}
+    <h3 style="margin:6px 4px 10px">Multiple choice</h3>
+    ${I.mcq.map((q, n) => { const r = mres[q.id]; return `<div class="mcq"><div class="sm mu">${n + 1} · ${esc(q.skill)}</div><b>${esc(q.question)}</b>
+      ${q.options.map((o, i) => `<label class="${r ? (i === r.answer ? 'right' : i === r.picked ? 'wrong' : '') : ''}"><input type="radio" name="${q.id}" value="${i}" ${(r ? r.picked : PICKS[q.id]) === i ? 'checked' : ''} ${r ? 'disabled' : ''}>${esc(o)}</label>`).join('')}
+      ${r ? `<div class="sm" style="margin-top:6px">${r.correct ? '✅ Correct.' : '❌ Not quite.'} ${esc(r.explanation)}</div>` : ''}</div>`; }).join('')}
+    <h3 style="margin:16px 4px 10px">Open questions</h3>
+    ${I.open.map((q, n) => { const e = Res && Res.open.find(o => o.id === q.id); return `<div class="card"><div class="sm mu">${n + 1} · ${esc(q.skill)}</div><b>${esc(q.question)}</b>
+      <textarea data-o="${q.id}" style="margin-top:10px;min-height:120px" placeholder="Answer in 4–8 sentences with a concrete example…" ${Res ? 'disabled' : ''}>${esc((Res && ME._answers?.[q.id]) || ME._draft?.[q.id] || '')}</textarea>
+      ${e ? evalHtml(e) : ''}</div>`; }).join('')}
+    <div id="iErr"></div>
+    <div class="row" style="justify-content:flex-end">${Res ? '<a class="btn ac big" href="#/app/feedback">Continue →</a>' : '<button class="btn ac big" id="finish">Finish interview</button>'}</div></div>`;
+  $$('.mcq input').forEach(r => r.onchange = () => PICKS[r.name] = +r.value);
+  $$('[data-o]').forEach(t => t.oninput = () => (ME._draft = { ...(ME._draft || {}), [t.dataset.o]: t.value }));
+  $('#finish') && ($('#finish').onclick = async () => {
+    const open = $$('[data-o]').map(t => ({ id: t.dataset.o, answer: t.value.trim() }));
+    if (I.mcq.some(q => PICKS[q.id] === undefined)) return ($('#iErr').innerHTML = '<div class="err">Please answer all multiple-choice questions.</div>');
+    if (open.some(o => !o.answer)) return ($('#iErr').innerHTML = '<div class="err">Please answer the open questions.</div>');
+    const b = $('#finish'); b.disabled = true; b.innerHTML = '<span class="spin"></span>Evaluating…';
+    try { ME.result = await api('/api/interview/submit', { mcq: PICKS, open }); ME._answers = Object.fromEntries(open.map(o => [o.id, o.answer])); route(); scrollTo(0, 0); }
+    catch (x) { $('#iErr').innerHTML = `<div class="err">${esc(x.message)} Your answers are kept — press Finish to retry.</div>`; b.disabled = false; b.textContent = 'Finish interview'; }
   });
 }
 function evalHtml(e) {
-  return `<div class="card"><div class="row" style="gap:18px"><div class="score">${e.totalScore}%</div><div><b>Rubric score</b><br><span class="mu sm">Sum of 4 criteria / 16 · learning rubric, not a probability of being hired</span></div></div>
-  ${e.shortAnswer ? '<div class="notice">Very short answer: there is not enough evidence to score higher.</div>' : ''}
-  <div style="margin:12px 0">${e.rubricScores.map(r => `<div class="rub"><b class="sm">${esc(r.criterion)}</b><div><div class="bar"><i style="width:${r.score * 25}%"></i></div><span class="sm mu">${esc(r.explanation)}</span></div><b>${r.score}/4</b></div>`).join('')}</div>
-  <div class="grid2"><div><h3>Strengths</h3><ul>${e.strengths.map(s => `<li>${esc(s)}</li>`).join('') || '<li class="mu">—</li>'}</ul></div>
-  <div><h3>Missing points</h3><ul>${e.weaknesses.map(s => `<li>${esc(s)}</li>`).join('') || '<li class="mu">—</li>'}</ul></div></div>
-  ${e.citedAnswerSegments.length ? `<h3>From your answer</h3>${e.citedAnswerSegments.map(c => `<blockquote>“${esc(c)}”</blockquote>`).join('')}` : ''}
-  ${e.improvedStructure ? `<h3 style="margin-top:12px">A stronger structure</h3><p class="mu" style="white-space:pre-line;margin:0">${esc(e.improvedStructure)}</p>` : ''}</div>`;
+  return `<div style="margin-top:12px;border-top:1px solid var(--ln);padding-top:12px"><div class="row"><div class="score">${e.totalScore}%</div><span class="sm mu">Rubric score · sum of 4 criteria / 16</span></div>
+  ${e.shortAnswer ? '<div class="notice">Very short answer: not enough evidence to score higher.</div>' : ''}
+  ${e.rubricScores.map(r => `<div class="rub"><b class="sm">${esc(r.criterion)}</b><div><div class="bar"><i style="width:${r.score * 25}%"></i></div><span class="sm mu">${esc(r.explanation)}</span></div><b>${r.score}/4</b></div>`).join('')}
+  <div class="grid2 sm"><div><b>Strengths</b><ul>${e.strengths.map(s => `<li>${esc(s)}</li>`).join('') || '<li>—</li>'}</ul></div><div><b>Missing points</b><ul>${e.weaknesses.map(s => `<li>${esc(s)}</li>`).join('') || '<li>—</li>'}</ul></div></div>
+  ${e.cited.length ? e.cited.map(c => `<blockquote>“${esc(c)}”</blockquote>`).join('') : ''}
+  ${e.improvedStructure ? `<div class="sm"><b>A stronger structure:</b><div class="mu" style="white-space:pre-line">${esc(e.improvedStructure)}</div></div>` : ''}</div>`;
 }
 
-// ---------- plan + feedback ----------
-function renderPlan() {
-  const v = $('#v-plan');
-  if (!S.report) { v.innerHTML = `<div class="card empty">Your plan is built from the report and interview.<br><br><button class="btn" onclick="go('profile')">Start →</button></div>`; return; }
-  const skill = S.gap || S.report.topGaps[0]?.skill, L = S.data.learning[skill];
-  const ev = S.evals.filter(Boolean), pr = ev.length ? ev[ev.length - 1].recommendedPractice : null;
-  const avg = ev.length ? Math.round(ev.reduce((a, e) => a + e.totalScore, 0) / ev.length) : null;
-  const hours = $('#hours').value;
-  v.innerHTML = `<div class="grid2">
-   <div>
-    <div class="card"><h2>Your next step: ${esc(skill || '—')}</h2>
-      <p class="mu sm">Why: ${S.report.topGaps[0] ? `mandatory in ${S.report.topGaps.find(g => g.skill === skill)?.mCount ?? '—'} of ${S.report.sampleSize} postings` : 'chosen by you'}${avg !== null ? ` · interview rubric ${avg}%` : ' · interview not taken yet'} · study time ${esc(hours)}/week</p>
-      ${pr && pr.title ? `<div class="gapc"><b>Today · ${pr.minutes} min practice: ${esc(pr.title)}</b><ol class="sm">${pr.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol><div class="sm"><b>Done when:</b> ${esc(pr.successCriterion)}</div></div>`
-        : `<div class="notice">Take the AI interview to get a personal 20–40 min practice task. <button class="btn soft small" onclick="go('interview')">Go to interview</button></div>`}
-      ${L ? `<div class="gapc"><b>This week · mini-project (~${L.hours} h)</b><p style="margin:6px 0">${esc(L.miniProject)}</p><div class="sm"><b>Done when:</b> ${esc(L.criterion)}</div>
-        <div class="row" style="margin-top:10px"><a class="btn small" id="learn" href="${esc(L.url)}" target="_blank" rel="noopener" style="text-decoration:none">Open: ${esc(L.resource)} ↗</a></div></div>` : ''}
-      <p class="mu sm" style="margin:0">Re-take the interview after the project to see your rubric change.</p>
-    </div>
-    <div class="card pro"><h3>Future Pro · $15–19 / month (not live)</h3><p class="mu sm" style="margin:0 0 10px">Monitoring of new postings for your target, more career goals, repeat interviews and progress over time. No payment is taken — we are only measuring interest.</p>
-      <div class="row"><button class="btn small" data-pi="yes">I'd try Pro</button><button class="btn soft small" data-pi="maybe">Maybe later</button><button class="btn soft small" data-pi="no">Not for me</button></div></div>
-   </div>
-   <div class="card" id="fbCard"><h2>Was this useful?</h2><p class="mu sm">Anonymous. Helps us validate the product.</p>
-      <div class="stars" id="fbStars"></div>
-      <label class="row sm" style="margin:10px 0"><input type="checkbox" id="fbRet"> I'd come back for an updated report next month</label>
-      <textarea id="fbCom" style="min-height:100px" placeholder="What would you use instead of this service? What blocked you?"></textarea>
-      <div class="row" style="margin-top:10px"><button class="btn" id="fbSend">Send feedback</button></div>
-   </div></div>`;
-  $('#learn') && ($('#learn').onclick = () => track('learning_action_clicked'));
-  $$('[data-pi]').forEach(b => b.onclick = () => { S.fb.pricing = b.dataset.pi; $$('[data-pi]').forEach(x => x.classList.toggle('soft', x !== b)); track('pricing_interest_' + b.dataset.pi); toast('Thanks — noted'); });
-  const stars = () => { $('#fbStars').innerHTML = [1, 2, 3, 4, 5].map(i => `<button class="${i <= S.fb.rating ? 'on' : ''}" data-r="${i}" aria-label="${i} stars">★</button>`).join(''); $$('[data-r]').forEach(b => b.onclick = () => { S.fb.rating = +b.dataset.r; stars(); }); };
+// ---------- feedback ----------
+const FB = { rating: 0, pro: '' };
+function renderFeedback() {
+  const v = $('#v-feedback');
+  if (ME.feedbackDone) { v.innerHTML = `<div class="card empty" style="max-width:600px;margin:20px auto"><h2>Thank you!</h2>Your feedback helps us build tirek.<br><br><a class="btn soft" href="#/app/report">Back to my report</a></div>`; return; }
+  v.innerHTML = `<div class="card" style="max-width:640px;margin:20px auto">
+    <h2>Was it useful?</h2><div class="stars" id="fbStars"></div>
+    <h3 style="margin-top:18px">Would you buy the Pro version?</h3>
+    <p class="sm mu" style="margin:0 0 8px">Pro ($15–19 / month, not live yet): monitoring of new vacancies for your target, more career goals, repeat interviews and progress tracking. No payment is taken.</p>
+    <div class="choice" id="fbPro">${['Yes', 'Maybe', 'No'].map(x => `<button class="btn soft small ${FB.pro === x ? 'on' : ''}" data-p="${x}">${x}</button>`).join('')}</div>
+    <h3 style="margin-top:18px">Anything else?</h3><textarea id="fbCom" style="min-height:100px" placeholder="What was most useful? What blocked you?"></textarea>
+    <div id="fErr"></div><div class="row" style="margin-top:12px;justify-content:flex-end"><button class="btn ac" id="fbSend">Send feedback</button></div></div>`;
+  const stars = () => { $('#fbStars').innerHTML = [1, 2, 3, 4, 5].map(i => `<button class="${i <= FB.rating ? 'on' : ''}" data-r="${i}" aria-label="${i} stars">★</button>`).join(''); $$('[data-r]').forEach(b => b.onclick = () => { FB.rating = +b.dataset.r; stars(); }); };
   stars();
+  $$('[data-p]').forEach(b => b.onclick = () => { FB.pro = b.dataset.p; $$('[data-p]').forEach(x => x.classList.toggle('on', x === b)); });
   $('#fbSend').onclick = async () => {
-    try {
-      await api('/api/feedback', { sid, completedReport: !!S.report, interviewFinished: !!S.done.interview, helpfulRating: S.fb.rating || null, nextUpdateInterest: $('#fbRet').checked, pricingInterest: S.fb.pricing || '', comment: $('#fbCom').value });
-      $('#fbCard').innerHTML = '<div class="empty"><h2>Thank you!</h2>Your feedback was saved anonymously.</div>';
-    } catch (e) { toast(e.message); }
+    if (!FB.rating) return ($('#fErr').innerHTML = '<div class="err">Please rate how useful it was.</div>');
+    try { await api('/api/feedback', { helpfulRating: FB.rating, buyPro: FB.pro, comment: $('#fbCom').value }); ME.feedbackDone = true; route(); }
+    catch (x) { $('#fErr').innerHTML = `<div class="err">${esc(x.message)}</div>`; }
   };
 }
 
+// ---------- theme ----------
+$('#theme').onclick = () => {
+  const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const next = cur === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next;
+  try { localStorage.setItem('tirek-theme', next); } catch (e) {}
+};
+
+// ---------- ambient music (generated in the browser, no files) ----------
+let AC, mg, lp, loop, play = 0, ci = 0;
+const CH = [[130.8, 261.6, 329.6, 392, 493.9], [110, 220, 261.6, 329.6, 392], [87.3, 174.6, 220, 261.6, 329.6], [98, 196, 246.9, 293.7, 392]], PE = [523.3, 587.3, 659.3, 784, 880, 1046.5];
+function tone(f, t, d, g, ty) { const o = AC.createOscillator(), e = AC.createGain(); o.type = ty; o.frequency.value = f; e.gain.setValueAtTime(0, t); e.gain.linearRampToValueAtTime(g, t + d * .35); e.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(e); e.connect(lp); o.start(t); o.stop(t + d + .1); }
+function bar() { const t = AC.currentTime + .05; CH[ci % 4].forEach(f => tone(f, t, 9, .045, 'sine')); for (let k = 0; k < 5; k++) tone(PE[Math.floor(Math.random() * PE.length)], t + k * 1.6 + .4, 3.2, .035, 'triangle'); ci++; loop = setTimeout(bar, 8000); }
+function music() {
+  play = !play; const b = $('#mus'); b.classList.toggle('on', play); b.setAttribute('aria-pressed', play); $('#mt').textContent = play ? 'Playing' : 'Music'; $('#vol').classList.toggle('hide', !play);
+  if (play) {
+    if (!AC) { AC = new (window.AudioContext || window.webkitAudioContext)(); mg = AC.createGain(); mg.gain.value = 0; lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1500; const dl = AC.createDelay(), fb = AC.createGain(); dl.delayTime.value = .5; fb.gain.value = .38; lp.connect(mg); lp.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(mg); mg.connect(AC.destination); }
+    AC.resume(); mg.gain.cancelScheduledValues(AC.currentTime); mg.gain.linearRampToValueAtTime($('#vol').value / 100, AC.currentTime + 2); bar();
+  } else { clearTimeout(loop); mg.gain.linearRampToValueAtTime(0, AC.currentTime + 1.5); }
+}
+$('#mus').onclick = () => { try { music(); } catch (e) { toast('Sound is not available in this browser'); } };
+$('#vol').oninput = e => { if (mg && play) mg.gain.value = e.target.value / 100; };
+
 // ---------- boot ----------
 (async function () {
-  nav();
-  api('/api/health').then(h => { const a = $('#ai'); a.classList.toggle('on', h.ai); a.textContent = h.ai ? 'AI: on' : 'AI: off — add key to .env'; }).catch(() => $('#ai').textContent = 'Server offline');
-  try { S.data = await api('/api/jobs'); initProfile(); } catch (e) { toast('Could not load job snapshot: ' + e.message); }
+  try { ROLES = (await api('/api/roles')).roles; } catch (e) { toast('Server is offline'); }
+  try { ME = await api('/api/me'); } catch (e) { ME = null; }
+  route();
 })();

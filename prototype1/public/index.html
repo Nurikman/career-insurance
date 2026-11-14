@@ -4,20 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>tirek — Career Insurance</title>
+<script>try{var t=localStorage.getItem('tirek-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header>
-  <div class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 28V15a11 11 0 0 1 22 0v13" fill="none" stroke="#3E8F86" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="20" r="4" fill="currentColor"/></svg><b>tirek</b><small>Career Insurance</small></div>
-  <nav id="nav"></nav>
-  <span class="ai" id="ai">AI: checking…</span>
+  <a class="logo" href="#/"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 28V15a11 11 0 0 1 22 0v13" fill="none" stroke="#3E8F86" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="20" r="4" fill="currentColor"/></svg><b>tirek</b><small>Career Insurance</small></a>
+  <nav id="nav" class="hide"></nav>
+  <div class="tools">
+    <button class="tool" id="mus" aria-pressed="false" title="Ambient music"><span class="eq"></span><span id="mt">Music</span></button>
+    <input id="vol" type="range" min="0" max="100" value="45" aria-label="Volume" class="hide">
+    <button class="tool" id="theme" title="Toggle light / dark mode" aria-label="Toggle light or dark mode">◐</button>
+    <span class="who hide" id="who"></span>
+    <button class="btn small hide" id="logout">Log out</button>
+  </div>
 </header>
 
 <main>
-  <!-- MAIN: live vacancy map -->
-  <section id="v-main">
+  <!-- LANDING (public) -->
+  <section id="v-landing" class="hide">
     <div class="mapwrap">
       <canvas id="globe" aria-label="Animated world map of vacancies that fit your career"></canvas>
       <div class="mtop">
@@ -37,62 +44,52 @@
       </div>
       <div class="mnote">Simulated data · visualization only</div>
     </div>
-    <div class="cta">
-      <div class="card" style="margin:0">
-        <h2>Know what the next level asks for — and prove you can do it</h2>
-        <p class="mu">Compare your confirmed skills with Senior Data Analyst postings in New York, practice a short AI interview on your top gap and leave with one concrete growth step. No sign-up.</p>
-        <div class="flow"><div><b>1 · Profile</b>CV or sample</div><div><b>2 · Report</b>3 skill gaps</div><div><b>3 · Interview</b>2 AI questions</div><div><b>4 · Plan</b>1 practice step</div></div>
-        <div class="row" style="margin-top:16px"><button class="btn" onclick="go('profile')">Analyze my career →</button><span class="mu sm">≈ 3–5 minutes</span></div>
-      </div>
-      <div class="card" style="margin:0">
-        <h3>Demo scope</h3>
-        <p class="mu sm" style="margin:0 0 8px">Target: <b>Data Analyst → Senior Data Analyst</b>, market: <b>New York</b>. The map above uses simulated data; the report uses a labelled sample snapshot of job postings.</p>
-        <p class="mu sm" style="margin:0">AI feedback is formative learning feedback on a transparent rubric — not a hiring decision.</p>
+    <div class="card" style="margin-top:16px">
+      <h2>Instructions</h2>
+      <p class="mu">Find out how protected your career is, which skills employers need next, and get a plan to close the gaps.</p>
+      <div class="flow">
+        <div><b>1 · Profile</b>Upload your CV and tell us about yourself</div>
+        <div><b>2 · Career report</b>Risk score, skill trends, real US vacancies</div>
+        <div><b>3 · Learning roadmap</b>90-day plan with learning links</div>
+        <div><b>4 · AI interview</b>Quiz + open questions, then feedback</div>
       </div>
     </div>
+    <div class="authcta"><a class="btn big" href="#/login">Log in</a><a class="btn big ac" href="#/signup">Sign up</a></div>
   </section>
 
-  <!-- PROFILE -->
-  <section id="v-profile" class="hide">
-    <div class="grid2">
-      <div class="card">
-        <h2>Your CV</h2>
-        <p class="mu sm">Upload a text PDF, paste your CV, or try a sample profile. Your CV is not stored.</p>
-        <div class="row" style="margin-bottom:10px" id="samples"></div>
-        <textarea id="cv" placeholder="Paste your CV text here…"></textarea>
-        <div class="row" style="margin-top:10px">
-          <label class="btn soft small" style="cursor:pointer">Upload PDF<input type="file" id="pdf" accept="application/pdf" hidden></label>
-          <span class="mu sm" id="pdfNote">Text PDFs up to 5 MB</span>
-        </div>
-        <div class="row" style="margin-top:14px"><button class="btn" id="extract">Extract skills</button></div>
-        <div id="pErr"></div>
-      </div>
-      <div class="card">
-        <h2>Goal</h2>
-        <div class="grid2" style="gap:10px">
-          <label class="sm mu">Current role<input type="text" id="role" value="Data Analyst"></label>
-          <label class="sm mu">Target role<input type="text" value="Senior Data Analyst" disabled></label>
-          <label class="sm mu">Market<input type="text" value="New York, NY" disabled></label>
-          <label class="sm mu">Study time / week<select id="hours"><option>1–2 h</option><option selected>3–6 h</option><option>7+ h</option></select></label>
-          <label class="sm mu">US work authorization<select id="auth"><option value="unknown">Not stated</option><option value="yes">Yes</option></select></label>
-        </div>
-        <h3 style="margin-top:18px">Skills <span class="mu sm" style="font-weight:400">— dashed = suggested, solid = confirmed. Only confirmed skills count.</span></h3>
-        <div id="skills"><p class="mu sm">Extract skills from your CV first.</p></div>
-        <div class="row" id="skillTools" style="margin-top:6px">
-          <select id="addSkill" style="width:auto"></select><button class="btn soft small" id="addBtn">Add</button>
-          <button class="btn soft small" id="confirmAll">Confirm all</button>
-        </div>
-        <div class="row" style="margin-top:16px"><button class="btn ac" id="toReport" disabled>Build career report →</button></div>
-      </div>
-    </div>
+  <!-- LOGIN -->
+  <section id="v-login" class="hide">
+    <form class="card auth" id="loginForm">
+      <h2>Welcome back</h2><p class="mu sm">Log in to continue your career plan.</p>
+      <label>Gmail<input type="email" name="email" autocomplete="email" placeholder="name@gmail.com" required></label>
+      <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
+      <div class="ferr"></div>
+      <button class="btn" type="submit">Log in</button>
+      <p class="sm mu">No account? <a href="#/signup">Sign up</a></p>
+    </form>
   </section>
 
-  <!-- REPORT -->
+  <!-- SIGNUP -->
+  <section id="v-signup" class="hide">
+    <form class="card auth" id="signupForm">
+      <h2>Create your account</h2><p class="mu sm">Free. Takes 30 seconds.</p>
+      <div class="grid2" style="gap:10px"><label>Name<input name="name" autocomplete="given-name" required></label><label>Surname<input name="surname" autocomplete="family-name" required></label></div>
+      <label>Country<input name="country" autocomplete="country-name" list="countries" required></label>
+      <datalist id="countries"><option>United States</option><option>Kazakhstan</option><option>Kyrgyzstan</option><option>Uzbekistan</option><option>United Kingdom</option><option>Germany</option><option>Canada</option><option>India</option><option>Turkey</option><option>United Arab Emirates</option></datalist>
+      <label>Gmail<input type="email" name="email" autocomplete="email" placeholder="name@gmail.com" required></label>
+      <label>Password<input type="password" name="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required></label>
+      <div class="ferr"></div>
+      <button class="btn ac" type="submit">Sign up</button>
+      <p class="sm mu">Already have an account? <a href="#/login">Log in</a></p>
+    </form>
+  </section>
+
+  <!-- APP (authorized) -->
+  <section id="v-profile" class="hide"></section>
   <section id="v-report" class="hide"></section>
-  <!-- INTERVIEW -->
+  <section id="v-roadmap" class="hide"></section>
   <section id="v-interview" class="hide"></section>
-  <!-- PLAN -->
-  <section id="v-plan" class="hide"></section>
+  <section id="v-feedback" class="hide"></section>
 </main>
 <div id="toast" role="status"></div>
 

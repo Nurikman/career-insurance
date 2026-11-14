@@ -1,0 +1,635 @@
+{
+ "note": "Role automation exposure (A) and demand trend are illustrative estimates for the prototype; calibrate on real data before production.",
+ "roles": {
+  "AI Engineer": {
+   "A": 0.25,
+   "trend": 0.1
+  },
+  "Data Analyst": {
+   "A": 0.55,
+   "trend": 0.4
+  },
+  "Data Scientist": {
+   "A": 0.35,
+   "trend": 0.3
+  },
+  "Product Manager": {
+   "A": 0.3,
+   "trend": 0.35
+  },
+  "Software Engineer": {
+   "A": 0.4,
+   "trend": 0.4
+  },
+  "UX Designer": {
+   "A": 0.4,
+   "trend": 0.45
+  },
+  "Content Creator": {
+   "A": 0.6,
+   "trend": 0.5
+  },
+  "Marketing Manager": {
+   "A": 0.45,
+   "trend": 0.45
+  },
+  "Cybersecurity Analyst": {
+   "A": 0.25,
+   "trend": 0.2
+  },
+  "DevOps Engineer": {
+   "A": 0.3,
+   "trend": 0.3
+  },
+  "Business Analyst": {
+   "A": 0.5,
+   "trend": 0.45
+  },
+  "Financial Analyst": {
+   "A": 0.6,
+   "trend": 0.45
+  }
+ },
+ "skills": {
+  "SQL": {
+   "domain": "data",
+   "aliases": [
+    "postgresql",
+    "mysql",
+    "t-sql",
+    "sql server"
+   ],
+   "resource": "https://mode.com/sql-tutorial"
+  },
+  "Python": {
+   "domain": "programming",
+   "aliases": [
+    "pandas",
+    "numpy",
+    "jupyter"
+   ],
+   "resource": "https://www.kaggle.com/learn/python"
+  },
+  "R": {
+   "domain": "data",
+   "aliases": [
+    "rstudio",
+    "tidyverse",
+    "ggplot"
+   ],
+   "resource": "https://r4ds.hadley.nz/"
+  },
+  "Excel": {
+   "domain": "data",
+   "aliases": [
+    "spreadsheets",
+    "vlookup",
+    "pivot tables",
+    "google sheets"
+   ],
+   "resource": "https://learn.microsoft.com/en-us/training/"
+  },
+  "Tableau": {
+   "domain": "data",
+   "aliases": [],
+   "resource": "https://www.tableau.com/learn/training"
+  },
+  "Power BI": {
+   "domain": "data",
+   "aliases": [
+    "powerbi",
+    "dax"
+   ],
+   "resource": "https://learn.microsoft.com/en-us/training/powerplatform/power-bi"
+  },
+  "Looker": {
+   "domain": "data",
+   "aliases": [
+    "lookml",
+    "looker studio"
+   ],
+   "resource": "https://cloud.google.com/looker/docs"
+  },
+  "Statistics": {
+   "domain": "data",
+   "aliases": [
+    "statistical",
+    "hypothesis testing",
+    "regression analysis"
+   ],
+   "resource": "https://www.khanacademy.org/math/statistics-probability"
+  },
+  "A/B testing": {
+   "domain": "data",
+   "aliases": [
+    "a/b test",
+    "ab testing",
+    "experimentation",
+    "split test"
+   ],
+   "resource": "https://www.udacity.com/course/ab-testing--ud257"
+  },
+  "Data modeling": {
+   "domain": "data",
+   "aliases": [
+    "data model",
+    "star schema",
+    "dimensional model"
+   ],
+   "resource": "https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview"
+  },
+  "dbt": {
+   "domain": "data",
+   "aliases": [],
+   "resource": "https://learn.getdbt.com/"
+  },
+  "ETL": {
+   "domain": "data",
+   "aliases": [
+    "elt",
+    "data pipeline",
+    "data pipelines"
+   ],
+   "resource": "https://github.com/DataTalksClub/data-engineering-zoomcamp"
+  },
+  "Snowflake": {
+   "domain": "data",
+   "aliases": [],
+   "resource": "https://learn.snowflake.com/"
+  },
+  "BigQuery": {
+   "domain": "data",
+   "aliases": [],
+   "resource": "https://cloud.google.com/bigquery/docs"
+  },
+  "Spark": {
+   "domain": "data",
+   "aliases": [
+    "pyspark",
+    "databricks"
+   ],
+   "resource": "https://spark.apache.org/docs/latest/quick-start.html"
+  },
+  "Airflow": {
+   "domain": "data",
+   "aliases": [],
+   "resource": "https://airflow.apache.org/docs/"
+  },
+  "Data visualization": {
+   "domain": "data",
+   "aliases": [
+    "dashboards",
+    "dashboarding",
+    "data viz"
+   ],
+   "resource": "https://www.storytellingwithdata.com/"
+  },
+  "Machine learning": {
+   "domain": "ai",
+   "aliases": [
+    "scikit-learn",
+    "sklearn",
+    "ml models",
+    "predictive model"
+   ],
+   "resource": "https://www.coursera.org/specializations/machine-learning-introduction"
+  },
+  "Deep learning": {
+   "domain": "ai",
+   "aliases": [
+    "neural network",
+    "neural networks"
+   ],
+   "resource": "https://www.deeplearning.ai/courses/"
+  },
+  "PyTorch": {
+   "domain": "ai",
+   "aliases": [],
+   "resource": "https://pytorch.org/tutorials/"
+  },
+  "TensorFlow": {
+   "domain": "ai",
+   "aliases": [
+    "keras"
+   ],
+   "resource": "https://www.tensorflow.org/tutorials"
+  },
+  "LLMs": {
+   "domain": "ai",
+   "aliases": [
+    "llm",
+    "large language model",
+    "large language models",
+    "generative ai",
+    "genai",
+    "rag",
+    "prompt engineering",
+    "openai"
+   ],
+   "resource": "https://huggingface.co/learn"
+  },
+  "NLP": {
+   "domain": "ai",
+   "aliases": [
+    "natural language processing"
+   ],
+   "resource": "https://huggingface.co/learn"
+  },
+  "MLOps": {
+   "domain": "ai",
+   "aliases": [
+    "model deployment",
+    "ml infrastructure"
+   ],
+   "resource": "https://github.com/DataTalksClub/mlops-zoomcamp"
+  },
+  "Java": {
+   "domain": "programming",
+   "aliases": [],
+   "resource": "https://dev.java/learn/"
+  },
+  "JavaScript": {
+   "domain": "programming",
+   "aliases": [
+    "ecmascript"
+   ],
+   "resource": "https://developer.mozilla.org/en-US/docs/Learn"
+  },
+  "TypeScript": {
+   "domain": "programming",
+   "aliases": [],
+   "resource": "https://www.typescriptlang.org/docs/"
+  },
+  "React": {
+   "domain": "programming",
+   "aliases": [
+    "react.js",
+    "reactjs",
+    "next.js"
+   ],
+   "resource": "https://react.dev/learn"
+  },
+  "Node.js": {
+   "domain": "programming",
+   "aliases": [
+    "nodejs",
+    "express.js"
+   ],
+   "resource": "https://nodejs.org/en/learn"
+  },
+  "Go": {
+   "domain": "programming",
+   "aliases": [
+    "golang"
+   ],
+   "resource": "https://go.dev/tour/"
+  },
+  "C++": {
+   "domain": "programming",
+   "aliases": [],
+   "resource": "https://www.learncpp.com/"
+  },
+  "REST APIs": {
+   "domain": "programming",
+   "aliases": [
+    "rest api",
+    "restful",
+    "graphql",
+    "apis"
+   ],
+   "resource": "https://developer.mozilla.org/en-US/docs/Learn"
+  },
+  "Git": {
+   "domain": "programming",
+   "aliases": [
+    "github",
+    "version control"
+   ],
+   "resource": "https://git-scm.com/book/en/v2"
+  },
+  "AWS": {
+   "domain": "cloud",
+   "aliases": [
+    "amazon web services",
+    "ec2",
+    "s3",
+    "lambda"
+   ],
+   "resource": "https://explore.skillbuilder.aws/"
+  },
+  "Azure": {
+   "domain": "cloud",
+   "aliases": [],
+   "resource": "https://learn.microsoft.com/en-us/training/azure/"
+  },
+  "GCP": {
+   "domain": "cloud",
+   "aliases": [
+    "google cloud"
+   ],
+   "resource": "https://cloud.google.com/learn/training"
+  },
+  "Docker": {
+   "domain": "cloud",
+   "aliases": [
+    "containers",
+    "containerization"
+   ],
+   "resource": "https://docs.docker.com/get-started/"
+  },
+  "Kubernetes": {
+   "domain": "cloud",
+   "aliases": [
+    "k8s",
+    "helm"
+   ],
+   "resource": "https://kubernetes.io/docs/tutorials/"
+  },
+  "Terraform": {
+   "domain": "cloud",
+   "aliases": [
+    "infrastructure as code",
+    "iac"
+   ],
+   "resource": "https://developer.hashicorp.com/terraform/tutorials"
+  },
+  "CI/CD": {
+   "domain": "cloud",
+   "aliases": [
+    "continuous integration",
+    "github actions",
+    "jenkins"
+   ],
+   "resource": "https://docs.github.com/en/actions"
+  },
+  "Linux": {
+   "domain": "cloud",
+   "aliases": [
+    "unix",
+    "bash",
+    "shell scripting"
+   ],
+   "resource": "https://linuxjourney.com/"
+  },
+  "Figma": {
+   "domain": "design",
+   "aliases": [],
+   "resource": "https://www.figma.com/resources/learn-design/"
+  },
+  "User research": {
+   "domain": "design",
+   "aliases": [
+    "usability testing",
+    "user interviews",
+    "ux research"
+   ],
+   "resource": "https://www.nngroup.com/articles/"
+  },
+  "Prototyping": {
+   "domain": "design",
+   "aliases": [
+    "wireframes",
+    "wireframing",
+    "prototypes"
+   ],
+   "resource": "https://www.nngroup.com/articles/"
+  },
+  "Design systems": {
+   "domain": "design",
+   "aliases": [
+    "design system"
+   ],
+   "resource": "https://www.figma.com/resources/learn-design/"
+  },
+  "Product strategy": {
+   "domain": "product",
+   "aliases": [
+    "product vision",
+    "go-to-market",
+    "product roadmap",
+    "roadmapping",
+    "roadmap"
+   ],
+   "resource": "https://www.svpg.com/articles/"
+  },
+  "Product analytics": {
+   "domain": "product",
+   "aliases": [
+    "funnel",
+    "retention",
+    "product metrics",
+    "cohort",
+    "amplitude",
+    "mixpanel"
+   ],
+   "resource": "https://mode.com/sql-tutorial"
+  },
+  "Agile": {
+   "domain": "product",
+   "aliases": [
+    "scrum",
+    "kanban",
+    "sprint"
+   ],
+   "resource": "https://www.atlassian.com/agile"
+  },
+  "Jira": {
+   "domain": "product",
+   "aliases": [
+    "confluence"
+   ],
+   "resource": "https://www.atlassian.com/software/jira/guides"
+  },
+  "Stakeholder communication": {
+   "domain": "soft",
+   "aliases": [
+    "stakeholders",
+    "stakeholder management",
+    "cross-functional",
+    "presentations",
+    "storytelling"
+   ],
+   "resource": "https://www.storytellingwithdata.com/"
+  },
+  "Project management": {
+   "domain": "soft",
+   "aliases": [
+    "project manager",
+    "pmp",
+    "timelines"
+   ],
+   "resource": "https://www.coursera.org/professional-certificates/google-project-management"
+  },
+  "Leadership": {
+   "domain": "soft",
+   "aliases": [
+    "mentoring",
+    "mentor",
+    "led a team",
+    "people management"
+   ],
+   "resource": null
+  },
+  "Communication": {
+   "domain": "soft",
+   "aliases": [
+    "written communication",
+    "verbal communication",
+    "communication skills"
+   ],
+   "resource": null
+  },
+  "Business analysis": {
+   "domain": "business",
+   "aliases": [
+    "business requirements",
+    "requirements gathering",
+    "process mapping",
+    "bpmn",
+    "user stories"
+   ],
+   "resource": "https://www.iiba.org/"
+  },
+  "Financial modeling": {
+   "domain": "finance",
+   "aliases": [
+    "financial model",
+    "dcf",
+    "valuation",
+    "fp&a",
+    "budgeting"
+   ],
+   "resource": "https://corporatefinanceinstitute.com/resources/financial-modeling/"
+  },
+  "Forecasting": {
+   "domain": "finance",
+   "aliases": [
+    "forecast",
+    "forecasts",
+    "time series",
+    "time-series"
+   ],
+   "resource": "https://otexts.com/fpp3/"
+  },
+  "Accounting": {
+   "domain": "finance",
+   "aliases": [
+    "gaap",
+    "general ledger",
+    "reconciliation"
+   ],
+   "resource": "https://www.khanacademy.org/economics-finance-domain"
+  },
+  "SEO": {
+   "domain": "marketing",
+   "aliases": [
+    "search engine optimization"
+   ],
+   "resource": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide"
+  },
+  "Content strategy": {
+   "domain": "marketing",
+   "aliases": [
+    "content marketing",
+    "editorial calendar",
+    "content creation"
+   ],
+   "resource": "https://academy.hubspot.com/"
+  },
+  "Copywriting": {
+   "domain": "marketing",
+   "aliases": [
+    "copy writing",
+    "copywriter"
+   ],
+   "resource": "https://academy.hubspot.com/"
+  },
+  "Social media": {
+   "domain": "marketing",
+   "aliases": [
+    "tiktok",
+    "instagram",
+    "linkedin content",
+    "social media marketing"
+   ],
+   "resource": "https://academy.hubspot.com/"
+  },
+  "Video editing": {
+   "domain": "marketing",
+   "aliases": [
+    "premiere pro",
+    "final cut",
+    "davinci resolve",
+    "after effects"
+   ],
+   "resource": null
+  },
+  "Google Analytics": {
+   "domain": "marketing",
+   "aliases": [
+    "ga4"
+   ],
+   "resource": "https://skillshop.withgoogle.com/"
+  },
+  "Paid advertising": {
+   "domain": "marketing",
+   "aliases": [
+    "google ads",
+    "paid media",
+    "paid social",
+    "ppc",
+    "sem"
+   ],
+   "resource": "https://skillshop.withgoogle.com/"
+  },
+  "Marketing automation": {
+   "domain": "marketing",
+   "aliases": [
+    "hubspot",
+    "marketo",
+    "salesforce marketing cloud",
+    "email marketing"
+   ],
+   "resource": "https://academy.hubspot.com/"
+  },
+  "Network security": {
+   "domain": "security",
+   "aliases": [
+    "firewall",
+    "firewalls",
+    "vulnerability management",
+    "penetration testing",
+    "pentest"
+   ],
+   "resource": "https://www.coursera.org/professional-certificates/google-cybersecurity"
+  },
+  "SIEM": {
+   "domain": "security",
+   "aliases": [
+    "splunk",
+    "sentinel",
+    "security monitoring"
+   ],
+   "resource": "https://www.coursera.org/professional-certificates/google-cybersecurity"
+  },
+  "Incident response": {
+   "domain": "security",
+   "aliases": [
+    "threat detection",
+    "threat hunting",
+    "soc"
+   ],
+   "resource": "https://www.cisa.gov/resources-tools/training"
+  },
+  "Risk management": {
+   "domain": "business",
+   "aliases": [
+    "risk assessment",
+    "compliance",
+    "soc 2",
+    "iso 27001"
+   ],
+   "resource": null
+  }
+ }
+}

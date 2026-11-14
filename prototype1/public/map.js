@@ -28,6 +28,11 @@
     ['Shanghai', 121.5, 31.2, 2], ['Shenzhen', 114.1, 22.5, 2], ['Hong Kong', 114.2, 22.3, 1.5], ['Seoul', 127.0, 37.6, 2],
     ['Tokyo', 139.7, 35.7, 2.5], ['Sydney', 151.2, -33.9, 1.8], ['Melbourne', 145.0, -37.8, 1.2], ['Auckland', 174.8, -36.8, .8],
   ];
+  // Mock employers and annual salary bands (USD k) per career — simulated for the visualization only
+  const COMPANIES = ['Northwind', 'Lumen Labs', 'Atlas Group', 'Brightpath', 'Cobalt AI', 'Vista Media', 'Pinecrest', 'Harbor Tech', 'Keystone', 'Nimbus Cloud', 'Orbit Studio', 'Summit Health', 'Greenline', 'Meridian', 'Polaris Data', 'Sable Security'];
+  const PAY = { 'AI Engineer': [140, 260], 'Data Analyst': [70, 130], 'Data Scientist': [110, 200], 'Product Manager': [110, 210], 'Software Engineer': [100, 220],
+    'UX Designer': [80, 160], 'Content Creator': [45, 110], 'Marketing Manager': [75, 150], 'Cybersecurity Analyst': [85, 165], 'DevOps Engineer': [110, 200] };
+  const COST = { 'San Francisco': 1.15, 'New York': 1.1, 'Seattle': 1.05, 'London': .8, 'Zurich': 1, 'Berlin': .7, 'Bengaluru': .25, 'Almaty': .3, 'Astana': .3, 'Tashkent': .2, 'Lagos': .2, 'Nairobi': .2, 'Cairo': .2, 'Ho Chi Minh City': .25, 'Jakarta': .25, 'Bogotá': .3, 'Mexico City': .35, 'São Paulo': .35, 'Buenos Aires': .3 };
   const HOMES = ['New York', 'San Francisco', 'London', 'Berlin', 'Almaty', 'Astana', 'Dubai', 'Bengaluru', 'Singapore', 'Tokyo', 'São Paulo'];
 
   const cv = document.getElementById('globe'), ctx = cv.getContext('2d');
@@ -71,7 +76,10 @@
     const city = pick(CITIES, c => c[3]);
     const lon = city[1] + (Math.random() - .5) * 1.6, lat = city[2] + (Math.random() - .5) * 1.2;
     const fit = fitScore(S.career, career.n);
-    const ev = { lon, lat, career: career.n, color: career.c, fit, city: city[0], born: now, life: 3200 + Math.random() * 1600 };
+    const band = PAY[career.n], k = COST[city[0]] ?? .65, lo = Math.round(band[0] * k * (0.9 + Math.random() * .2) / 5) * 5;
+    const salary = '$' + lo + 'k–$' + Math.round(lo * (1.2 + Math.random() * .25) / 5) * 5 + 'k';
+    const company = COMPANIES[Math.floor(Math.random() * COMPANIES.length)];
+    const ev = { lon, lat, career: career.n, color: career.c, fit, city: city[0], company, salary, born: now, life: 3200 + Math.random() * 1600 };
     S.events.push(ev);
     S.total++; S.perCareer[career.n]++; S.perCity[city[0]] = (S.perCity[city[0]] || 0) + 1;
     if (fit >= 80) {
@@ -82,7 +90,7 @@
   }
   function feed(ev) {
     const li = document.createElement('li');
-    li.innerHTML = `<span class="sw" style="color:${ev.color}"></span><span>${ev.career}<small>${ev.city}</small></span><b class="${ev.fit >= 80 ? 'hi' : ''}">${ev.fit}%</b>`;
+    li.innerHTML = `<span class="sw" style="color:${ev.color}"></span><span>${ev.career}<small>${ev.company} · ${ev.city} · ${ev.salary}/yr</small></span><b class="${ev.fit >= 80 ? 'hi' : ''}">${ev.fit}%</b>`;
     const ul = $('mFeed'); ul.prepend(li); while (ul.children.length > 16) ul.lastChild.remove();
   }
   let statT = 0;
@@ -160,7 +168,7 @@
   function frame(now) {
     requestAnimationFrame(frame);
     const dt = Math.min(100, now - prevT); prevT = now;
-    if (document.getElementById('v-main').classList.contains('hide') || document.hidden) return;
+    if (document.getElementById('v-landing').classList.contains('hide') || document.hidden) return;
     if (!S.w) resize();
     acc += dt; const every = reduce ? 900 : 190;
     while (acc > every) { acc -= every; spawn(now); }
@@ -226,7 +234,7 @@
     // labels for top matches
     ctx.font = '500 11px Onest, system-ui';
     labels.slice(-3).forEach(([p, ev, age]) => {
-      const txt = `${ev.career} · ${ev.city} · ${ev.fit}%`, tw = ctx.measureText(txt).width;
+      const txt = `${ev.career} · ${ev.company} · ${ev.salary} · ${ev.fit}%`, tw = ctx.measureText(txt).width;
       ctx.globalAlpha = Math.min(1, (.75 - age) * 4);
       ctx.fillStyle = 'rgba(11,20,24,.85)'; ctx.strokeStyle = ev.color; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.roundRect ? ctx.roundRect(p[0] + 10, p[1] - 24, tw + 14, 20, 6) : ctx.rect(p[0] + 10, p[1] - 24, tw + 14, 20); ctx.fill(); ctx.stroke();
