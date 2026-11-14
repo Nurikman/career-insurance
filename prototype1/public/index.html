@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tirek — Career Insurance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <div class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 28V15a11 11 0 0 1 22 0v13" fill="none" stroke="#3E8F86" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="20" r="4" fill="currentColor"/></svg><b>tirek</b><small>Career Insurance</small></div>
+  <nav id="nav"></nav>
+  <span class="ai" id="ai">AI: checking…</span>
+</header>
+
+<main>
+  <!-- MAIN: live vacancy map -->
+  <section id="v-main">
+    <div class="mapwrap">
+      <canvas id="globe" aria-label="Animated world map of vacancies that fit your career"></canvas>
+      <div class="mtop">
+        <div class="mtitle"><h1>Opportunities fitting you, worldwide</h1><p>Every pulse is a vacancy emerging right now. Brighter arcs reach you when the fit is high.</p></div>
+        <div class="mctl">
+          <label>Your career<select id="mCareer"></select></label>
+          <label>You are in<select id="mHome"></select></label>
+          <div class="seg" id="mView"><button class="on" data-v="globe">Globe</button><button data-v="flat">Flat</button></div>
+        </div>
+      </div>
+      <div class="legend"><h3>Careers · click to filter</h3><div id="mLegend"></div></div>
+      <div class="feed"><h3>Live feed · fit to you</h3><ul id="mFeed"></ul></div>
+      <div class="mstats">
+        <div class="mstat"><b id="sTotal">0</b><small>vacancies today</small></div>
+        <div class="mstat"><b id="sFit">0</b><small>≥ 80% fit</small></div>
+        <div class="mstat"><b id="sTop">—</b><small>hottest city</small></div>
+      </div>
+      <div class="mnote">Simulated data · visualization only</div>
+    </div>
+    <div class="cta">
+      <div class="card" style="margin:0">
+        <h2>Know what the next level asks for — and prove you can do it</h2>
+        <p class="mu">Compare your confirmed skills with Senior Data Analyst postings in New York, practice a short AI interview on your top gap and leave with one concrete growth step. No sign-up.</p>
+        <div class="flow"><div><b>1 · Profile</b>CV or sample</div><div><b>2 · Report</b>3 skill gaps</div><div><b>3 · Interview</b>2 AI questions</div><div><b>4 · Plan</b>1 practice step</div></div>
+        <div class="row" style="margin-top:16px"><button class="btn" onclick="go('profile')">Analyze my career →</button><span class="mu sm">≈ 3–5 minutes</span></div>
+      </div>
+      <div class="card" style="margin:0">
+        <h3>Demo scope</h3>
+        <p class="mu sm" style="margin:0 0 8px">Target: <b>Data Analyst → Senior Data Analyst</b>, market: <b>New York</b>. The map above uses simulated data; the report uses a labelled sample snapshot of job postings.</p>
+        <p class="mu sm" style="margin:0">AI feedback is formative learning feedback on a transparent rubric — not a hiring decision.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="v-profile" class="hide">
+    <div class="grid2">
+      <div class="card">
+        <h2>Your CV</h2>
+        <p class="mu sm">Upload a text PDF, paste your CV, or try a sample profile. Your CV is not stored.</p>
+        <div class="row" style="margin-bottom:10px" id="samples"></div>
+        <textarea id="cv" placeholder="Paste your CV text here…"></textarea>
+        <div class="row" style="margin-top:10px">
+          <label class="btn soft small" style="cursor:pointer">Upload PDF<input type="file" id="pdf" accept="application/pdf" hidden></label>
+          <span class="mu sm" id="pdfNote">Text PDFs up to 5 MB</span>
+        </div>
+        <div class="row" style="margin-top:14px"><button class="btn" id="extract">Extract skills</button></div>
+        <div id="pErr"></div>
+      </div>
+      <div class="card">
+        <h2>Goal</h2>
+        <div class="grid2" style="gap:10px">
+          <label class="sm mu">Current role<input type="text" id="role" value="Data Analyst"></label>
+          <label class="sm mu">Target role<input type="text" value="Senior Data Analyst" disabled></label>
+          <label class="sm mu">Market<input type="text" value="New York, NY" disabled></label>
+          <label class="sm mu">Study time / week<select id="hours"><option>1–2 h</option><option selected>3–6 h</option><option>7+ h</option></select></label>
+          <label class="sm mu">US work authorization<select id="auth"><option value="unknown">Not stated</option><option value="yes">Yes</option></select></label>
+        </div>
+        <h3 style="margin-top:18px">Skills <span class="mu sm" style="font-weight:400">— dashed = suggested, solid = confirmed. Only confirmed skills count.</span></h3>
+        <div id="skills"><p class="mu sm">Extract skills from your CV first.</p></div>
+        <div class="row" id="skillTools" style="margin-top:6px">
+          <select id="addSkill" style="width:auto"></select><button class="btn soft small" id="addBtn">Add</button>
+          <button class="btn soft small" id="confirmAll">Confirm all</button>
+        </div>
+        <div class="row" style="margin-top:16px"><button class="btn ac" id="toReport" disabled>Build career report →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REPORT -->
+  <section id="v-report" class="hide"></section>
+  <!-- INTERVIEW -->
+  <section id="v-interview" class="hide"></section>
+  <!-- PLAN -->
+  <section id="v-plan" class="hide"></section>
+</main>
+<div id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="map.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

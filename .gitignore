@@ -1,0 +1,6 @@
+.DS_Store
+.env
+**/.env
+**/data/logs/
+__pycache__/
+.claude/
