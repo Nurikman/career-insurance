@@ -29,7 +29,7 @@ function route() {
   if (ME && PUBLIC.includes(view)) { location.hash = '#/app/' + (ME.report ? 'report' : 'profile'); return; }
   VIEWS.forEach(v => $('#v-' + v).classList.toggle('hide', v !== view));
   const app = !PUBLIC.includes(view);
-  ['#nav', '#logout', '#who', '#mus', '#theme'].forEach(s => $(s).classList.toggle('hide', !app));
+  ['#nav', '#logout', '#who', '#mus'].forEach(s => $(s).classList.toggle('hide', !app));
   if (!app) $('#vol').classList.add('hide'); else $('#vol').classList.toggle('hide', !play);
   if (app) {
     $('#who').textContent = ME.user.name + ' ' + ME.user.surname;
@@ -281,11 +281,15 @@ function renderFeedback() {
 }
 
 // ---------- theme ----------
+const curTheme = () => document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+function themeBtn() { const d = curTheme() === 'dark'; $('#theme').textContent = d ? '☀' : '☾'; $('#theme').title = d ? 'Switch to light mode' : 'Switch to dark mode'; }
 $('#theme').onclick = () => {
-  const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  const next = cur === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next;
+  const next = curTheme() === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next;
   try { localStorage.setItem('tirek-theme', next); } catch (e) {}
+  themeBtn();
 };
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', themeBtn);
+themeBtn();
 
 // ---------- ambient music (generated in the browser, no files) ----------
 let AC, mg, lp, loop, play = 0, ci = 0;

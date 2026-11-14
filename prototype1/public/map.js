@@ -45,6 +45,18 @@
   const byName = Object.fromEntries(CAREERS.map(c => [c.n, c]));
   const cityByName = Object.fromEntries(CITIES.map(c => [c[0], c]));
   const graticule = d3.geoGraticule10();
+  // Canvas palettes for light and dark themes (follow <html data-theme> or the OS setting)
+  const PAL = {
+    dark: { atmo: 'rgba(62,143,134,.35)', atmo0: 'rgba(62,143,134,0)', sea1: '#0F2228', sea2: '#0A161A', grid: 'rgba(127,148,153,.08)', land: '#18323A',
+      landln: 'rgba(108,191,180,.35)', rim: 'rgba(108,191,180,.25)', head: '#fff', home: '#D9A441', hometx: '#F5D79A', labbg: 'rgba(11,20,24,.85)', labtx: '#fff', blend: 'lighter', dot: c => c },
+    light: { atmo: 'rgba(62,143,134,.22)', atmo0: 'rgba(62,143,134,0)', sea1: '#E4EFEC', sea2: '#D3E5E1', grid: 'rgba(31,42,46,.07)', land: '#FBF9F4',
+      landln: 'rgba(62,143,134,.55)', rim: 'rgba(62,143,134,.35)', head: '#1F2A2E', home: '#B9781A', hometx: '#7A4E0E', labbg: 'rgba(255,255,255,.94)', labtx: '#1F2A2E', blend: 'source-over',
+      dot: c => DARKER[c] || (DARKER[c] = d3.color(c).darker(0.9).formatHex()) },
+  };
+  const DARKER = {};
+  let P = PAL.dark;
+  const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+  const theme = () => { const t = document.documentElement.dataset.theme; return PAL[t === 'dark' || (!t && darkMQ.matches) ? 'dark' : 'light']; };
 
   // ---------- controls ----------
   const $ = id => document.getElementById(id);
@@ -154,12 +166,12 @@
         if (!p || (prev && Math.abs(p[0] - prev[0]) > S.w / 3)) { pen = false; prev = p; continue; }
         pen ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); pen = true; prev = p;
       }
-      ctx.globalAlpha = alpha * fade; ctx.lineWidth = width; ctx.strokeStyle = arc.color; ctx.stroke();
+      ctx.globalAlpha = alpha * fade; ctx.lineWidth = width; ctx.strokeStyle = P.dot(arc.color); ctx.stroke();
     };
     seg(0, head, .22, 1.2);
     seg(Math.max(0, head - 10), head, .95, 2);
     const hp = pts[head];
-    if (hp && t < 1) { ctx.globalAlpha = fade; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(hp[0], hp[1], 2.2, 0, 7); ctx.fill(); }
+    if (hp && t < 1) { ctx.globalAlpha = fade; ctx.fillStyle = P.head; ctx.beginPath(); ctx.arc(hp[0], hp[1], 2.2, 0, 7); ctx.fill(); }
     ctx.globalAlpha = 1;
     return true;
   }
@@ -174,6 +186,7 @@
     while (acc > every) { acc -= every; spawn(now); }
     if (S.view === 'globe' && !S.dragging && !reduce) S.rot[0] += dt * 0.006;
 
+    P = theme();
     const proj = projection(), path = d3.geoPath(proj, ctx), { w, h } = S;
     ctx.clearRect(0, 0, w, h);
 
@@ -181,20 +194,20 @@
     if (S.view === 'globe') {
       const [cx, cy] = proj.translate(), R = proj.scale();
       const g = ctx.createRadialGradient(cx, cy, R * .9, cx, cy, R * 1.25);
-      g.addColorStop(0, 'rgba(62,143,134,.35)'); g.addColorStop(1, 'rgba(62,143,134,0)');
+      g.addColorStop(0, P.atmo); g.addColorStop(1, P.atmo0);
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 1.25, 0, 7); ctx.fill();
     }
     ctx.beginPath(); path({ type: 'Sphere' });
-    const sg = ctx.createLinearGradient(0, 0, 0, h); sg.addColorStop(0, '#0F2228'); sg.addColorStop(1, '#0A161A');
+    const sg = ctx.createLinearGradient(0, 0, 0, h); sg.addColorStop(0, P.sea1); sg.addColorStop(1, P.sea2);
     ctx.fillStyle = sg; ctx.fill();
-    ctx.beginPath(); path(graticule); ctx.strokeStyle = 'rgba(127,148,153,.08)'; ctx.lineWidth = .7; ctx.stroke();
+    ctx.beginPath(); path(graticule); ctx.strokeStyle = P.grid; ctx.lineWidth = .7; ctx.stroke();
     if (S.land) {
-      ctx.beginPath(); path(S.land); ctx.fillStyle = '#18323A'; ctx.fill();
-      ctx.strokeStyle = 'rgba(108,191,180,.35)'; ctx.lineWidth = .6; ctx.stroke();
+      ctx.beginPath(); path(S.land); ctx.fillStyle = P.land; ctx.fill();
+      ctx.strokeStyle = P.landln; ctx.lineWidth = .6; ctx.stroke();
     }
-    ctx.beginPath(); path({ type: 'Sphere' }); ctx.strokeStyle = 'rgba(108,191,180,.25)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.beginPath(); path({ type: 'Sphere' }); ctx.strokeStyle = P.rim; ctx.lineWidth = 1; ctx.stroke();
 
-    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalCompositeOperation = P.blend;
     // arcs
     S.arcs = S.arcs.filter(a => {
       if (S.off.has(a.career)) return now - a.born < a.dur + 900;
@@ -207,14 +220,14 @@
       if (age >= 1) return false;
       if (S.off.has(ev.career) || !visible([ev.lon, ev.lat])) return true;
       const p = proj([ev.lon, ev.lat]); if (!p) return true;
-      const hi = ev.fit >= 80, base = hi ? 3.2 : 2.2;
+      const hi = ev.fit >= 80, base = hi ? 3.2 : 2.2, col = P.dot(ev.color);
       const glow = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], base * 5);
-      glow.addColorStop(0, ev.color); glow.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.globalAlpha = (1 - age) * (hi ? .9 : .5); ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(p[0], p[1], base * 5, 0, 7); ctx.fill();
-      ctx.globalAlpha = 1 - age; ctx.fillStyle = ev.color; ctx.beginPath(); ctx.arc(p[0], p[1], base * (age < .1 ? age * 10 : 1), 0, 7); ctx.fill();
+      glow.addColorStop(0, col); glow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.globalAlpha = (1 - age) * (hi ? .9 : .5) * (P === PAL.light ? .45 : 1); ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(p[0], p[1], base * 5, 0, 7); ctx.fill();
+      ctx.globalAlpha = 1 - age; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p[0], p[1], base * (age < .1 ? age * 10 : 1), 0, 7); ctx.fill();
       for (const k of [0, .35]) {
         const a2 = age - k; if (a2 <= 0) continue;
-        ctx.globalAlpha = Math.max(0, (1 - a2) * .8); ctx.strokeStyle = ev.color; ctx.lineWidth = hi ? 1.6 : 1;
+        ctx.globalAlpha = Math.max(0, (1 - a2) * .8); ctx.strokeStyle = col; ctx.lineWidth = hi ? 1.6 : 1;
         ctx.beginPath(); ctx.arc(p[0], p[1], 3 + a2 * (hi ? 30 : 18), 0, 7); ctx.stroke();
       }
       if (ev.fit >= 88 && age < .75) labels.push([p, ev, age]);
@@ -226,19 +239,19 @@
     const hc = cityByName[S.home];
     if (visible([hc[1], hc[2]])) {
       const p = proj([hc[1], hc[2]]), pulse = (now / 1400) % 1;
-      ctx.strokeStyle = '#D9A441'; ctx.lineWidth = 2; ctx.globalAlpha = 1 - pulse;
+      ctx.strokeStyle = P.home; ctx.lineWidth = 2; ctx.globalAlpha = 1 - pulse;
       ctx.beginPath(); ctx.arc(p[0], p[1], 6 + pulse * 16, 0, 7); ctx.stroke(); ctx.globalAlpha = 1;
-      ctx.fillStyle = '#D9A441'; ctx.beginPath(); ctx.arc(p[0], p[1], 4.5, 0, 7); ctx.fill();
-      ctx.font = '600 12px Onest, system-ui'; ctx.fillStyle = '#F5D79A'; ctx.fillText('You · ' + S.home, p[0] + 10, p[1] + 4);
+      ctx.fillStyle = P.home; ctx.beginPath(); ctx.arc(p[0], p[1], 4.5, 0, 7); ctx.fill();
+      ctx.font = '600 12px Onest, system-ui'; ctx.fillStyle = P.hometx; ctx.fillText('You · ' + S.home, p[0] + 10, p[1] + 4);
     }
     // labels for top matches
     ctx.font = '500 11px Onest, system-ui';
     labels.slice(-3).forEach(([p, ev, age]) => {
       const txt = `${ev.career} · ${ev.company} · ${ev.salary} · ${ev.fit}%`, tw = ctx.measureText(txt).width;
       ctx.globalAlpha = Math.min(1, (.75 - age) * 4);
-      ctx.fillStyle = 'rgba(11,20,24,.85)'; ctx.strokeStyle = ev.color; ctx.lineWidth = 1;
+      ctx.fillStyle = P.labbg; ctx.strokeStyle = P.dot(ev.color); ctx.lineWidth = 1;
       ctx.beginPath(); ctx.roundRect ? ctx.roundRect(p[0] + 10, p[1] - 24, tw + 14, 20, 6) : ctx.rect(p[0] + 10, p[1] - 24, tw + 14, 20); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = '#fff'; ctx.fillText(txt, p[0] + 17, p[1] - 10);
+      ctx.fillStyle = P.labtx; ctx.fillText(txt, p[0] + 17, p[1] - 10);
     });
     ctx.globalAlpha = 1;
     stats(now);
