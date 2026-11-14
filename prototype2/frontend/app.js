@@ -7,10 +7,13 @@ let tt; function toast(t) { const e = $('#toast'); e.textContent = t; e.classLis
 const spin = t => `<div class="loading"><span class="spin"></span><b>${esc(t)}</b><span class="sm mu" id="loadStep"></span></div>`;
 
 async function api(path, body) {
-  const r = await fetch(API + path, { credentials: 'include', ...(body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : {}) });
-  const j = await r.json().catch(() => ({ error: 'Server returned an invalid response.' }));
+  let r;
+  try { r = await fetch(API + path, { credentials: 'include', ...(body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : {}) }); }
+  catch (e) { throw new Error('Cannot reach the server. Check your connection or the API address (frontend/vercel.json).'); }
+  const j = await r.json().catch(() => null);
   if (r.status === 401 && path !== '/api/login' && path !== '/api/me') { ME = null; location.hash = '#/login'; }
-  if (!r.ok) throw new Error(j.error || 'Request failed.');
+  if (!j) throw new Error(`The API did not answer correctly (HTTP ${r.status}). Check that /api/health works and that vercel.json points to your Railway domain.`);
+  if (!r.ok) throw new Error(j.error || `Request failed (HTTP ${r.status}).`);
   return j;
 }
 const track = name => api('/api/event', { name }).catch(() => {});
