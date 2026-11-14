@@ -193,6 +193,22 @@ class DB:
     def audit(self, ip, action, target=""):
         self.run("INSERT INTO admin_audit (created_at,ip,action,target) VALUES (?,?,?,?)", (int(time.time()), ip, action, target))
 
+    # ---------- backup ----------
+    def backup_bytes(self):
+        """Consistent copy of the whole database (safe while the app is running)."""
+        import os
+        import tempfile
+        fd, tmp = tempfile.mkstemp(suffix=".db")
+        os.close(fd)
+        try:
+            dst = sqlite3.connect(tmp)
+            with self.lock:
+                self.conn().backup(dst)
+            dst.close()
+            return Path(tmp).read_bytes()
+        finally:
+            os.remove(tmp)
+
     # ---------- retention ----------
     def purge(self, cv_days):
         now = int(time.time())

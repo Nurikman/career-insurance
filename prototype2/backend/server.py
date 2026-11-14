@@ -844,6 +844,17 @@ class Handler(SimpleHTTPRequestHandler):
                 if not hmac.compare_digest(auth, "Bearer " + ADMIN_TOKEN):
                     DBX.audit(self.client_address[0], "denied", path)
                     raise ApiError(401, "Wrong admin token.")
+                if path == "/api/admin/backup":
+                    DBX.audit(self.client_address[0], "download_backup")
+                    data = DBX.backup_bytes()
+                    self.send_response(200)
+                    self.send_header("Content-Type", "application/vnd.sqlite3")
+                    self.send_header("Content-Disposition", f'attachment; filename="tirek-backup-{time.strftime('%Y%m%d-%H%M')}.db"')
+                    self.send_header("Content-Length", str(len(data)))
+                    self.send_header("Cache-Control", "no-store")
+                    self.end_headers()
+                    self.wfile.write(data)
+                    return
                 return self.send_json(200, admin_get(path, self.client_address[0]))
             except ApiError as e:
                 return self.send_json(e.status, {"error": e.message})
@@ -882,7 +893,7 @@ class Handler(SimpleHTTPRequestHandler):
             return self.send_json(404, {"error": "Frontend is hosted separately."})
         if path == "/api/health":
             return self.send_json(200, {"ok": True, "ai": bool(OPENAI_KEY), "model": OPENAI_MODEL, "jobs": len(JOBS["jobs"]),
-                                        "storage": {"persistent": PERSISTENT,
+                                        "storage": {"persistent": PERSISTENT, "dataDir": str(DATA), "volumeMount": VOLUME, "onRailway": ON_RAILWAY,
                                                     "note": None if PERSISTENT else "No Railway volume: data is lost on every redeploy. Add a volume (any mount path)."}})
         if path == "/api/me":
             u = session_user(self.token())
