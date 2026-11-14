@@ -42,8 +42,8 @@ async function overview() {
     <div class="card"><h2>Funnel</h2><table>${o.funnel.map(f => `<tr><td>${esc(f.name)}</td><td>${f.users} users</td><td>${f.n}</td></tr>`).join('') || '<tr><td class="mu">No events yet</td></tr>'}</table></div>
     <div class="card"><h2>Would buy Pro</h2><table>${o.buyPro.map(b => `<tr><td>${esc(b.answer || 'no answer')}</td><td>${b.n}</td></tr>`).join('') || '<tr><td class="mu">—</td></tr>'}</table></div>
     <div class="card"><h2>Countries</h2><table>${o.countries.map(c => `<tr><td>${esc(c.country)}</td><td>${c.n}</td></tr>`).join('') || '<tr><td class="mu">—</td></tr>'}</table></div></div>
-  <div class="card"><div class="row between"><div><h2 style="margin:0">Backup</h2><p class="sm mu" style="margin:4px 0 0">Download the whole database (users, CVs with consent, reports, feedback, logs) as one file. Store it privately and encrypted — it contains personal data.</p></div>
-    <button class="btn blue" id="backup">Download backup</button></div></div>
+  <div class="card"><div class="row between"><div><h2 style="margin:0">Backup</h2><p class="sm mu" style="margin:4px 0 0">Excel: one sheet each for users, reports, feedback, profiles &amp; CV, vacancies, events, consents and access log. Backup: the full database file. Store it privately and encrypted — it contains personal data.</p></div>
+    <div class="row"><button class="btn green" data-dl="/api/admin/export.xlsx" data-label="Download Excel">Download Excel</button><button class="btn blue" data-dl="/api/admin/backup" data-label="Download backup">Download backup</button></div></div></div>
   <p class="sm mu">CV text retention: ${o.retention.cvDays} days · consent version ${esc(o.retention.consentVersion)}</p>`;
 }
 async function feedback() {
@@ -78,17 +78,17 @@ async function audit() {
     ${a.items.map(x => `<tr><td>${dt(x.created_at)}</td><td>${esc(x.action)}</td><td>${esc(x.target || '')}</td><td class="mu">${esc(x.ip || '')}</td></tr>`).join('')}</table></div>`;
 }
 function bind() {
-  $('#backup') && ($('#backup').onclick = async () => {
-    const b = $('#backup'); b.disabled = true; b.textContent = 'Preparing…';
+  $$('[data-dl]').forEach(b => b.onclick = async () => {
+    b.disabled = true; b.textContent = 'Preparing…';
     try {
-      const r = await fetch(API + '/api/admin/backup', { headers: { Authorization: 'Bearer ' + TOKEN } });
-      if (!r.ok) throw new Error('Backup failed (HTTP ' + r.status + ')');
-      const name = (r.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/)?.[1] || 'tirek-backup.db';
+      const r = await fetch(API + b.dataset.dl, { headers: { Authorization: 'Bearer ' + TOKEN } });
+      if (!r.ok) throw new Error('Failed (HTTP ' + r.status + ')');
+      const name = (r.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/)?.[1] || 'tirek-download';
       const url = URL.createObjectURL(await r.blob()), link = Object.assign(document.createElement('a'), { href: url, download: name });
       document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
       b.textContent = 'Downloaded ✓';
     } catch (x) { b.textContent = x.message; }
-    setTimeout(() => { b.disabled = false; b.textContent = 'Download backup'; }, 3000);
+    setTimeout(() => { b.disabled = false; b.textContent = b.dataset.label; }, 3000);
   });
   $$('[data-u]').forEach(r => r.onclick = async () => {
     const v = $('#view'); v.innerHTML = '<div class="loading"><span class="spin"></span></div>';

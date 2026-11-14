@@ -17,7 +17,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from db import DB, CONSENT_VERSION
+from db import CONSENT_VERSION, open_db
 from collections import defaultdict
 from http.cookies import SimpleCookie
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -44,11 +44,14 @@ STATIC = ROOT / "data"                                                   # bundl
 DATA = Path(os.environ.get("DATA_DIR") or os.environ.get("RAILWAY_VOLUME_MOUNT_PATH") or ROOT / "data")
 ON_RAILWAY = bool(os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("RAILWAY_PROJECT_ID"))
 VOLUME = os.environ.get("RAILWAY_VOLUME_MOUNT_PATH")
-PERSISTENT = (not ON_RAILWAY) or bool(VOLUME and str(DATA).startswith(VOLUME))
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "").strip()
+SUPABASE_SECRET_KEY = os.environ.get("SUPABASE_SECRET_KEY", "").strip()  # backend only, never in the frontend
+PERSISTENT = bool(SUPABASE_URL and SUPABASE_SECRET_KEY) or (not ON_RAILWAY) or bool(VOLUME and str(DATA).startswith(VOLUME))
 PUBLIC = Path(os.environ.get("FRONTEND_DIR") or ROOT.parent / "frontend")  # served only when present (local dev)
 DATA.mkdir(parents=True, exist_ok=True)
 ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")                         # enables /admin.html; use a long random value
 CV_RETENTION_DAYS = int(os.environ.get("CV_RETENTION_DAYS", "90"))       # stored CV text is deleted after this many days
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "https://career-insurance-frontend.vercel.app").strip().rstrip("/")
 ALLOWED_ORIGINS = {o.strip().rstrip("/") for o in os.environ.get("ALLOWED_ORIGINS", "").split(",") if o.strip()}
 COOKIE_ATTRS = "SameSite=None; Secure" if os.environ.get("CROSS_SITE_COOKIES") == "1" else "SameSite=Lax"
 OPENAI_KEY =os.environ.get("OPENAI_API_KEY", "")
@@ -102,7 +105,15 @@ class ApiError(Exception):
 
 
 # ---------- storage (SQLite, see db.py) ----------
-DBX = DB(DATA / "tirek.db")
+STORAGE_ERROR = None
+try:
+    DBX = open_db(DATA, SUPABASE_URL, SUPABASE_SECRET_KEY, SSL_CTX)
+except Exception as e:  # keep the site up, but make the problem loud on /api/health and in the logs
+    STORAGE_ERROR = f"Supabase not usable, falling back to local SQLite: {e}"[:400]
+    print("ERROR:", STORAGE_ERROR)
+    DBX = open_db(DATA)
+if STORAGE_ERROR or DBX.kind != "supabase":
+    PERSISTENT = (not ON_RAILWAY) or bool(VOLUME and str(DATA).startswith(VOLUME))
 DBX.purge(CV_RETENTION_DAYS)
 
 
@@ -629,7 +640,7 @@ def api_logout(body, u, token=None):
 def api_me(u):
     st = user_state(u["id"])
     pr = DBX.profile(u["id"]) or {}
-    inp = {"currentRole": pr.get("current_role"), "targetRole": pr.get("target_role"), "targetSalary": pr.get("target_salary"),
+    inp = {"currentRole": pr.get("role_current"), "targetRole": pr.get("target_role"), "targetSalary": pr.get("target_salary"),
            "studyHours": pr.get("study_hours"), "about": pr.get("about") or ""} if pr else None
     return {"user": public_user(u), "input": inp, "savedCv": pr.get("cv_name") if pr.get("cv_text") else None,
             "report": st.get("report"), "roadmap": st.get("roadmap"),
@@ -677,10 +688,9 @@ def export_data(u):
     return {"exportedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "account": {k: u[k] for k in ("id", "email", "name", "surname", "country", "created_at", "last_login_at",
                                           "terms_accepted_at", "consent_version", "consent_store_cv", "consent_research")},
-            "consentLog": DBX.q("SELECT created_at,kind,value,version FROM consent_log WHERE user_id=? ORDER BY id", (u["id"],)),
+            **DBX.user_export(u["id"]),
             "profile": pr, "reports": DBX.reports(u["id"]), "state": user_state(u["id"]),
-            "feedback": DBX.q("SELECT created_at,rating,buy_pro,comment FROM feedback WHERE user_id=?", (u["id"],)),
-            "events": DBX.q("SELECT created_at,name FROM events WHERE user_id=?", (u["id"],))}
+}
 
 
 # ---------- admin (token-protected, masked by default, every access audited) ----------
@@ -692,29 +702,20 @@ def mask_email(e):
 def admin_get(path, ip):
     if path == "/api/admin/overview":
         DBX.audit(ip, "overview")
-        users = DBX.one("SELECT COUNT(*) n, SUM(consent_store_cv) cv, SUM(consent_research) research FROM users")
-        return {"users": users, "reports": DBX.one("SELECT COUNT(*) n FROM reports")["n"],
-                "feedback": DBX.one("SELECT COUNT(*) n, ROUND(AVG(rating),2) avg FROM feedback"),
-                "buyPro": DBX.q("SELECT buy_pro answer, COUNT(*) n FROM feedback GROUP BY buy_pro ORDER BY n DESC"),
-                "funnel": DBX.q("SELECT name, COUNT(*) n, COUNT(DISTINCT user_id) users FROM events GROUP BY name ORDER BY n DESC"),
-                "countries": DBX.q("SELECT country, COUNT(*) n FROM users GROUP BY country ORDER BY n DESC LIMIT 10"),
-                "retention": {"cvDays": CV_RETENTION_DAYS, "consentVersion": CONSENT_VERSION}}
+        return {**DBX.overview(), "storage": DBX.kind, "retention": {"cvDays": CV_RETENTION_DAYS, "consentVersion": CONSENT_VERSION}}
     if path == "/api/admin/feedback":
         DBX.audit(ip, "list_feedback")
-        return {"items": DBX.q("SELECT f.id, f.created_at, f.rating, f.buy_pro, f.comment, u.country, substr(f.user_id,1,6) user_ref "
-                                "FROM feedback f LEFT JOIN users u ON u.id=f.user_id ORDER BY f.id DESC LIMIT 500")}
+        return {"items": DBX.feedback_list()}
     if path == "/api/admin/users":
         DBX.audit(ip, "list_users")
-        rows = DBX.q("SELECT u.id, u.email, u.name, u.surname, u.country, u.created_at, u.last_login_at, u.consent_store_cv, u.consent_research, "
-                     "(SELECT COUNT(*) FROM reports r WHERE r.user_id=u.id) reports, "
-                     "(SELECT p.cv_text IS NOT NULL FROM profiles p WHERE p.user_id=u.id) has_cv FROM users u ORDER BY u.created_at DESC LIMIT 500")
+        rows = DBX.users_list()
         for r in rows:  # masked list view; full details only on the per-user (audited) endpoint
             r["email"] = mask_email(r["email"])
             r["name"] = f"{r['name'][:1]}. {r['surname'][:1]}."
             r.pop("surname")
         return {"items": rows}
     if path == "/api/admin/audit":
-        return {"items": DBX.q("SELECT * FROM admin_audit ORDER BY id DESC LIMIT 300")}
+        return {"items": DBX.audit_list()}
     m = re.fullmatch(r"/api/admin/users/([0-9a-f]{16})", path)
     if m:
         uid = m.group(1)
@@ -727,14 +728,14 @@ def admin_get(path, ip):
         last = reps[0] if reps else None
         return {"account": {k: u[k] for k in ("id", "email", "name", "surname", "country", "created_at", "last_login_at",
                                               "consent_store_cv", "consent_research", "consent_version")},
-                "profile": {k: pr.get(k) for k in ("current_role", "target_role", "target_salary", "study_hours", "updated_at")},
+                "profile": {"current_role": pr.get("role_current"), **{k: pr.get(k) for k in ("target_role", "target_salary", "study_hours", "updated_at")}},
                 "cv": ({"name": pr.get("cv_name"), "savedAt": pr.get("cv_saved_at"), "about": pr.get("about"), "text": pr.get("cv_text")}
                        if u["consent_store_cv"] and (pr.get("cv_text") or pr.get("about")) else None),
                 "cvNote": None if u["consent_store_cv"] else "User did not consent to storing CV text.",
                 "extracted": last.get("profile") if last else None,
                 "reports": [{"id": r["id"], "createdAt": r["createdAt"], "score": r["risk"]["score"], "targetRole": r["targetRole"],
                              "value": {k: (r.get("value") or {}).get(k) for k in ("min", "max", "median")}} for r in reps],
-                "feedback": DBX.q("SELECT created_at,rating,buy_pro,comment FROM feedback WHERE user_id=?", (uid,))}
+                "feedback": DBX.user_feedback(uid)}
     raise ApiError(404, "Not found")
 
 
@@ -844,12 +845,24 @@ class Handler(SimpleHTTPRequestHandler):
                 if not hmac.compare_digest(auth, "Bearer " + ADMIN_TOKEN):
                     DBX.audit(self.client_address[0], "denied", path)
                     raise ApiError(401, "Wrong admin token.")
+                if path == "/api/admin/export.xlsx":
+                    from export_excel import build
+                    DBX.audit(self.client_address[0], "download_excel")
+                    data = build(DBX.all_tables())
+                    self.send_response(200)
+                    self.send_header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    self.send_header("Content-Disposition", f'attachment; filename="tirek-data-{time.strftime('%Y%m%d-%H%M')}.xlsx"')
+                    self.send_header("Content-Length", str(len(data)))
+                    self.send_header("Cache-Control", "no-store")
+                    self.end_headers()
+                    self.wfile.write(data)
+                    return
                 if path == "/api/admin/backup":
                     DBX.audit(self.client_address[0], "download_backup")
                     data = DBX.backup_bytes()
                     self.send_response(200)
-                    self.send_header("Content-Type", "application/vnd.sqlite3")
-                    self.send_header("Content-Disposition", f'attachment; filename="tirek-backup-{time.strftime('%Y%m%d-%H%M')}.db"')
+                    self.send_header("Content-Type", "application/json")
+                    self.send_header("Content-Disposition", f'attachment; filename="tirek-backup-{time.strftime('%Y%m%d-%H%M')}.json"')
                     self.send_header("Content-Length", str(len(data)))
                     self.send_header("Cache-Control", "no-store")
                     self.end_headers()
@@ -889,12 +902,18 @@ class Handler(SimpleHTTPRequestHandler):
             return self.send_pdf(render_report(rep, name), f"tirek-report-{rep['createdAt'][:10]}.pdf")
         if path.startswith("/api/"):
             pass
-        elif not PUBLIC.exists():
-            return self.send_json(404, {"error": "Frontend is hosted separately."})
+        elif not PUBLIC.exists():  # API-only deploy (Railway): send page requests to the frontend (Vercel)
+            if FRONTEND_URL:
+                self.send_response(302)
+                self.send_header("Location", FRONTEND_URL + self.path)
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+                return
+            return self.send_json(404, {"error": "This is the API server. Open the website on its frontend address instead."})
         if path == "/api/health":
             return self.send_json(200, {"ok": True, "ai": bool(OPENAI_KEY), "model": OPENAI_MODEL, "jobs": len(JOBS["jobs"]),
-                                        "storage": {"persistent": PERSISTENT, "dataDir": str(DATA), "volumeMount": VOLUME, "onRailway": ON_RAILWAY,
-                                                    "note": None if PERSISTENT else "No Railway volume: data is lost on every redeploy. Add a volume (any mount path)."}})
+                                        "storage": {"backend": DBX.kind, "persistent": PERSISTENT, "error": STORAGE_ERROR, "dataDir": None if DBX.kind == "supabase" else str(DATA), "volumeMount": VOLUME, "onRailway": ON_RAILWAY,
+                                                    "note": None if PERSISTENT else "No Supabase or Railway volume: data is lost on every redeploy."}})
         if path == "/api/me":
             u = session_user(self.token())
             return self.send_json(200, api_me(u)) if u else self.send_json(401, {"error": "Not logged in."})
@@ -930,7 +949,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
-    print(f"tirek → http://localhost:{port}  (AI {'ON, model ' + OPENAI_MODEL if OPENAI_KEY else 'OFF: add OPENAI_API_KEY to .env'}; {len(JOBS['jobs'])} jobs; database {DATA / 'tirek.db'})")
+    print(f"tirek → http://localhost:{port}  (AI {'ON, model ' + OPENAI_MODEL if OPENAI_KEY else 'OFF: add OPENAI_API_KEY to .env'}; {len(JOBS['jobs'])} jobs; storage {'Supabase' if DBX.kind == 'supabase' else DATA / 'tirek.db'})")
     if not PERSISTENT:
         print("WARNING: no Railway volume attached - accounts and reports will be lost on every redeploy. Add a volume to this service.")
     ThreadingHTTPServer(("0.0.0.0", port), Handler).serve_forever()
