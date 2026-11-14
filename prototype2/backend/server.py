@@ -39,7 +39,12 @@ def load_env():
 
 load_env()
 STATIC = ROOT / "data"                                                   # bundled read-only data (jobs, taxonomy)
-DATA = Path(os.environ.get("DATA_DIR") or ROOT / "data")                 # writable: users, sessions, reports (Railway volume)
+# Writable storage (SQLite). On Railway, a mounted volume is used automatically (RAILWAY_VOLUME_MOUNT_PATH);
+# without a volume the container disk is wiped on every redeploy.
+DATA = Path(os.environ.get("DATA_DIR") or os.environ.get("RAILWAY_VOLUME_MOUNT_PATH") or ROOT / "data")
+ON_RAILWAY = bool(os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("RAILWAY_PROJECT_ID"))
+VOLUME = os.environ.get("RAILWAY_VOLUME_MOUNT_PATH")
+PERSISTENT = (not ON_RAILWAY) or bool(VOLUME and str(DATA).startswith(VOLUME))
 PUBLIC = Path(os.environ.get("FRONTEND_DIR") or ROOT.parent / "frontend")  # served only when present (local dev)
 DATA.mkdir(parents=True, exist_ok=True)
 ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")                         # enables /admin.html; use a long random value
@@ -876,7 +881,9 @@ class Handler(SimpleHTTPRequestHandler):
         elif not PUBLIC.exists():
             return self.send_json(404, {"error": "Frontend is hosted separately."})
         if path == "/api/health":
-            return self.send_json(200, {"ok": True, "ai": bool(OPENAI_KEY), "model": OPENAI_MODEL, "jobs": len(JOBS["jobs"])})
+            return self.send_json(200, {"ok": True, "ai": bool(OPENAI_KEY), "model": OPENAI_MODEL, "jobs": len(JOBS["jobs"]),
+                                        "storage": {"persistent": PERSISTENT,
+                                                    "note": None if PERSISTENT else "No Railway volume: data is lost on every redeploy. Add a volume (any mount path)."}})
         if path == "/api/me":
             u = session_user(self.token())
             return self.send_json(200, api_me(u)) if u else self.send_json(401, {"error": "Not logged in."})
@@ -912,5 +919,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
-    print(f"tirek → http://localhost:{port}  (AI {'ON, model ' + OPENAI_MODEL if OPENAI_KEY else 'OFF: add OPENAI_API_KEY to .env'}; {len(JOBS['jobs'])} jobs)")
+    print(f"tirek → http://localhost:{port}  (AI {'ON, model ' + OPENAI_MODEL if OPENAI_KEY else 'OFF: add OPENAI_API_KEY to .env'}; {len(JOBS['jobs'])} jobs; database {DATA / 'tirek.db'})")
+    if not PERSISTENT:
+        print("WARNING: no Railway volume attached - accounts and reports will be lost on every redeploy. Add a volume to this service.")
     ThreadingHTTPServer(("0.0.0.0", port), Handler).serve_forever()

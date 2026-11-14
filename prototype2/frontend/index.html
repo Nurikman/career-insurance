@@ -7,7 +7,7 @@
 <script>try{var t=localStorage.getItem('tirek-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=202611142201">
+<link rel="stylesheet" href="styles.css?v=202611142207">
 </head>
 <body>
 <header>
@@ -87,8 +87,7 @@
     <form class="card auth" id="signupForm">
       <h2>Create account</h2>
       <div class="grid2" style="gap:10px"><label>Name<input name="name" autocomplete="given-name" required></label><label>Surname<input name="surname" autocomplete="family-name" required></label></div>
-      <label>Country<input name="country" autocomplete="country-name" list="countries" required></label>
-      <datalist id="countries"><option>United States</option><option>Kazakhstan</option><option>Kyrgyzstan</option><option>Uzbekistan</option><option>United Kingdom</option><option>Germany</option><option>Canada</option><option>India</option><option>Turkey</option><option>United Arab Emirates</option></datalist>
+      <label>Country<input name="country" id="country" placeholder="Search your country…" required></label>
       <label>Gmail<input type="email" name="email" autocomplete="email" placeholder="name@gmail.com" required></label>
       <label>Password<input type="password" name="password" autocomplete="new-password" minlength="8" placeholder="8+ characters" required></label>
       <div class="consents">
@@ -141,11 +140,12 @@
 <footer><a href="#/privacy">Privacy</a><span>© tirek</span></footer>
 <div id="toast" role="status"></div>
 
-<script src="config.js?v=202611142201"></script>
+<script src="config.js?v=202611142207"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="map.js?v=202611142201"></script>
-<script src="app.js?v=202611142201"></script>
+<script src="countries.js?v=202611142207"></script>
+<script src="map.js?v=202611142207"></script>
+<script src="app.js?v=202611142207"></script>
 </body>
 </html>

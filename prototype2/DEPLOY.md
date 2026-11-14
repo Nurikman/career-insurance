@@ -12,7 +12,7 @@ Browser ──► Vercel (static frontend)
 ## 1. Backend on Railway
 1. New Project → Deploy from GitHub repo → set **Root Directory** to `prototype2/backend`.
    Railway detects Python from `requirements.txt` and starts `python3 server.py` (`railway.json`, health check `/api/health`). `PORT` is provided by Railway.
-2. Add a **Volume** mounted at `/data`.
+2. Add a **Volume** (right-click the service → Attach volume, any mount path, e.g. `/data`). The backend uses it automatically; `/api/health` shows `"storage": {"persistent": true}` when it's attached.
 3. Variables:
    | Name | Value |
    |---|---|

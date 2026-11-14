@@ -58,6 +58,7 @@ async function authSubmit(e, path) {
   b.disabled = false;
 }
 $('#loginForm').onsubmit = e => authSubmit(e, '/api/login');
+window.countryPicker && countryPicker($('#country'));
 $('#signupForm').onsubmit = e => authSubmit(e, '/api/signup');
 $('#logout').onclick = async () => { await api('/api/logout', {}).catch(() => {}); ME = null; CV = { text: '', name: '' }; SEL.clear(); location.hash = '#/'; };
 
