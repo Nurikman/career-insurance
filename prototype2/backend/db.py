@@ -140,16 +140,34 @@ class SupabaseStore:
     kind = "supabase"
 
     def __init__(self, url, key, ssl_ctx=None):
-        self.base = url.rstrip("/") + "/rest/v1/"
+        url, key = url.strip().strip('"').strip("'").rstrip("/"), key.strip().strip('"').strip("'")  # tolerate pasted quotes/spaces
+        if url.endswith("/rest/v1"):
+            url = url[: -len("/rest/v1")]
+        if not url.startswith("https://"):
+            raise StoreError(f"SUPABASE_URL must start with https:// (got '{url[:40]}')")
+        if key.startswith("sb_publishable_") or key.startswith("eyJ") and '"anon"' in key:
+            raise StoreError("SUPABASE_SECRET_KEY is the public/publishable key. Use the secret key (sb_secret_…).")
+        self.base = url + "/rest/v1/"
         self.key, self.ctx = key, ssl_ctx or ssl.create_default_context()
-        missing = []
-        for t in TABLES:  # verify the schema exists so problems show at startup, not mid-request
+        missing, other = [], None
+        for t in TABLES:  # verify access + schema at startup so problems show on /api/health, not mid-request
             try:
                 self.select(t, limit=1, cols="*")
-            except StoreError:
-                missing.append(t)
+            except StoreError as e:
+                msg = str(e)
+                if "PGRST205" in msg or "does not exist" in msg:
+                    missing.append(t)
+                else:
+                    other = msg
+                    break
+        host = url.replace("https://", "")
+        if other:
+            hint = (" (check SUPABASE_SECRET_KEY: Supabase rejected it)" if "HTTP 401" in other or "HTTP 403" in other
+                    else " (check SUPABASE_URL)" if "unreachable" in other or "HTTP 404" in other else "")
+            raise StoreError(f"Cannot use Supabase at {host}: {other[:220]}{hint}")
         if missing:
-            raise StoreError("Supabase tables missing: " + ", ".join(missing) + ". Run backend/supabase_schema.sql in the Supabase SQL Editor.")
+            raise StoreError(f"Supabase at {host} has no tables: " + ", ".join(missing) +
+                             ". Run backend/supabase_schema.sql in the SQL Editor of THIS project, then restart.")
 
     @staticmethod
     def _filters(where):
