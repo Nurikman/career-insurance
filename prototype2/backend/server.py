@@ -842,6 +842,9 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.send_json(200, admin_get(path, self.client_address[0]))
             except ApiError as e:
                 return self.send_json(e.status, {"error": e.message})
+            except Exception as e:  # never drop the connection: the proxy would answer with an opaque error
+                print("Admin error:", type(e).__name__, e)
+                return self.send_json(500, {"error": f"Server error in admin: {type(e).__name__}"})
         if path.startswith("/api/history/") or path in ("/api/report.pdf", "/api/me/export"):
             u = session_user(self.token())
             if not u:

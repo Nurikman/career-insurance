@@ -8,9 +8,15 @@ let TOKEN = '';
 try { TOKEN = sessionStorage.getItem('tirek-admin') || ''; } catch (e) {}
 
 async function get(path) {
-  const r = await fetch(API + path, { headers: { Authorization: 'Bearer ' + TOKEN } });
-  const j = await r.json().catch(() => ({ error: 'Invalid response' }));
-  if (!r.ok) throw Object.assign(new Error(j.error || 'Request failed'), { status: r.status });
+  let r;
+  try { r = await fetch(API + path, { headers: { Authorization: 'Bearer ' + TOKEN } }); }
+  catch (e) { throw Object.assign(new Error('Cannot reach the server. Check your connection and try again.'), { status: 0 }); }
+  const j = await r.json().catch(() => null);
+  if (!r.ok || !j) {
+    const why = j && (j.error || j.message);  // Railway's proxy errors use "message"
+    const msg = why ? `${why} (HTTP ${r.status})` : `The server did not answer correctly (HTTP ${r.status}).`;
+    throw Object.assign(new Error(r.status >= 500 ? msg + ' The backend may be restarting — wait a minute and try again.' : msg), { status: r.status });
+  }
   return j;
 }
 function lock(msg) {
@@ -79,7 +85,7 @@ function bind() {
 
 $('#login').onsubmit = async e => {
   e.preventDefault(); TOKEN = $('#tok').value.trim(); $('#lerr').textContent = '';
-  try { await get('/api/admin/overview'); } catch (x) { return lock(x.message); }
+  try { await get('/api/admin/overview'); } catch (x) { TOKEN = x.status >= 500 || x.status === 0 ? TOKEN : ''; $('#lerr').textContent = x.message; return; }
   try { sessionStorage.setItem('tirek-admin', TOKEN); } catch (e) {}
   $('#login').classList.add('hide'); $('#tabs').classList.remove('hide'); $('#out').classList.remove('hide'); $('#tok').value = '';
   open('overview');

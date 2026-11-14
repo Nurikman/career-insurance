@@ -13,7 +13,7 @@ async function api(path, body) {
   const j = await r.json().catch(() => null);
   if (r.status === 401 && path !== '/api/login' && path !== '/api/me') { ME = null; location.hash = '#/login'; }
   if (!j) throw new Error(`The API did not answer correctly (HTTP ${r.status}). Check that /api/health works and that vercel.json points to your Railway domain.`);
-  if (!r.ok) throw new Error(j.error || `Request failed (HTTP ${r.status}).`);
+  if (!r.ok) throw new Error((j.error || j.message || 'Request failed') + ` (HTTP ${r.status})` + (r.status >= 500 ? ' — the server may be restarting, try again in a minute.' : ''));
   return j;
 }
 const track = name => api('/api/event', { name }).catch(() => {});
